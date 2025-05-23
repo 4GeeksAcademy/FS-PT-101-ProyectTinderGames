@@ -1,19 +1,96 @@
+# permite referencias a clases futuras en tipos
+from __future__ import annotations
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Boolean, ForeignKey, Integer, JSON
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import List, Optional
 
 db = SQLAlchemy()
 
-class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
+class User(db.Model):
+    __tablename__ = 'users'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(20), unique=False, nullable=False)
+    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    age: Mapped[int] = mapped_column(Integer, nullable=False)
+    discord: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
+
+    # Relaciones
+    profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False)
+    # reseñas que le hacen a este usuario
+    reviews_received: Mapped[List[Review]] = relationship('Review',back_populates='user',foreign_keys='Review.user_id',cascade='all, delete-orphan')
+    # reseñas que este usuario escribe
+    reviews_authored: Mapped[List[Review]] = relationship('Review',back_populates='author',foreign_keys='Review.author_id',cascade='all, delete-orphan')
 
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
+            'age': self.age,
+            "profile": self.profile.serialize() if self.profile else None
             # do not serialize the password, its a security breach
+        }
+
+
+class Profile(db.Model):
+    __tablename__ = 'profiles'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
+    gender: Mapped[str] = mapped_column(String(15), nullable=False)
+    preferences: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
+    zodiac: Mapped[str] = mapped_column(String(20), unique=False, nullable=True)
+    location: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
+    nick_name: Mapped[str] = mapped_column(String(21), unique=True, nullable=False)
+    bio: Mapped[str] = mapped_column(String(500), unique=True, nullable=False)
+    language: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
+
+    # Relaciones
+    user: Mapped[User] = relationship('User', back_populates='profile')
+    games: Mapped[List[Game]] = relationship('Game', back_populates='profile', cascade='all, delete-orphan')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            'user_Id': self.user_id
+        }
+
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id:   Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    author_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    stars:     Mapped[int] = mapped_column(Integer, nullable=False)
+    comment:   Mapped[str] = mapped_column(String(100), nullable=True)
+
+# Relaciones
+    # el reseñado
+    user:   Mapped[User] = relationship('User', back_populates='reviews_received', foreign_keys=[user_id])
+    # el que reseña
+    author: Mapped[User] = relationship('User', back_populates='reviews_authored', foreign_keys=[author_id])
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            'user_id': self.user_id,
+            'author_id': self.author_id
+        }
+
+
+class Game(db.Model):
+    __tablename__ = 'games'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey('profiles.id', ondelete='CASCADE'), nullable=False)
+    game: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+    # Relaciones
+    profile: Mapped[Profile] = relationship('Profile', back_populates='games')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "profile_id": self.profile_id,
+            "game": self.game   # ya sale como dict/JSON
         }
