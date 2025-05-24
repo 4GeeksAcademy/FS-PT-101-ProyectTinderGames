@@ -1,7 +1,7 @@
 # permite referencias a clases futuras en tipos
 from __future__ import annotations
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, ForeignKey, Integer, JSON
+from sqlalchemy import String, Boolean, ForeignKey, Integer, JSON,DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, Optional
 
@@ -23,6 +23,10 @@ class User(db.Model):
     reviews_received: Mapped[List[Review]] = relationship('Review',back_populates='user',foreign_keys='Review.user_id',cascade='all, delete-orphan')
     # reseñas que este usuario escribe
     reviews_authored: Mapped[List[Review]] = relationship('Review',back_populates='author',foreign_keys='Review.author_id',cascade='all, delete-orphan')
+    # Likes que hace este usuario
+    matches_given: Mapped[List[Match]] = relationship('Match',foreign_keys='Match.liker_id',back_populates='liker',cascade='all, delete-orphan')
+    # Likes que este usuario recibe
+    matches_received: Mapped[List[Match]] = relationship('Match',foreign_keys='Match.liked_id',back_populates='liked',cascade='all, delete-orphan')
 
     def serialize(self):
         return {
@@ -93,4 +97,22 @@ class Game(db.Model):
             "id": self.id,
             "profile_id": self.profile_id,
             "game": self.game   # ya sale como dict/JSON
+        }
+
+class Match(db.Model):
+    __tablename__ = 'matches'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    liker_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'),nullable=False)  # quien da el like
+    liked_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'),nullable=False)  # quien recibe el like
+    created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True),server_default=func.now(),nullable=False)
+
+    # Relaciones
+    liker: Mapped[User] = relationship('User',foreign_keys=[liker_id],back_populates='matches_given')
+    liked: Mapped[User] = relationship('User',foreign_keys=[liked_id],back_populates='matches_received')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "liker_id": self.liker_id,
+            "liked_id": self.liked_id,
         }
