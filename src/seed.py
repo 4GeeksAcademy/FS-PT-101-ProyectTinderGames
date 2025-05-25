@@ -1,6 +1,6 @@
-from src.app import app, db
+from app import app, db
 from datetime import datetime, timezone
-from models import User, Profile, Review, Game, Match
+from api.models import User, Profile, Review, Game, Match
 
 with app.app_context():
     db.drop_all()
