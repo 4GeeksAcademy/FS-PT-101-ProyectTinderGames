@@ -56,8 +56,13 @@ class Profile(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
-            'user_Id': self.user_id
+            "gender": self.gender,
+            'preferences': self.preferences,
+            'zodiac':self.zodiac,
+            'location':self.location,
+            "nick_name":self.nick_name,
+            "bio":self.bio,
+            "languaje":self.language
         }
 
 
