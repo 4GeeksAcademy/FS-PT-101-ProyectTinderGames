@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from sqlalchemy import select
 
 api = Blueprint('api', __name__)
 
@@ -12,11 +13,30 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+# GET ALL USERS
+@api.route('/users', methods=['GET'])
+def get_users():
+    stmt = select(User)
+    users = db.session.execute(stmt).scalars().all()
+    return jsonify([user.serialize() for user in users]), 200
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+# GET SINGLE USER
+@api.route('/users/<int:user_id>', methods=['GET'])
+def get_single_user(user_id):
+    stmt = select(User).where(User.id == user_id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({'error': f'user whit id: {user_id} not found'}), 414
+    return jsonify(user.serialize()), 200
 
-    return jsonify(response_body), 200
+# DELETE USER
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    stmt = select(User).where(User.id == user_id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({'error': f'user whit id: {user_id} not found'}), 414
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message':f'user {user_id} deleted'}), 200
+

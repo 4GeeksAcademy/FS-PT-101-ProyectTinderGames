@@ -18,7 +18,7 @@ class User(db.Model):
     discord: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
 
     # Relaciones
-    profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False)
+    profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False, cascade='all, delete-orphan',single_parent=True)
     # reseñas que le hacen a este usuario
     reviews_received: Mapped[List[Review]] = relationship('Review',back_populates='user',foreign_keys='Review.user_id',cascade='all, delete-orphan')
     # reseñas que este usuario escribe
