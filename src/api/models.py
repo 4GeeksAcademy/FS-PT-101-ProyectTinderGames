@@ -28,6 +28,9 @@ class User(db.Model):
     # Likes que este usuario recibe
     matches_received: Mapped[List[Match]] = relationship('Match',foreign_keys='Match.liked_id',back_populates='liked',cascade='all, delete-orphan')
 
+    rejects_given: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejector_id', back_populates='rejector', cascade='all, delete-orphan')
+    rejects_recieved: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejected_id', back_populates='rejected', cascade='all, delete-orphan')
+
     def serialize(self):
         return {
             "id": self.id,
@@ -115,4 +118,22 @@ class Match(db.Model):
             "id": self.id,
             "liker_id": self.liker_id,
             "liked_id": self.liked_id,
+        }
+    
+class Reject(db.Model):
+    __tablename__ = 'rejects'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    rejector_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'),nullable=False)  # quien da el like
+    rejected_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'),nullable=False)  # quien recibe el like
+    created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True),server_default=func.now(),nullable=False)
+
+    # Relaciones
+    rejector: Mapped[User] = relationship('User',foreign_keys=[rejector_id],back_populates='rejects_given')
+    rejected: Mapped[User] = relationship('User',foreign_keys=[rejected_id],back_populates='rejects_recieved')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "liker_id": self.rejector_id,
+            "liked_id": self.rejected_id,
         }
