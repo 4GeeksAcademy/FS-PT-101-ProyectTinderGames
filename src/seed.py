@@ -1,6 +1,6 @@
 from app import app, db
 from datetime import datetime, timezone
-from api.models import User, Profile, Review, Game, Match
+from api.models import User, Profile, Review, Game, Match, Reject
 
 with app.app_context():
     db.drop_all()
@@ -59,6 +59,17 @@ with app.app_context():
     match6 = Match(liker_id=6, liked_id=7, created_at=datetime(2023, 1, 20, 16, 45, 0, tzinfo=timezone.utc))
     match7 = Match(liker_id=7, liked_id=4, created_at=datetime(2023, 1, 21, 8, 30, 0, tzinfo=timezone.utc))
     db.session.add_all([match1, match2, match3, match4, match5, match6, match7])
+    db.session.commit()
+
+    #Crear matches rejected
+    reject1 = Reject(rejector_id=1, rejected_id=3, created_at=datetime(2023, 1, 15, 12, 0, 0, tzinfo=timezone.utc))
+    reject2 = Reject(rejector_id=2, rejected_id=4, created_at=datetime(2023, 1, 16, 13, 15, 0, tzinfo=timezone.utc))
+    reject3 = Reject(rejector_id=3, rejected_id=5, created_at=datetime(2023, 1, 17, 14, 30, 0, tzinfo=timezone.utc))
+    reject4 = Reject(rejector_id=4, rejected_id=6, created_at=datetime(2023, 1, 18, 15, 45, 0, tzinfo=timezone.utc))
+    reject5 = Reject(rejector_id=5, rejected_id=7, created_at=datetime(2023, 1, 19, 16, 0, 0, tzinfo=timezone.utc))
+    reject6 = Reject(rejector_id=6, rejected_id=1, created_at=datetime(2023, 1, 20, 17, 30, 0, tzinfo=timezone.utc))
+    reject7 = Reject(rejector_id=7, rejected_id=2, created_at=datetime(2023, 1, 21, 18, 45, 0, tzinfo=timezone.utc))
+    db.session.add_all([reject1, reject2, reject3, reject4, reject5, reject6, reject7])
     db.session.commit()
 
     
