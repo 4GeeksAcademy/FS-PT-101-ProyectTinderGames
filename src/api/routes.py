@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Profile, Review, Match
+from api.models import db, User, Profile, Review, Match, Reject
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
@@ -350,6 +350,7 @@ def delete_match(match_id):
     db.session.commit()
     return jsonify({'message':f'match with id: {match_id} deleted'})
 
+# POST MATCH
 @api.route('/matches/<int:liker_id>/<int:liked_id>', methods=['POST'])
 def post_match(liker_id, liked_id):
     liker = db.session.get(User, liker_id)
@@ -374,6 +375,69 @@ def post_match(liker_id, liked_id):
 
     # 5. Responder con 201 Created y los datos del match
     return jsonify(new_match.serialize()), 201
+
+# GET ALL REJECT
+@api.route('/rejects', methods=['GET'])
+def get_all_rejects():
+    stmt = select(Reject)
+    rejects = db.session.execute(stmt).scalars().all()
+    return jsonify([reject.serialize() for reject in rejects]), 200
+
+# GET REJECT BY ID
+@api.route('/rejects/<reject_id>', methods=['GET'])
+def get_single_reject(reject_id):
+    stmt = select(Reject).where(Reject.id == reject_id)
+    match = db.session.execute(stmt).scalar_one_or_none()
+    if match is None:
+        return jsonify({'error':f'match with id: {reject_id} not found'}), 400
+
+    return jsonify(match.serialize())
+
+# GET REJECTS SENT
+@api.route('/rejects_sent/<user_id>', methods=['GET'])
+def get_rejects_sent(user_id):
+    # 1. Buscamos al usuario; si no existe devolvemos 404
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
+
+    # 2. Sacamos las reseñas que ha escrito
+    rejects = user.rejects_given
+
+    # Serializamos cada review usando el método de instancia
+    serialized = [reject.serialize() for reject in rejects]
+
+    return jsonify({"rejects_authored": serialized}), 200
+
+# GET REJECTS RECEIVED
+@api.route('/rejects_received/<user_id>', methods=['GET'])
+def get_rejects_received(user_id):
+    # 1. Buscamos al usuario; si no existe devolvemos 404
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
+
+    # 2. Sacamos las reseñas que ha escrito
+    rejects = user.rejects_received
+
+    # Serializamos cada review usando el método de instancia
+    serialized = [reject.serialize() for reject in rejects]
+
+    return jsonify({"rejects_recieved": serialized}), 200
+
+# DELETE REJECT
+@api.route('/rejects/<reject_id>', methods=['DELETE'])
+def delete_reject(reject_id):
+    stmt = select(Match).where(Match.id == reject_id)
+    reject = db.session.execute(stmt).scalar_one_or_none()
+    if reject is None:
+        return jsonify({'error':f'match with id: {reject_id} not found'})
+    
+    db.session.delete(reject)
+    db.session.commit()
+    return jsonify({'message':f'match with id: {reject_id} deleted'})
+
+
 
     
 

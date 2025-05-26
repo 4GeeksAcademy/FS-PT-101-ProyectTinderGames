@@ -29,7 +29,7 @@ class User(db.Model):
     matches_received: Mapped[List[Match]] = relationship('Match',foreign_keys='Match.liked_id',back_populates='liked',cascade='all, delete-orphan')
 
     rejects_given: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejector_id', back_populates='rejector', cascade='all, delete-orphan')
-    rejects_recieved: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejected_id', back_populates='rejected', cascade='all, delete-orphan')
+    rejects_received: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejected_id', back_populates='rejected', cascade='all, delete-orphan')
 
     def serialize(self):
         return {
@@ -134,7 +134,7 @@ class Reject(db.Model):
 
     # Relaciones
     rejector: Mapped[User] = relationship('User',foreign_keys=[rejector_id],back_populates='rejects_given')
-    rejected: Mapped[User] = relationship('User',foreign_keys=[rejected_id],back_populates='rejects_recieved')
+    rejected: Mapped[User] = relationship('User',foreign_keys=[rejected_id],back_populates='rejects_received')
 
     def serialize(self):
         return {
