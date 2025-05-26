@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Profile, Review
+from api.models import db, User, Profile, Review, Match
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
@@ -286,3 +286,94 @@ def put_review(review_id):
     review.comment = data.get('comment', review.comment)
     db.session.commit()
     return jsonify({'message':'review updated'}), 200
+
+
+# GET ALL MATCHES
+@api.route('/matches', methods=['GET'])
+def get_all_matches():
+    stmt = select(Match)
+    matches = db.session.execute(stmt).scalars().all()
+    return jsonify([match.serialize() for match in matches]), 200
+
+# GET MATCH BY ID
+@api.route('/matches/<match_id>', methods=['GET'])
+def get_single_match(match_id):
+    stmt = select(Match).where(Match.id == match_id)
+    match = db.session.execute(stmt).scalar_one_or_none()
+    if match is None:
+        return jsonify({'error':f'match with id: {match_id} not found'}), 400
+
+    return jsonify(match.serialize())
+
+# GET MATCHES SENT
+@api.route('/matches_sent/<user_id>', methods=['GET'])
+def get_matches_sent(user_id):
+    # 1. Buscamos al usuario; si no existe devolvemos 404
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
+
+    # 2. Sacamos las reseñas que ha escrito
+    matches = user.matches_given
+
+    # Serializamos cada review usando el método de instancia
+    serialized = [match.serialize() for match in matches]
+
+    return jsonify({"reviews_authored": serialized}), 200
+
+
+# GET MATCHES RECIEVED
+@api.route('/matches_recieved/<user_id>', methods=['GET'])
+def get_matches_recieved(user_id):
+     # 1. Buscamos al usuario; si no existe devolvemos 404
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
+
+    # 2. Sacamos las reseñas que ha escrito
+    matches = user.matches_received
+
+    # Serializamos cada review usando el método de instancia
+    serialized = [match.serialize() for match in matches]
+
+    return jsonify({"reviews_authored": serialized}), 200
+
+# DELETE MATCH
+@api.route('/matches/<match_id>', methods=['DELETE'])
+def delete_match(match_id):
+    stmt = select(Match).where(Match.id == match_id)
+    match = db.session.execute(stmt).scalar_one_or_none()
+    if match is None:
+        return jsonify({'error':f'match with id: {match_id} not found'})
+    
+    db.session.delete(match)
+    db.session.commit()
+    return jsonify({'message':f'match with id: {match_id} deleted'})
+
+@api.route('/matches/<int:liker_id>/<int:liked_id>', methods=['POST'])
+def post_match(liker_id, liked_id):
+    liker = db.session.get(User, liker_id)
+    if liker is None:
+        return jsonify({'error': f'User (liker) with id={liker_id} not found'}), 404
+
+    liked = db.session.get(User, liked_id)
+    if liked is None:
+        return jsonify({'error': f'User (liked) with id={liked_id} not found'}), 404
+
+    if liker_id == liked_id:
+        return jsonify({'error': 'Cannot match with yourself'}), 400
+
+    existing = (db.session.query(Match).filter_by(liker_id=liker_id, liked_id=liked_id).first())
+    if existing:
+        return jsonify({'error': 'Match already exists'}), 409
+
+    # 4. Crear y persistir el nuevo match
+    new_match = Match(liker_id=liker_id, liked_id=liked_id)
+    db.session.add(new_match)
+    db.session.commit()
+
+    # 5. Responder con 201 Created y los datos del match
+    return jsonify(new_match.serialize()), 201
+
+    
+
