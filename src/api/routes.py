@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Profile, Review, Match, Reject
+from api.models import db, User, Profile, Review, Match, Reject, Game
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
@@ -436,6 +436,41 @@ def delete_reject(reject_id):
     db.session.delete(reject)
     db.session.commit()
     return jsonify({'message':f'match with id: {reject_id} deleted'})
+
+
+# POST REJECT
+@api.route('/rejects/<int:rejector_id>/<int:rejected_id>', methods=['POST'])
+def post_reject(rejector_id, rejected_id):
+    rejector = db.session.get(User, rejector_id)
+    if rejector is None:
+        return jsonify({'error': f'User (rejector) with id={rejector_id} not found'}), 404
+
+    rejected = db.session.get(User, rejected_id)
+    if rejected is None:
+        return jsonify({'error': f'User (rejected) with id={rejected_id} not found'}), 404
+
+    if rejector_id == rejected_id:
+        return jsonify({'error': 'Cannot match with yourself'}), 400
+
+    existing = (db.session.query(Reject).filter_by(rejector_id=rejector_id, rejected_id=rejected_id).first())
+    if existing:
+        return jsonify({'error': 'Reject already exists'}), 409
+
+    # 4. Crear y persistir el nuevo reject
+    new_reject = Reject(rejector_id=rejector_id, rejected_id=rejected_id)
+    db.session.add(new_reject)
+    db.session.commit()
+
+    # 5. Responder con 201 Created y los datos del match
+    return jsonify(new_reject.serialize()), 201
+
+
+# GET ALL GAMES
+@api.route('/games', methods=['GET'])
+def get_all_games():
+    stmt = select(Game)
+    games = db.session.execute(stmt).scalars().all()
+    return jsonify([game.serialize() for game in games]), 200
 
 
 

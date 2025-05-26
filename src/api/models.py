@@ -139,6 +139,6 @@ class Reject(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "liker_id": self.rejector_id,
-            "liked_id": self.rejected_id,
+            "rejector_id": self.rejector_id,
+            "rejected_id": self.rejected_id,
         }
