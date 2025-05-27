@@ -21,8 +21,6 @@ def get_users():
     return jsonify([user.serialize() for user in users]), 200
 
 # GET SINGLE USER
-
-
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_single_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -32,8 +30,6 @@ def get_single_user(user_id):
     return jsonify(user.serialize()), 200
 
 # DELETE USER
-
-
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -45,8 +41,6 @@ def delete_user(user_id):
     return jsonify({'message': f'user {user_id} deleted'}), 200
 
 # POST USER
-
-
 @api.route('/users', methods=['POST'])
 def post_user():
     data = request.get_json()
@@ -64,8 +58,6 @@ def post_user():
     return jsonify(new_user.serialize()), 200
 
 # PUT USER
-
-
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
     data = request.get_json()
@@ -84,8 +76,6 @@ def put_user(user_id):
     return jsonify(user.serialize()), 200
 
 # GET ALL PROFILES
-
-
 @api.route('/profiles', methods=['GET'])
 def get_profiles():
     stmt = select(Profile)
