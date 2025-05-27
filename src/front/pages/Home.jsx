@@ -54,7 +54,7 @@ export const Home = () => {
 				{/* About Us */}
 				<section className="about-section py-5 text-white my-5 border-bottom border-top">
 					<div className="container position-relative">
-						<div className="d-flex align-items-start">
+						<div className="d-flex align-items-center">
 							<div className="vertical-title me-4 my-5">ABOUT US</div>
 							<div className="row flex-grow-1 gx-4 justify-content-around">
 								<div className="col-md-4 mb-4">
@@ -93,7 +93,7 @@ export const Home = () => {
 								</h2>
 
 								{/* Una sola fila: 1 col en xs, 2 en md, 4 en lg */}
-								<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4 justify-content-center me-5">
+								<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4 justify-content-center">
 									<div className="col d-flex m-5">
 										<div className="card-wrapper w-100">
 											<NeonCard
@@ -113,7 +113,7 @@ export const Home = () => {
 										</div>
 									</div>
 								</div>
-								<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4 justify-content-center ms-5">
+								<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4 justify-content-center">
 									<div className="col d-flex m-5">
 										<div className="card-wrapper w-100">
 											<NeonCard
