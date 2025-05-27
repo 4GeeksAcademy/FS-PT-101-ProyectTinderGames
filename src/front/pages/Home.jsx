@@ -1,5 +1,4 @@
 // Home.jsx
-import React from 'react';
 import '../Home.css';
 import { NavbarHome } from '../components/NavbarHome.jsx';
 import carrusel1 from '../assets/img/carrusel/carrusel-1.png';
@@ -11,7 +10,6 @@ import logotarjeta from '../assets/img/logos/logo-tarjetas-about-us.png';
 import React, { useEffect } from "react"
 
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { NavbarHome } from "../components/NavbarHome.jsx";
 
 export const Home = () => {
 	return (
