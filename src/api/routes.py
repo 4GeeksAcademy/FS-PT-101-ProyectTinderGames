@@ -472,6 +472,75 @@ def get_all_games():
     games = db.session.execute(stmt).scalars().all()
     return jsonify([game.serialize() for game in games]), 200
 
+# GET SINGLE GAMES
+@api.route('/games/<int:game_id>', methods=['GET'])
+def get_single_game(game_id):
+    stmt = select(Game).where(Game.id == game_id)
+    games = db.session.execute(stmt).scalar_one_or_none()
+    if games is None:
+        return jsonify({'error':'this game does not exist'})
+    return jsonify(games.serialize()), 200
+
+@api.route('/games_by_profile/<int:profile_id>', methods=['GET'])
+def get_games_by_profile_id(profile_id):
+    # 1. Ejecutar la consulta
+    stmt  = select(Game).where(Game.profile_id == profile_id)
+    games = db.session.execute(stmt).scalars().all()
+
+    # 2. Si no hay resultados, podemos devolver 404 o una lista vacía.
+    if not games:
+        return jsonify({'error': 'No se han encontrado juegos para este perfil'}), 404
+
+    # 3. Serializar y devolver la lista
+    serialized = [ game.serialize() for game in games ]
+    return jsonify(serialized), 200
+
+
+
+@api.route('/games/<profile_id>', methods=['POST'])
+def post_game(profile_id):
+    # 1) Asegurarnos de que el Content-Type sea application/json
+    if not request.is_json:
+        return jsonify({'error': 'Se requiere Content-Type: application/json'}), 400
+
+    data = request.get_json()
+
+    # 2) Validar que venga la clave "game"
+    if 'game' not in data:
+        return jsonify({'error': 'Falta el campo "game" en el JSON'}), 400
+
+    # 3) Validar que game sea un objeto JSON (dict)
+    if not isinstance(data['game'], dict):
+        return jsonify({'error': 'El campo "game" debe ser un objeto JSON'}), 400
+
+    # 4) Crear y persistir la nueva partida
+    new_game = Game(
+        profile_id=profile_id,
+        game=data['game']  # Asumiendo que el tipo de columna es JSON/Text en tu modelo
+    )
+    db.session.add(new_game)
+    db.session.commit()
+
+    return jsonify({'message': f'Game añadido al perfil {profile_id}','game_id': new_game.id, # si tu modelo los tiene
+        'game':       new_game.game
+    }), 201
+
+
+# DELETE GAME
+@api.route('/games/<game_id>', methods=['DELETE'])
+def delete_game(game_id):
+    stmt = select(Game).where(Game.id == game_id)
+    game = db.session.execute(stmt).scalar_one_or_none()
+    if game is None:
+        return jsonify({'error':f'game with id: {game_id} not found'}), 400
+    
+    db.session.delete(game)
+    db.session.commit()
+    return jsonify({'message':f'game with id: {game_id} deleted'}), 200
+
+
+
+
 
 
     
