@@ -18,7 +18,7 @@ class User(db.Model):
     discord: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
 
     # Relaciones
-    profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False)
+    profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False, cascade='all, delete-orphan',single_parent=True)
     # reseñas que le hacen a este usuario
     reviews_received: Mapped[List[Review]] = relationship('Review',back_populates='user',foreign_keys='Review.user_id',cascade='all, delete-orphan')
     # reseñas que este usuario escribe
@@ -29,7 +29,7 @@ class User(db.Model):
     matches_received: Mapped[List[Match]] = relationship('Match',foreign_keys='Match.liked_id',back_populates='liked',cascade='all, delete-orphan')
 
     rejects_given: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejector_id', back_populates='rejector', cascade='all, delete-orphan')
-    rejects_recieved: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejected_id', back_populates='rejected', cascade='all, delete-orphan')
+    rejects_received: Mapped[List[Reject]] = relationship('Reject', foreign_keys='Reject.rejected_id', back_populates='rejected', cascade='all, delete-orphan')
 
     def serialize(self):
         return {
@@ -59,8 +59,13 @@ class Profile(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
-            'user_Id': self.user_id
+            "gender": self.gender,
+            'preferences': self.preferences,
+            'zodiac':self.zodiac,
+            'location':self.location,
+            "nick_name":self.nick_name,
+            "bio":self.bio,
+            "languaje":self.language
         }
 
 
@@ -129,11 +134,11 @@ class Reject(db.Model):
 
     # Relaciones
     rejector: Mapped[User] = relationship('User',foreign_keys=[rejector_id],back_populates='rejects_given')
-    rejected: Mapped[User] = relationship('User',foreign_keys=[rejected_id],back_populates='rejects_recieved')
+    rejected: Mapped[User] = relationship('User',foreign_keys=[rejected_id],back_populates='rejects_received')
 
     def serialize(self):
         return {
             "id": self.id,
-            "liker_id": self.rejector_id,
-            "liked_id": self.rejected_id,
+            "rejector_id": self.rejector_id,
+            "rejected_id": self.rejected_id,
         }
