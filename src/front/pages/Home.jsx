@@ -8,6 +8,10 @@ import carrusel3 from '../assets/img/carrusel/carrusel-3.png';
 import carrusel4 from '../assets/img/carrusel/carrusel-4.png';
 import { NeonCard } from '../components/NeonCard.jsx';
 import logotarjeta from '../assets/img/logos/logo-tarjetas-about-us.png';
+import React, { useEffect } from "react"
+
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { NavbarHome } from "../components/NavbarHome.jsx";
 
 export const Home = () => {
 	return (
