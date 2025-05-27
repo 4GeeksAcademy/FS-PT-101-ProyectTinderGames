@@ -5,8 +5,25 @@ body {
 
 /* Secciones con fondo negro y bordes */
 .about-section {
-  background-color: #000;
-  border-bottom: 4px solid red;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(assets/img/background/about-us-background-image.png);
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+.howitworks-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(assets/img/background/how-it-works-background.png);
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+.bestpractices-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(assets/img/background/best-practices-background.png);
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
 .about-section.border-top {
   border-top: 4px solid red;
@@ -28,7 +45,7 @@ body {
   border: 2px solid transparent;
   border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1 round;
   border-radius: 0.5rem;
-  height: 12rem;          /* o lo que necesites */
+  height: 12rem; /* o lo que necesites */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,10 +68,10 @@ body {
 
 .card-inner {
   width: 100%;
-  aspect-ratio: 4 / 3;           /* mantiene proporción, altura menor al reducir ancho */
+  aspect-ratio: 4 / 3; /* mantiene proporción, altura menor al reducir ancho */
   position: relative;
   transform-style: preserve-3d;
-  transition: transform .4s cubic-bezier(.455,.03,.515,.955);
+  transition: transform 0.4s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   border-radius: 0.5rem;
 }
 
@@ -65,7 +82,7 @@ body {
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   border: 2px solid transparent;
   border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1 round;
   border-radius: 0.5rem;

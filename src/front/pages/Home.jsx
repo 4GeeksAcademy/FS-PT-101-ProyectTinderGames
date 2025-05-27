@@ -55,7 +55,7 @@ export const Home = () => {
 				<section className="about-section py-5 text-white my-5 border-bottom border-top">
 					<div className="container position-relative">
 						<div className="d-flex align-items-start">
-							<div className="vertical-title me-4">ABOUT US</div>
+							<div className="vertical-title me-4 my-5">ABOUT US</div>
 							<div className="row flex-grow-1 gx-4 justify-content-around">
 								<div className="col-md-4 mb-4">
 									<div className="neon-box p-4 h-100 d-flex flex-column text-center">
@@ -82,7 +82,7 @@ export const Home = () => {
 				</section>
 
 				{/* How It Works */}
-				<section className="about-section py-5 text-white my-5 border-bottom border-white">
+				<section className="howitworks-section pb-5 text-white my-5 border-bottom border-white">
 					<div className="container position-relative">
 						<div className="d-flex align-items-start">
 
@@ -143,7 +143,7 @@ export const Home = () => {
 					</div>
 				</section>
 				{/* Best Practices */}
-				<section className="about-section py-5 text-white my-5 border-bottom border-white">
+				<section className="bestpractices-section pb-5 text-white my-5 border-bottom border-white">
 					<div className="container position-relative">
 						<div className="d-flex align-items-start">
 
