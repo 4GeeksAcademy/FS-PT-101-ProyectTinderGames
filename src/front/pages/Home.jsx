@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { NavbarHome } from "../components/NavbarHome.jsx";
 
 export const Home = () => {
 
@@ -33,6 +34,9 @@ export const Home = () => {
 	}, [])
 
 	return (
+
+		<>
+		<NavbarHome/>
 		<div className="text-center mt-5">
 			<h1 className="display-4">Hello Rigo!!</h1>
 			<p className="lead">
@@ -47,5 +51,6 @@ export const Home = () => {
 				)}
 			</div>
 		</div>
+				</>
 	);
 }; 
