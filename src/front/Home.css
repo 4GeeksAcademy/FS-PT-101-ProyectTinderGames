@@ -1,0 +1,106 @@
+/* Home.css */
+body {
+  background-color: #000;
+}
+
+/* Secciones con fondo negro y bordes */
+.about-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(assets/img/background/about-us-background-image.png);
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+.howitworks-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(assets/img/background/how-it-works-background.png);
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+.bestpractices-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(assets/img/background/best-practices-background.png);
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+.about-section.border-top {
+  border-top: 4px solid red;
+}
+
+/* Títulos verticales */
+.vertical-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: "Audiowide", sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 4px #fff, 0 0 16px #ff00ff;
+  color: #fff;
+  margin: auto;
+}
+.neon-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1 round;
+  border-radius: 0.5rem;
+  height: 12rem; /* o lo que necesites */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Título neón horizontal */
+.neon-heading {
+  font-family: "Audiowide", sans-serif;
+  font-size: 2rem;
+  text-shadow: 0 0 2px #fff, 0 0 4px #ff00ff, 0 0 8px #00ffff;
+  color: #f8f8f8;
+}
+
+/* Estructura 3D de la tarjeta */
+.card-wrapper {
+  perspective: 800px;
+}
+
+.card-inner {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* mantiene proporción, altura menor al reducir ancho */
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  border-radius: 0.5rem;
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1 round;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 1rem;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.card-wrapper.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-back img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
