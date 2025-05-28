@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+
+.navbarHome-font {
+  font-family: "Audiowide", sans-serif;
+  color: #ffffff !important;
+}
+.nabarHome-font-shadow {
+  text-shadow: 0 1.5px 0 #0088fe, 0 1.5px 1.5px #0088fe;
+}
+
+.logo-navbarHome {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+
+.navbarHome-start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 10px 20px;
+  background-color: black;
+}
+
+/* .start-text {
+  font-family: 'Audiowide', sans-serif;
+  font-size: 30px;
+  color: white;
+  text-shadow: 0 2px 2px #00aaff, 0 4px 6px #0077ff;
+  position: relative;
+  z-index: 2;
+} */
+
+.navbarHome-line {
+  width: 85%;
+  height: 2px;
+  position: relative;
+}
+
+.navbarHome-top-line {
+  background: #00ddff;
+}
+
+.navbarHome-bottom-line {
+  background: #a41ef1;
+}
+
+.navbarHome-top-line:before,
+.navbarHome-bottom-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-style: solid;
+}
+
+.navbarHome-top-line::before {
+  left: -7px;
+  border-width: 5px 0 5px 10px;
+  border-color: transparent transparent transparent #00ddff;
+}
+
+.navbarHome-bottom-line::after {
+  right: -7px;
+  border-width: 5px 10px 5px 0;
+  border-color: transparent #a41ef1 transparent transparent;
+}
+
+.navbarHome-toggler {
+  border-color: #a41ef1;
+}
