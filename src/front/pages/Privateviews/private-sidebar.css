@@ -1,0 +1,83 @@
+.sidebar {
+  width: 250px;
+  background-color: #000;
+  padding: 30px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  border-right: 2px solid #6600cc;
+}
+
+.sidebar-button {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, rgba(0,255,255,0.2), rgba(204,0,255,0.2));
+  border: 2px solid cyan;
+  
+  border-radius: 10px;
+  text-decoration: none;
+  font-family: 'Audiowide', cursive;
+  font-size: 18px;
+  color: white;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/*AJUSTAR EL TAMAÑO DE LOS ICONOS !!! NO OLVIDAAARRR*/
+.Privateicons{
+    object-fit: contain;
+}
+
+.sidebar-button .sidebar-icon {
+  margin-right: 10px;
+}
+
+.sidebar-button:hover {
+  transform: translateX(8px);
+  background: linear-gradient(90deg, rgba(0,255,255,0.2), rgba(204,0,255,0.2));
+  border: 2px solid cyan;
+}
+
+.sidebar-button:active {
+  box-shadow: 0 0 12px cyan, 0 0 12px #cc00ff;
+  transform: scale(0.98);
+}
+
+/* Ajuste a resoluciones pequeñas */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 60px; /* Altura del navbar */
+    left: -250px;
+    height: calc(100% - 60px);
+    width: 250px;
+    background-color: #000;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+}
+
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  background: none;
+  color: white;
+  font-size: 28px;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: block;
+  }
+}
