@@ -2,8 +2,29 @@
     color: white;
     text-shadow: 0 1.5px 0 #E773EA, 0 1.5px 1.5px #E773EA;
 }
-.searchMatchCard{
-
-    width: 581px;
-    height: 795px;
+.searchMatchCard {
+  width: 100%;
+  max-width: 444px;     
+  min-height: 643px;    
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 1rem;
 }
+.search-match-card-age{
+
+    color: #7C0EBC;
+}
+
+.search-match-card-hours {
+    color: #256973
+}
+
+.search-match-card-country-language{
+    color: #A046A4
+}
+
+.search-match-profile-pic{
+    width: 192px;
+    height: 192px;
+    }
