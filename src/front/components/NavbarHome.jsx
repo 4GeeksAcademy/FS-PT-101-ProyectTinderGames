@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import logoApp from "../assets/img/logos/logo-app.png";
 import './navbarHome.css'
 
 export const NavbarHome = () => {
 
-
+ const navigate = useNavigate()
   return (
 <>
     <nav className="navbar navbar-expand-lg bg-black navbarHome-font">
