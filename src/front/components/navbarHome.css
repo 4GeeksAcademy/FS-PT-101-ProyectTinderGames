@@ -1,15 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
 
 .navbarHome-font {
-    font-family: 'Audiowide', sans-serif;
-    color: #ffffff !important;
-    
+  font-family: "Audiowide", sans-serif;
+  color: #ffffff !important;
 }
-.nabarHome-font-shadow{
-    text-shadow:
-    0 1.5px 0 #0088fe, 
-    0 1.5px 1.5px #0088fe; 
+.nabarHome-font-shadow {
+  text-shadow: 0 1.5px 0 #0088fe, 0 1.5px 1.5px #0088fe;
 }
 .fixed-height-navbarHome {
   height: 60px;
@@ -47,11 +43,11 @@
 }
 
 .navbarHome-top-line {
-  background: linear-gradient(to right, #00DDFF, #00DDFF);
+  background: #00ddff;
 }
 
 .navbarHome-bottom-line {
-  background: linear-gradient(to right, #A41EF1, #A41EF1);
+  background: #a41ef1;
 }
 
 .navbarHome-top-line:before,
@@ -60,19 +56,21 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 0;
-  height: 0;
   border-style: solid;
 }
 
 .navbarHome-top-line::before {
-  left: -7px; /* Mueve el triángulo a la izquierda */
-  border-width: 5px 0 5px 10px; /* Triángulo apuntando a la derecha */
-  border-color: transparent transparent transparent #00DDFF;
+  left: -7px;
+  border-width: 5px 0 5px 10px;
+  border-color: transparent transparent transparent #00ddff;
 }
 
 .navbarHome-bottom-line::after {
-  right: -7px; /* Ya está en el lado izquierdo, se mantiene igual */
-  border-width: 5px 10px 5px 0; /* Triángulo apuntando a la izquierda */
-  border-color: transparent #A41EF1 transparent transparent;
+  right: -7px;
+  border-width: 5px 10px 5px 0;
+  border-color: transparent #a41ef1 transparent transparent;
+}
+
+.navbarHome-toggler {
+  border-color: #a41ef1;
 }
