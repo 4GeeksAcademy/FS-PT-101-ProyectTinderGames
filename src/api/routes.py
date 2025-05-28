@@ -6,12 +6,73 @@ from api.models import db, User, Profile, Review, Match, Reject, Game
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
 
+
+# REGISTER
+@api.route('/register', methods=['POST'])
+def register():
+    try:
+        data = request.get_json()
+        if not data or 'email' not in data or 'password' not in data:
+            raise Exception('missing data')
+        stmt = select(User).where(User.email == data['email'])
+        existing_email = db.session.execute(stmt).scalar_one_or_none()
+
+        if existing_email:
+            return jsonify({'error':'email taken'}), 418
+                
+        new_user = User(
+        email=data['email'],
+        password=data['password'],
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({'success':'true'}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'Error':'algo paso'}), 400
+
+# LOGIN
+@api.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.get_json()
+        if not data or 'email' not in data or 'password' not in data: 
+            raise Exception('missing data')
+        stmt = select(User).where(User.email == data['email'])
+        user = db.session.execute(stmt).scalar_one_or_none()
+
+        if not user:
+            return jsonify({'error':'el email no está registrado, registrate'}), 418
+        
+        if user.password != data['password']  :
+            return jsonify({'error':'email/contraseña no valido'}), 418
+        
+
+        token = create_access_token(identity = str(user.id))
+        return jsonify({'success':'true', 'token':token}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'Error':'algo paso'}), 400
+
+
+
+# PRIVATE ENDPOINT
+@api.route('/private', methods=['GET'])
+@jwt_required()
+def get_user_info():
+    id = get_jwt_identity()
+    stmt = select(User).where(User.id==id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({'error':'user not finded'})
+    return jsonify({'success':'true', 'user': user.serialize()})
 
 # GET ALL USERS
 @api.route('/users', methods=['GET'])
@@ -44,14 +105,11 @@ def delete_user(user_id):
 @api.route('/users', methods=['POST'])
 def post_user():
     data = request.get_json()
-    if not data or 'email' not in data or 'password' not in data or 'age' not in data or 'name' not in data or 'discord' not in data:
+    if not data or 'email' not in data or 'password' not in data:
         return jsonify({'error': 'Missing data'}), 400
     new_user = User(
         email=data['email'],
-        name=data['name'],
-        password=data['password'],
-        age=data['age'],
-        discord=data['discord']
+        password=data['password']
     )
     db.session.add(new_user)
     db.session.commit()
@@ -61,17 +119,14 @@ def post_user():
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
     data = request.get_json()
-    if not data or 'email' not in data or 'password' not in data or 'age' not in data or 'name' not in data or 'discord' not in data:
+    if not data or 'email' not in data or 'password' not in data:
         return jsonify({'error': 'Missing data'}), 400
     stmt = select(User).where(User.id == user_id)
     user = db.session.execute(stmt).scalar_one_or_none()
     if user is None:
         return jsonify({'error': f'can not find user with id: {user_id}'})
     user.email = data.get('email', user.email)
-    user.name = data.get('name', user.name)
     user.password = data.get('password', user.password)
-    user.age = data.get('age', user.age)
-    user.discord = data.get('discord', user.discord)
     db.session.commit()
     return jsonify(user.serialize()), 200
 
@@ -107,7 +162,7 @@ def delete_profile(user_id):
 @api.route('/profiles/<int:user_id>', methods=['POST'])
 def post_profile(user_id):
     data = request.get_json()
-    if not data or 'language' not in data or 'bio' not in data or 'nick_name' not in data or 'location' not in data or 'zodiac' not in data or not 'gender' in data or not 'preferences' in data:
+    if not data or 'language' not in data or 'bio' not in data or 'nick_name' not in data or 'location' not in data or 'zodiac' not in data or not 'gender' in data or not 'preferences' in data or not 'discord' in data or not 'age' in data or not 'name' in data:
         return jsonify({'error': 'Missing data'}), 400
     stmt = select(User).where(User.id == user_id)
     user = db.session.execute(stmt).scalar_one_or_none()
@@ -117,6 +172,9 @@ def post_profile(user_id):
         return jsonify({'error': 'this profile already exist, please try to modify it insted of create a new one'}), 400
     new_profile = Profile(
         gender=data['gender'],
+        age=data['age'],
+        discord=data['discord'],
+        name=data['name'],
         preferences=data['preferences'],
         zodiac=data['zodiac'],
         location=data['location'],
@@ -146,6 +204,9 @@ def put_profile(user_id):
     user.profile.preferences = data.get(
         'preferences', user.profile.preferences)
     user.profile.zodiac = data.get('zodiac', user.profile.zodiac)
+    user.profile.discord=data.get('discord', user.profile.discord)
+    user.profile.age=data.get('age',user.profile.age)
+    user.profile.name=data.get('name',user.profile.name)
     user.profile.location = data.get('location', user.profile.location)
     user.profile.nick_name = data.get('nick_name', user.profile.nick_name)
     user.profile.bio = data.get('bio', user.profile.bio)
