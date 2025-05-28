@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom/dist"
 import ScrollToTop from "../components/ScrollToTop"
 import {PrivateNavbar} from "../components/Private/Private-navbar"
 import { Footer } from "../components/Footer"
+import { SearchMatchCard } from "../components/SearchMatchCard/SearchMatchCard"
 
 
 
@@ -13,6 +14,7 @@ export const Layout = () => {
   
             {/* <Navbar /> */}
                 <Outlet />
+            <SearchMatchCard/>
             <Footer />
         </ScrollToTop>
     )

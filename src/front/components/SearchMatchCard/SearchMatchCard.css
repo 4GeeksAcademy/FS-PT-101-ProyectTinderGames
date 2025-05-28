@@ -1,0 +1,9 @@
+.searchMateCard-font-shadow{
+    color: white;
+    text-shadow: 0 1.5px 0 #E773EA, 0 1.5px 1.5px #E773EA;
+}
+.searchMatchCard{
+
+    width: 581px;
+    height: 795px;
+}
