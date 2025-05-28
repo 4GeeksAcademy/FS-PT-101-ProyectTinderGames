@@ -7,11 +7,7 @@
 .nabarHome-font-shadow {
   text-shadow: 0 1.5px 0 #0088fe, 0 1.5px 1.5px #0088fe;
 }
-.fixed-height-navbarHome {
-  height: 60px;
-  padding: 0 1rem;
-  overflow: hidden;
-}
+
 .logo-navbarHome {
   width: 60px;
   height: auto;

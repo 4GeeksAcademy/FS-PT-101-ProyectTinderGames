@@ -6,7 +6,7 @@ export const NavbarHome = () => {
 
   return (
 <>
-    <nav className="navbar navbar-expand-lg bg-black navbarHome-font fixed-height-navbarHome ">
+    <nav className="navbar navbar-expand-lg bg-black navbarHome-font">
       <div className="container-fluid">
         <div className="d-flex align-items-center">
           <a className="navbar-brand" href="#" />
@@ -20,6 +20,8 @@ export const NavbarHome = () => {
           <div className="collapse navbar-collapse border-2 navbarHome-toggler" id="navbarNav">
               <div className="d-flex align-items-center">
             <ul className="navbar-nav">
+              <div className="d-flex justify-content-around align-self-center">
+
                 <li className="nav-item">
                   <a className="nav-link active navbarHome-font me-5" aria-current="page" href="#">Best Practices</a>
                 </li>
@@ -29,6 +31,7 @@ export const NavbarHome = () => {
                 <li className="nav-item">
                   <a className="nav-link navbarHome-font me-5" href="#">About Us</a>
                 </li>
+              </div>
               <li className="nav-item">
                 <div className="navbarHome-start-container">
                   <div className="navbarHome-line navbarHome-top-line"></div>
@@ -42,6 +45,8 @@ export const NavbarHome = () => {
         </div>
       </div>
     </nav>
+
+  
 
 </>
 
