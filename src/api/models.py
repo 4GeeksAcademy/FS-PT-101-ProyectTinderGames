@@ -11,11 +11,8 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(20), unique=False, nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
-    age: Mapped[int] = mapped_column(Integer, nullable=False)
-    discord: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
 
     # Relaciones
     profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False, cascade='all, delete-orphan',single_parent=True)
@@ -35,7 +32,6 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            'age': self.age,
             "profile": self.profile.serialize() if self.profile else None
             # do not serialize the password, its a security breach
         }
@@ -45,13 +41,16 @@ class Profile(db.Model):
     __tablename__ = 'profiles'
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
-    gender: Mapped[str] = mapped_column(String(15), nullable=False)
-    preferences: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
+    gender: Mapped[str] = mapped_column(String(15), nullable=True)
+    age: Mapped[int] = mapped_column(Integer, nullable=True)
+    name: Mapped[str] = mapped_column(String(20), unique=False, nullable=True)
+    discord: Mapped[str] = mapped_column(String(40), unique=True, nullable=True)
+    preferences: Mapped[str] = mapped_column(String(50), unique=False, nullable=True)
     zodiac: Mapped[str] = mapped_column(String(20), unique=False, nullable=True)
-    location: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
-    nick_name: Mapped[str] = mapped_column(String(21), unique=True, nullable=False)
-    bio: Mapped[str] = mapped_column(String(500), unique=True, nullable=False)
-    language: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
+    location: Mapped[str] = mapped_column(String(50), unique=False, nullable=True)
+    nick_name: Mapped[str] = mapped_column(String(21), unique=True, nullable=True)
+    bio: Mapped[str] = mapped_column(String(500), unique=True, nullable=True)
+    language: Mapped[str] = mapped_column(String(50), unique=False, nullable=True)
 
     # Relaciones
     user: Mapped[User] = relationship('User', back_populates='profile')
