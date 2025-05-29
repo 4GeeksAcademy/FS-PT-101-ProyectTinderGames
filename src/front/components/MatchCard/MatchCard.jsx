@@ -1,5 +1,5 @@
 import './MatchCard.css';
-import profilePic from "../../assets/img/icons/icon-profile.png";
+import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import goldMedal from "../../assets/img/medals/gold-medal.png"
 import connectIcon from "../../assets/img/logos/logo-app.png"
 
@@ -27,7 +27,7 @@ export const MatchCard = () => {
                                 <div className='d-flex align-items-start'>
                                     {/* profile pic */}
                                     <div className='match-profile-pic d-flex rounded-circle'>
-                                        <img src={profilePic} alt="App Logo"></img>
+                                        <img src={profilePic4} alt="App Logo" className='match-profile-pic rounded-circle'></img>
                                     </div>
                                     <div>
                                         {/* user name */}
