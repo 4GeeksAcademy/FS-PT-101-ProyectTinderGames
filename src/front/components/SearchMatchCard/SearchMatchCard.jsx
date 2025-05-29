@@ -127,7 +127,6 @@ export const SearchMatchCard = () => {
 
         </div>
       </div>
-
     </>
 
   )
