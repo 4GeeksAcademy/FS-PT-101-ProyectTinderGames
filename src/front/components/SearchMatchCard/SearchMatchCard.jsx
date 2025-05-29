@@ -22,8 +22,7 @@ export const SearchMatchCard = () => {
         <div className='d-flex justify-content-center'>
           <div className="col-12 col-sm-10 col-md-8 col-lg-6">
 
-
-            <div className="card searchMatchCard">
+            <div className="card searchMatchCard card-gradient-transparent">
               <div className="card-body">
                 <div className='d-flex justify-content-center'>
 
@@ -36,6 +35,14 @@ export const SearchMatchCard = () => {
 
 
                 <h2 className="card-title d-flex justify-content-center mt-2">User Name</h2>
+                <div className='search-match-stars d-flex justify-content-center mt-3 mb-4'>
+
+                  <i className="fa-regular fa-star fa-lg"></i>
+                  <i className="fa-regular fa-star fa-lg"></i>
+                  <i className="fa-regular fa-star fa-lg"></i>
+                  <i className="fa-regular fa-star fa-lg"></i>
+                  <i className="fa-regular fa-star fa-lg"></i>
+                </div>
                 <div>
 
 
@@ -95,7 +102,7 @@ export const SearchMatchCard = () => {
                           {/* dislike button */}
                           <button type="button"
                             onClick={() => setDisliked(true)}
-                            className={`p-1 me-1 search-match-button ${disliked ? 'slide-out-blurred-left' : ''}`}>                    
+                            className={`p-1 me-1 search-match-button ${disliked ? 'slide-out-blurred-left' : ''}`}>
                             <i className="hover-button-pulsate-bck fa-solid fa-xmark fa-3x d-flex justify-content-center align-items-center search-match-dislike"></i>
                           </button>
                         </div>
@@ -105,8 +112,8 @@ export const SearchMatchCard = () => {
                         <div className="me-lg-4 me-md-3 me-sm-3 me-2 d-flex justify-content-start ms-3">
                           {/* like button */}
                           <button type="button"
-                           onClick={() => setLike(true)}
-                            className={`p-1 me-1 search-match-button ${like ? 'slide-out-blurred-right' : ''}`}>                    
+                            onClick={() => setLike(true)}
+                            className={`p-1 me-1 search-match-button ${like ? 'slide-out-blurred-right' : ''}`}>
                             <i className="hover-button-pulsate-bck fa-solid fa-heart fa-3x d-flex justify-content-center align-items-center search-match-like "></i>
                           </button>
                         </div>
@@ -119,10 +126,11 @@ export const SearchMatchCard = () => {
           </div>
 
         </div>
-
-
-
       </div>
+
+
+
+
 
     </>
 

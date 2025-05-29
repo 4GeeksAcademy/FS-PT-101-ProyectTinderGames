@@ -12,6 +12,9 @@
   background-color: hsla(0, 0%, 100%, 0.72);
   padding: 1rem;
   place-self: center;
+    border: 6px solid #333;
+  padding: 16px;
+ 
 }
 .search-match-card-purple {
   color: #7c0ebc;
