@@ -12,7 +12,7 @@ class User(db.Model):
     __tablename__ = 'users'
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    password: Mapped[str] = mapped_column(String(250), nullable=False)
 
     # Relaciones
     profile: Mapped[Optional[Profile]] = relationship('Profile', back_populates='user', uselist=False, cascade='all, delete-orphan',single_parent=True)
@@ -51,6 +51,7 @@ class Profile(db.Model):
     nick_name: Mapped[str] = mapped_column(String(21), unique=True, nullable=True)
     bio: Mapped[str] = mapped_column(String(500), unique=True, nullable=True)
     language: Mapped[str] = mapped_column(String(50), unique=False, nullable=True)
+    steam_id: Mapped[str] = mapped_column(String(200), unique=True, nullable=True)
 
     # Relaciones
     user: Mapped[User] = relationship('User', back_populates='profile')
