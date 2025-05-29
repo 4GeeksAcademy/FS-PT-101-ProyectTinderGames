@@ -51,6 +51,7 @@ userServices.getUserInfo = async () => {
         if (!resp.ok) throw Error('Something went wrong')
         const data = await resp.json()
         console.log(data)
+        localStorage.setItem('user',JSON.stringify(data.user))
         return data
     } catch (error) {
         console.log(error)

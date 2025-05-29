@@ -1,6 +1,6 @@
 export const initialStore=()=>{
   return{
-    user:null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
     message: null,
     todos: [
       {
@@ -20,6 +20,7 @@ export const initialStore=()=>{
 export default function storeReducer(store, action = {}) {
   switch(action.type){
     case 'logout':
+      localStorage.removeItem('user')
       localStorage.removeItem('token')
       return {
         ...store,
