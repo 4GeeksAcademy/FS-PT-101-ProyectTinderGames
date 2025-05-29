@@ -7,6 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 api = Blueprint('api', __name__)
 
@@ -22,14 +23,16 @@ def register():
         if not data or 'email' not in data or 'password' not in data:
             raise Exception('missing data')
         stmt = select(User).where(User.email == data['email'])
-        existing_email = db.session.execute(stmt).scalar_one_or_none()
-
-        if existing_email:
+        existing_user = db.session.execute(stmt).scalar_one_or_none()
+        if existing_user:
             return jsonify({'error':'email taken'}), 418
+        
+        #hash
+        hashed_password = generate_password_hash(data['password'])
                 
         new_user = User(
         email=data['email'],
-        password=data['password'],
+        password=hashed_password
         )
         db.session.add(new_user)
         db.session.commit()
@@ -49,11 +52,10 @@ def login():
         user = db.session.execute(stmt).scalar_one_or_none()
 
         if not user:
-            return jsonify({'error':'el email no está registrado, registrate'}), 418
+            return jsonify({'error':'el email no esta registrado, registrate'}), 418
         
-        if user.password != data['password']  :
-            return jsonify({'error':'email/contraseña no valido'}), 418
-        
+        if not check_password_hash(user.password, data['password']):
+            return jsonify({'error':'email/contraseña no válido'}), 418
 
         token = create_access_token(identity = str(user.id))
         return jsonify({'success':'true', 'token':token}), 200
