@@ -6,7 +6,6 @@
 
   width: 130%;
   min-height: 500px;
-  border-radius: 30px;
   background-color: hsla(0, 0%, 100%, 0.72); 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 1rem;
@@ -102,29 +101,28 @@
 
 .match-card-games {
   width: 70%;
-      border: solid;
-    border: 10%;
-    border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.50);
-  border-color: hsla(184, 100%, 50%, 0.274);
+
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+
+
 }
 
 .match-card-languages {
   width: 25%;
-        border: solid;
-    border: 10%;
-    border-radius: 20px;
-      background-color: rgba(255, 255, 255, 0.50);
-      border-color: hsla(184, 100%, 50%, 0.274);
+  background-color: rgba(255, 255, 255, 0.50);
+ 
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+
 
 }
 
 .match-card-preferences {
   width: 95%;
-        border: solid;
-    border: 10%;
-    border-radius: 20px;
-      background-color: rgba(255, 255, 255, 0.50);
-         border-color: hsla(184, 100%, 50%, 0.274);
+  background-color: rgba(255, 255, 255, 0.50);
 
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
 }
