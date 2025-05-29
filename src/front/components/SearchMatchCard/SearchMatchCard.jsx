@@ -1,5 +1,6 @@
 import './SearchMatchCard.css';
 import profilePic from "../../assets/img/icons/icon-profile.png";
+import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import { useState } from 'react';
 
 
@@ -26,10 +27,10 @@ export const SearchMatchCard = () => {
               <div className="card-body">
                 <div className='d-flex justify-content-center'>
 
-                  <div className='search-match-profile-pic d-flex justify-content-center rounded-circle'>
+                  <div className='d-flex justify-content-center rounded-circle'>
 
 
-                    <img src={profilePic} alt="App Logo"></img>
+                    <img src={profilePic4} alt="App Logo" className='search-match-profile-pic'></img>
                   </div>
                 </div>
 
