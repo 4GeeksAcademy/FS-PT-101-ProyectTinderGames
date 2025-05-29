@@ -35,13 +35,13 @@ export const SearchMatchCard = () => {
 
 
                 <h2 className="card-title d-flex justify-content-center mt-2">User Name</h2>
+                {/* stars */}
                 <div className='search-match-stars d-flex justify-content-center mt-3 mb-4'>
-
                   <i className="fa-regular fa-star fa-lg"></i>
-                  <i className="fa-regular fa-star fa-lg"></i>
-                  <i className="fa-regular fa-star fa-lg"></i>
-                  <i className="fa-regular fa-star fa-lg"></i>
-                  <i className="fa-regular fa-star fa-lg"></i>
+                  <i className="fa-regular fa-star fa-lg ms-1"></i>
+                  <i className="fa-regular fa-star fa-lg ms-1"></i>
+                  <i className="fa-regular fa-star fa-lg ms-1"></i>
+                  <i className="fa-regular fa-star fa-lg ms-1"></i>
                 </div>
                 <div>
 
@@ -127,10 +127,6 @@ export const SearchMatchCard = () => {
 
         </div>
       </div>
-
-
-
-
 
     </>
 
