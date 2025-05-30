@@ -1,13 +1,13 @@
 .register-card{
-    width: 24rem;
-    height: 20rem;
+    width: 26rem;
+    height: 22rem;
     border: 3px solid;
     border-color: #7c0ebc ;
 
 }
 
 .register-card-subtitle{
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     text-shadow:
         0 2px 1px rgba(0, 0, 0, 0.10),
         0 4px 2px rgba(0, 0, 0, 0.10),
@@ -16,7 +16,13 @@
         0 12px 12px rgba(0, 0, 0, 0.03);
 
 }
+.register-password-subtitle{
+    font-size: 0.6rem;
+    color: rgb(99, 99, 99);
 
+}
 .register-card-border{
-    border-color: aqua ;
+    border: 1px solid !important;
+    border-color: aqua !important;
+    
 }

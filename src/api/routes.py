@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Profile, Review, Match, Reject, Game
+from api.models import db, User, Profile, Review, Match, Reject, Game, Like
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
@@ -343,93 +343,49 @@ def put_review(review_id):
     return jsonify({'message':'review updated'}), 200
 
 
-# GET ALL MATCHES
+# CRUD for Match
 @api.route('/matches', methods=['GET'])
 def get_all_matches():
     stmt = select(Match)
     matches = db.session.execute(stmt).scalars().all()
     return jsonify([match.serialize() for match in matches]), 200
 
-# GET MATCH BY ID
-@api.route('/matches/<match_id>', methods=['GET'])
+@api.route('/matches/<int:match_id>', methods=['GET'])
 def get_single_match(match_id):
     stmt = select(Match).where(Match.id == match_id)
     match = db.session.execute(stmt).scalar_one_or_none()
-    if match is None:
-        return jsonify({'error':f'match with id: {match_id} not found'}), 400
+    if not match:
+        return jsonify({'error': f'Match with id {match_id} not found'}), 404
+    return jsonify(match.serialize()), 200
 
-    return jsonify(match.serialize())
+@api.route('/matches/<int:user1_id>/<int:user2_id>', methods=['POST'])
+def post_match(user1_id, user2_id):
+    if user1_id == user2_id:
+        return jsonify({'error': 'Cannot match yourself'}), 400
+    user1 = User.query.get(user1_id)
+    user2 = User.query.get(user2_id)
+    if not user1 or not user2:
+        return jsonify({'error': 'User not found'}), 404
+    # prevent duplicates regardless of order
+    existing = (db.session.query(Match)
+        .filter(((Match.user1_id==user1_id) & (Match.user2_id==user2_id)) |
+                ((Match.user1_id==user2_id) & (Match.user2_id==user1_id))).first())
+    if existing:
+        return jsonify({'error': 'Match already exists'}), 409
+    new_match = Match(user1_id=user1_id, user2_id=user2_id)
+    db.session.add(new_match)
+    db.session.commit()
+    return jsonify(new_match.serialize()), 201
 
-# GET MATCHES SENT
-@api.route('/matches_sent/<user_id>', methods=['GET'])
-def get_matches_sent(user_id):
-    # 1. Buscamos al usuario; si no existe devolvemos 404
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
-
-    # 2. Sacamos las reseñas que ha escrito
-    matches = user.matches_given
-
-    # Serializamos cada review usando el método de instancia
-    serialized = [match.serialize() for match in matches]
-
-    return jsonify({"reviews_authored": serialized}), 200
-
-
-# GET MATCHES RECIEVED
-@api.route('/matches_recieved/<user_id>', methods=['GET'])
-def get_matches_recieved(user_id):
-     # 1. Buscamos al usuario; si no existe devolvemos 404
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
-
-    # 2. Sacamos las reseñas que ha escrito
-    matches = user.matches_received
-
-    # Serializamos cada review usando el método de instancia
-    serialized = [match.serialize() for match in matches]
-
-    return jsonify({"reviews_authored": serialized}), 200
-
-# DELETE MATCH
-@api.route('/matches/<match_id>', methods=['DELETE'])
+@api.route('/matches/<int:match_id>', methods=['DELETE'])
 def delete_match(match_id):
     stmt = select(Match).where(Match.id == match_id)
     match = db.session.execute(stmt).scalar_one_or_none()
-    if match is None:
-        return jsonify({'error':f'match with id: {match_id} not found'})
-    
+    if not match:
+        return jsonify({'error': f'Match with id {match_id} not found'}), 404
     db.session.delete(match)
     db.session.commit()
-    return jsonify({'message':f'match with id: {match_id} deleted'})
-
-# POST MATCH
-@api.route('/matches/<int:liker_id>/<int:liked_id>', methods=['POST'])
-def post_match(liker_id, liked_id):
-    liker = db.session.get(User, liker_id)
-    if liker is None:
-        return jsonify({'error': f'User (liker) with id={liker_id} not found'}), 404
-
-    liked = db.session.get(User, liked_id)
-    if liked is None:
-        return jsonify({'error': f'User (liked) with id={liked_id} not found'}), 404
-
-    if liker_id == liked_id:
-        return jsonify({'error': 'Cannot match with yourself'}), 400
-
-    existing = (db.session.query(Match).filter_by(liker_id=liker_id, liked_id=liked_id).first())
-    if existing:
-        return jsonify({'error': 'Match already exists'}), 409
-
-    # 4. Crear y persistir el nuevo match
-    new_match = Match(liker_id=liker_id, liked_id=liked_id)
-    db.session.add(new_match)
-    db.session.commit()
-
-    # 5. Responder con 201 Created y los datos del match
-    return jsonify(new_match.serialize()), 201
+    return jsonify({'message': f'Match {match_id} deleted'}), 200
 
 # GET ALL REJECT
 @api.route('/rejects', methods=['GET'])
@@ -592,6 +548,90 @@ def delete_game(game_id):
     db.session.delete(game)
     db.session.commit()
     return jsonify({'message':f'game with id: {game_id} deleted'}), 200
+
+@api.route('/likes', methods=['GET'])
+def get_all_likes():
+    stmt = select(Like)
+    likes = db.session.execute(stmt).scalars().all()
+    return jsonify([like.serialize() for like in likes]), 200
+
+@api.route('/likes/<int:like_id>', methods=['GET'])
+def get_single_like(like_id):
+    stmt = select(Like).where(Like.id == like_id)
+    like = db.session.execute(stmt).scalar_one_or_none()
+    if not like:
+        return jsonify({'error': f'Like with id {like_id} not found'}), 404
+    return jsonify(like.serialize()), 200
+
+@api.route('/likes/<int:liker_id>/<int:liked_id>', methods=['POST'])
+def post_like(liker_id, liked_id):
+    # No se permite que un usuario se de like a sí mismo
+    if liker_id == liked_id:
+        return jsonify({'error': 'Cannot like yourself'}), 400
+
+    # Obtener usuarios de la base de datos
+    liker = User.query.get(liker_id)
+    liked = User.query.get(liked_id)
+    if not liker or not liked:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Evitar likes duplicados
+    existing_like = (db.session.query(Like)
+                     .filter_by(liker_id=liker_id, liked_id=liked_id)
+                     .first())
+    if existing_like:
+        return jsonify({'error': 'Like already exists'}), 409
+
+    # Verificar like inverso para crear match
+    reverse_like = (db.session.query(Like)
+                    .filter_by(liker_id=liked_id, liked_id=liker_id)
+                    .first())
+
+    # Crear el nuevo like
+    new_like = Like(liker_id=liker_id, liked_id=liked_id)
+    db.session.add(new_like)
+
+    # Si existe el like inverso y no existe aún el match, crear match
+    if reverse_like:
+        existing_match = (db.session.query(Match)
+                          .filter(
+                              ((Match.user1_id == liker_id) & (Match.user2_id == liked_id)) |
+                              ((Match.user1_id == liked_id) & (Match.user2_id == liker_id))
+                          )
+                          .first())
+        if not existing_match:
+            new_match = Match(user1_id=liker_id, user2_id=liked_id)
+            db.session.add(new_match)
+
+    # Confirmar cambios en la base
+    db.session.commit()
+    return jsonify(new_like.serialize()), 201
+
+@api.route('/likes/<int:like_id>', methods=['DELETE'])
+def delete_like(like_id):
+    # Buscar el like
+    like = db.session.query(Like).get(like_id)
+    if not like:
+        return jsonify({'error': f'Like with id {like_id} not found'}), 404
+
+    # Comprobar si este like formó parte de un match
+    match = (db.session.query(Match)
+             .filter(
+                 ((Match.user1_id == like.liker_id) & (Match.user2_id == like.liked_id)) |
+                 ((Match.user1_id == like.liked_id) & (Match.user2_id == like.liker_id))
+             )
+             .first())
+
+    # Si hay match, borrarlo
+    if match:
+        db.session.delete(match)
+
+    # Borrar el like
+    db.session.delete(like)
+    db.session.commit()
+
+    return jsonify({'message': f'Like {like_id} deleted, match removed' if match else f'Like {like_id} deleted'}), 200
+
 
 
 
