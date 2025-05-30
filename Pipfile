@@ -21,6 +21,7 @@ sqlalchemy = "*"
 shell = "*"
 flask = "*"
 flask-jwt-extended = "*"
+werkzeug = "*"
 
 [requires]
 python_version = "3.13"

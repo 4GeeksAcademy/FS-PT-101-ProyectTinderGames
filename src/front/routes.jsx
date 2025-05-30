@@ -9,15 +9,13 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
+
+
 import { Register_page } from "./pages/Register_page";
 import { Login_page } from "./pages/Login_page";
 import { Private_page } from "./pages/Private_page";
-import { PrivateLayout } from "./components/Private/Private-layout";
-import { Profile } from "./pages/Privateviews/Profile";
-import { SearchMate } from "./pages/Privateviews/Search-mate";
-import { YourMatches } from "./pages/Privateviews/Your-matches";
-import { FindGames } from "./pages/Privateviews/Find-games";
-import { Settings } from "./pages/Privateviews/Settings";
+
+import { Cardscomponents} from "./pages/cardscomponents"
 
 
 export const router = createBrowserRouter(
@@ -35,6 +33,8 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/demo" element={<Demo />} />
+
+
       <Route path="/register" element={<Register_page />} />
       <Route path="/login" element={<Login_page />} />
       {/* dejo comentario para separar vistas públicas de las privadas */}
@@ -45,6 +45,8 @@ export const router = createBrowserRouter(
         <Route path="your-matches" element={<YourMatches />} />
         <Route path="find-games" element={<FindGames />} />
         <Route path="settings" element={<Settings />} />
+
+        <Route path="/cardscomponents" element={<Cardscomponents />} />
       </Route>
 
       <Route path="/privateside" element={<PrivateLayout />} />  {/* esta ruta la tengo para ver solo la sidebar cuando la esté manejando. */}
