@@ -6,7 +6,7 @@ export const Cardscomponents = () => {
   return (
     <>
       <SearchMatchCard />
-      <MatchCard />
+      {/* <MatchCard /> */}
     </>
   )
 

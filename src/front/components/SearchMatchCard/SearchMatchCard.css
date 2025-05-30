@@ -12,7 +12,7 @@
   background-color: hsla(0, 0%, 100%, 0.72);
   padding: 1rem;
   place-self: center;
-    border: 6px solid #333;
+  border: 6px solid #7c0ebc;
   padding: 16px;
  
 }
@@ -96,7 +96,7 @@
 
 }
 
-.move-left {
+.search-match-move-left {
   transform: translateX(-100px);
   transition: transform 0.5s ease;
 }

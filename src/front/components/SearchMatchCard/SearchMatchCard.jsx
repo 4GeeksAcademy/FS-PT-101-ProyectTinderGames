@@ -22,8 +22,8 @@ export const SearchMatchCard = () => {
         </div>
         <div className='d-flex justify-content-center'>
           <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-
-            <div className="card searchMatchCard card-gradient-transparent">
+{/* To do: Funcionalidad: que el borde cambie de morado-azul de forma aleatoria en cada tarjeta que se muestrre */}
+            <div className="card searchMatchCard"> 
               <div className="card-body">
                 <div className='d-flex justify-content-center'>
 
