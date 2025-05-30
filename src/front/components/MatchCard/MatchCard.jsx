@@ -22,30 +22,48 @@ export const MatchCard = () => {
                 <div className='d-flex justify-content-center'>
                     <div className="col-12 col-sm-10 col-md-8 col-lg-6">
 
+                        {/* to do: que el borde de la tarjeta cambie de color entre morado y azul de forma aletaoria 
+                        en cada tarjeta mostrada. si la tarjeta es azul, los bordes y la edad serán azul, si la tarjeta es morada,
+                        los bordes y la edad serán morados */}
                         <div className="card matchCard">
                             <div className="card-body">
-                                <div className='d-flex align-items-start'>
-                                    {/* profile pic */}
-                                    <div className='match-profile-pic d-flex rounded-circle'>
-                                        <img src={profilePic4} alt="App Logo" className='match-profile-pic rounded-circle'></img>
-                                    </div>
-                                    <div>
-                                        {/* user name */}
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <h2 className="card-title mx-4 mt-3">User Name </h2>
-                                            <h3 className="match-card-text-purple text-end mt-3">32</h3>
-                                        </div>
-                                        {/* stars */}
-                                        <div className="d-flex justify-content-start mx-4 mt-3">
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                        </div>
-                                    </div>
+                                <div className='holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa d-flex'>
 
+                                    <div className='d-flex me-auto '>
+                                        {/* profile pic */}
+                                        <div className='match-profile-pic rounded-circle '>
+                                            <img src={profilePic4} alt="App Logo" className='match-profile-pic rounded-circle'></img>
+                                        </div>
+                                        <div>
+                                            {/* user name */}
+                                            <div className="d-flex justify-content-between align-items-center mb-5">
+                                                <h1 className="card-title mx-4 mt-3">User Name </h1>
+                                                <h2 className="match-card-text-purple text-end mt-3">32</h2>
+                                            </div>
+                                            {/* stars */}
+                                            <div className="d-flex justify-content-start mx-4">
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div className='botoooooooooooooooooooooooooooooooooooon'>
+
+
+                                        {/* connect button */}
+
+                                        <div className='match-card-connect'>
+                                            <button type="button" className='match-card-button'> <img src={connectIcon} alt="connect icon" className='match-card-icon pulsate-bck' />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
+
                             </div>
                             <div className='d-flex align-items-start '>
 
@@ -142,12 +160,6 @@ export const MatchCard = () => {
                                     </div>
                                 </div>
 
-                                {/* connect button */}
-
-                                <div className='match-card-connect align-self-end'>
-                                    <button type="button" className='match-card-button'> <img src={connectIcon} alt="connect icon" className='match-card-icon pulsate-bck' />
-                                    </button>
-                                </div>
                                 <div>
                                 </div>
                             </div>
