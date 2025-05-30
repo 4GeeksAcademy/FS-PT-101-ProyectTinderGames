@@ -26,8 +26,11 @@
 }
 
 /*AJUSTAR EL TAMAÑO DE LOS ICONOS !!! NO OLVIDAAARRR*/
-.Privateicons{
-    object-fit: contain;
+.Privateicons {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin-right: 10px;
 }
 
 .sidebar-button .sidebar-icon {
@@ -41,8 +44,8 @@
 }
 
 .sidebar-button:active {
-  box-shadow: 0 0 12px cyan, 0 0 12px #cc00ff;
-  transform: scale(0.98);
+  box-shadow: 0 0 15px cyan, 0 0 15px #cc00ff, 0 0 30px rgba(0, 255, 255, 0.5);
+  transform: scale(0.97);
 }
 
 /* Ajuste a resoluciones pequeñas */
