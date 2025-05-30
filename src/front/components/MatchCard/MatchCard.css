@@ -4,22 +4,20 @@
 }
 .matchCard {
 
-  width: 130%;
+  width: 150%;
   min-height: 500px;
   background-color: hsla(0, 0%, 100%, 0.72); 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  border: 4px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-  border-image-slice: 1;
-  place-self: center;
-
+  border: 6px solid #7c0ebc;
+  border-radius: 30px
+  
 }
 
 
 .match-profile-pic {
-  width: 140px;
-  height: 140px;
+  width: 192px;
+  height: 192px;
+  border-radius: 50%;
 }
 
 
@@ -37,8 +35,10 @@
 }
 
 .match-card-icon {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
+  margin-right: -40%;
+  margin-top: -15%;
 }
 .pulsate-bck {
   -webkit-animation: pulsate-bck 2s ease-in-out infinite both;
@@ -101,28 +101,27 @@
 
 .match-card-games {
   width: 70%;
+  border: solid #7c0ebc;
   background-color: rgba(255, 255, 255, 0.50);
-
-  border: 2px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+  border-radius: 30px;
 
 
 }
 
 .match-card-languages {
   width: 25%;
+   border: solid #7c0ebc;
   background-color: rgba(255, 255, 255, 0.50);
- 
-  border: 2px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+  border-radius: 30px;
+
 
 
 }
 
 .match-card-preferences {
-  width: 95%;
+  width: 100%;
+  border: solid #7c0ebc;
   background-color: rgba(255, 255, 255, 0.50);
+  border-radius: 30px;
 
-  border: 2px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
 }
