@@ -12,23 +12,25 @@ export const SignIn = () => {
         password: "",
     })
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault()
-        userServices.login(formData).then(data => {
+        try {
+            const data = await userServices.login(formData)
             localStorage.setItem('token', data.token)
-        }).then(data=> {
             if (data.success) {
                 navigate('/private')
-                }
-        })
+            }
+        } catch (error) {
+            console.error('Login failed', error)
+        }
     }
 
     const handleChange = e => {
         setFormData({
-            ...formData, 
-            [e.target.name]: e.target.value  
+            ...formData,
+            [e.target.name]: e.target.value
         })
-        
+
     }
 
     return (
@@ -39,13 +41,13 @@ export const SignIn = () => {
                     <h2 className="card-title text-center">Sign In</h2>
                     <h6 className="card-subtitle mb-2 register-card-subtitle text-end me-4 pe-2 mb-3">Need an account <Link to="/register">Register</Link></h6>
 
-                    <form onSubmit={handleSubmit}> 
+                    <form onSubmit={handleSubmit}>
                         <div className="mx-4">
                             <div>
                                 <label for="basic-url" className="form-label mb-0 mt-2">Email</label>
 
                             </div>
-                            <input type="email" name="email"  placeholder="email" value={formData.email} onChange={handleChange} className='w-100 border-0 rounded-2 border-1 register-card-border' />
+                            <input type="email" name="email" placeholder="email" value={formData.email} onChange={handleChange} className='w-100 border-0 rounded-2 border-1 register-card-border' />
                             <div>
                                 <label for="basic-url" className="form-label mt-3 mb-0">Password</label>
                             </div>
