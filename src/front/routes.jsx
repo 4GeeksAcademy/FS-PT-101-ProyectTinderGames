@@ -14,8 +14,14 @@ import { Demo } from "./pages/Demo";
 import { Register_page } from "./pages/Register_page";
 import { Login_page } from "./pages/Login_page";
 import { Private_page } from "./pages/Private_page";
-
 import { Cardscomponents} from "./pages/cardscomponents"
+
+import { PrivateLayout } from "./components/Private/Private-layout";
+import { Profile } from "./pages/Privateviews/Profile";
+import { SearchMate } from "./pages/Privateviews/Search-mate";
+import { YourMatches } from "./pages/Privateviews/Your-matches";
+import { FindGames } from "./pages/Privateviews/Find-games";
+import { Settings } from "./pages/Privateviews/Settings";
 
 
 export const router = createBrowserRouter(
@@ -45,9 +51,8 @@ export const router = createBrowserRouter(
         <Route path="your-matches" element={<YourMatches />} />
         <Route path="find-games" element={<FindGames />} />
         <Route path="settings" element={<Settings />} />
-
-        <Route path="/cardscomponents" element={<Cardscomponents />} />
       </Route>
+      <Route path="/cardscomponents" element={<Cardscomponents />} />
 
       <Route path="/privateside" element={<PrivateLayout />} />  {/* esta ruta la tengo para ver solo la sidebar cuando la esté manejando. */}
 
