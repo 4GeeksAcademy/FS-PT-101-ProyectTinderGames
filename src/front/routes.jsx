@@ -15,6 +15,7 @@ import { Register_page } from "./pages/Register_page";
 import { Login_page } from "./pages/Login_page";
 import { Private_page } from "./pages/Private_page";
 import { Cardscomponents} from "./pages/cardscomponents"
+import { RegisterLoginTest } from "./pages/Register_login_test";
 
 import { PrivateLayout } from "./components/Private/Private-layout";
 import { Profile } from "./pages/Privateviews/Profile";
