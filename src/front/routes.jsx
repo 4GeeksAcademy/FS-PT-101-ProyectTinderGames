@@ -16,6 +16,7 @@ import { Login_page } from "./pages/Login_page";
 import { Private_page } from "./pages/Private_page";
 
 import { Cardscomponents} from "./pages/cardscomponents"
+import { RegisterLoginTest } from "./pages/Register_login_test";
 
 
 export const router = createBrowserRouter(
@@ -38,8 +39,11 @@ export const router = createBrowserRouter(
         <Route path="/register" element={<Register_page/>}/>
         <Route path="/login" element={<Login_page/>}/>
         <Route path='/private' element={<Private_page/>}/>
+        
 
         <Route path="/cardscomponents" element={<Cardscomponents />} />
+        <Route path="/register_login_test" element={<RegisterLoginTest/>} />
+        
       </Route>
     )
 );
