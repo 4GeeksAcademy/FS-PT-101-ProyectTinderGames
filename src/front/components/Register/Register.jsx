@@ -29,7 +29,7 @@ export const Register = () => {
                                 <label for="basic-url" className="form-label mt-3 mb-0">Password</label>
                             </div>
                             <div>
-                                <input type="password" name="" id="" className=" w-100 rounded-2 border-1 register-card-border " />
+                                <input type="password" name="" id="" className="w-100 rounded-2 border-1 register-card-border" />
                                 <div className="form-text register-password-subtitle" id="basic-addon4">*Password must have at least 8 characters.</div>
                             </div>
                             <input type="submit" value="Continue" className='w-100 rounded-2 border-1 mt-5 text-white bg-black register-card-border' />
