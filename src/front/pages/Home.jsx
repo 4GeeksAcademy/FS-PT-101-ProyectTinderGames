@@ -15,7 +15,6 @@ export const Home = () => {
 		<>
 			<NavbarHome />
 			<div className="container my-5">
-
 				{/* Carrusel Bootstrap 5 */}
 				<div className="row">
 					<div className="col-12">
@@ -54,7 +53,7 @@ export const Home = () => {
 
 
 				{/* How It Works */}
-				<section className="howitworks-section pb-5 text-white my-5 border-bottom border-top border-white pt-5">
+				<section className="howitworks-section pb-5 text-white my-5 border-bottom border-top border-white pt-5" id='howitworks'>
 					<div className="container position-relative">
 						<div className="d-flex align-items-start">
 							{/* Contenido principal */}
@@ -110,7 +109,7 @@ export const Home = () => {
 					</div>
 				</section>
 				{/* Best Practices */}
-				<section className="bestpractices-section pb-5 text-white my-5 border-bottom border-white">
+				<section className="bestpractices-section pb-5 text-white my-5 border-bottom border-white" id='bestpractices'>
 					<div className="container position-relative">
 						<div className="d-flex align-items-start">
 
@@ -181,7 +180,7 @@ export const Home = () => {
 					</div>
 				</section>
 				{/* About Us */}
-				<section className="about-section py-5 text-white my-5 border-bottom">
+				<section className="about-section py-5 text-white my-5 border-bottom" id='aboutus'>
 					<div className="container position-relative">
 						<div className="d-flex align-items-center">
 							<div className="vertical-title me-4 my-5">ABOUT US</div>

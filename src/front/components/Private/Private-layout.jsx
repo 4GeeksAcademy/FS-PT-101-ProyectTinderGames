@@ -9,6 +9,7 @@ export const PrivateLayout = () => {
 
   return (
     <div className="private-layout">
+      <PrivateNavbar/>
       {/*<PrivateNavbar />*/}
       <div className="private-layout-body">
         <Sidebar activePath={location.pathname} />
