@@ -7,7 +7,7 @@ export const NavbarHome = () => {
  const navigate = useNavigate()
   return (
 <>
-    <nav className="navbar navbar-expand-lg bg-black navbarHome-font">
+    <nav className="navbar navbar-expand-lg bg-black navbarHome-font border-bottom ">
       <div className="container-fluid">
         <div className="d-flex align-items-center">
           <a className="navbar-brand" href="#" />
@@ -24,13 +24,13 @@ export const NavbarHome = () => {
               <div className="d-flex justify-content-around align-self-center">
 
                 <li className="nav-item">
-                  <a className="nav-link active navbarHome-font me-5" aria-current="page" href="#">Best Practices</a>
+                  <a className="nav-link active navbarHome-font me-5" aria-current="page" href="#bestpractices">Best Practices</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link navbarHome-font me-5" href="#">How It Works</a>
+                  <a className="nav-link navbarHome-font me-5" href="#howitworks">How It Works</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link navbarHome-font me-5" href="#">About Us</a>
+                  <a className="nav-link navbarHome-font me-5" href="#aboutus">About Us</a>
                 </li>
               </div>
               <li className="nav-item">

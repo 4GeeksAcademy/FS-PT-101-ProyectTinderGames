@@ -43,6 +43,8 @@ export const router = createBrowserRouter(
 
 
       <Route path="/register" element={<Register_page />} />
+      <Route path="/registerprueba" element={<RegisterLoginTest/>} />
+
       <Route path="/login" element={<Login_page />} />
       {/* dejo comentario para separar vistas públicas de las privadas */}
       <Route path="/private" element={<PrivateLayout />}>
