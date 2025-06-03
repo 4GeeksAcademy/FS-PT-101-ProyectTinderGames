@@ -5,22 +5,19 @@ body {
 
 /* Secciones con fondo negro y bordes */
 .about-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(assets/img/background/about-us-background-image.png);
+  background-image:url(assets/img/background/about-us-background-image.png);
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
 .howitworks-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(assets/img/background/how-it-works-background.png);
+  background-image: url(assets/img/background/how-it-works-background.png);
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
 .bestpractices-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(assets/img/background/best-practices-background.png);
+  background-image:url(assets/img/background/best-practices-background.png);
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -40,18 +37,6 @@ body {
   color: #fff;
   margin: auto;
 }
-.neon-box {
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1 round;
-  border-radius: 0.5rem;
-  height: 12rem; /* o lo que necesites */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  user-select: none;
-}
 
 /* Título neón horizontal */
 .neon-heading {
@@ -61,46 +46,82 @@ body {
   color: #f8f8f8;
 }
 
-/* Estructura 3D de la tarjeta */
-.card-wrapper {
-  perspective: 800px;
+.card {
+  width: 225px;
+  height: 225px;
+  margin: 1rem auto;
+  perspective: 1000px;
+  cursor: pointer;
+  background-color:transparent;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  height: 400px;
+  width: 400px;
+  border: 2px solid #0000;
+  border-radius: 12px;
+  background: linear-gradient(#131219, #131219) padding-box, linear-gradient(
+        var(--angle),
+        #6bf1fa,
+        #f538ff
+      ) border-box;
+  animation: 15s rotate linear infinite;
+  background-color: transparent;
+}
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 .card-inner {
-  width: 100%;
-  aspect-ratio: 4 / 3; /* mantiene proporción, altura menor al reducir ancho */
   position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
   transform-style: preserve-3d;
-  transition: transform 0.4s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  border-radius: 0.5rem;
 }
 
-.card-face {
+.card:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
   position: absolute;
-  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  backface-visibility: hidden;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1 round;
   border-radius: 0.5rem;
-  cursor: pointer;
-  user-select: none;
-  padding: 1rem;
+}
+
+.card-front {
+  background: rgba(0, 0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 
 .card-back {
+  background: transparent;
+  color: rgb(255, 255, 255);
   transform: rotateY(180deg);
 }
-
-.card-wrapper.flipped .card-inner {
-  transform: rotateY(180deg);
+.card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.card-back img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}

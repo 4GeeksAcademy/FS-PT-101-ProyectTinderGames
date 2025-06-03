@@ -13,6 +13,7 @@ export const Register_page = () =>{
     const handleSubmit = e => {
         e.preventDefault()
         userServices.register(formData)
+        
     }
 
     const handleChange = e => {

@@ -22,6 +22,7 @@ shell = "*"
 flask = "*"
 flask-jwt-extended = "*"
 werkzeug = "*"
+openai = "*"
 
 [requires]
 python_version = "3.13"

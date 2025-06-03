@@ -1,6 +1,6 @@
 export const initialStore=()=>{
   return{
-    user: JSON.parse(localStorage.getItem('user')) || null,
+    // user: JSON.parse(localStorage.getItem('user')) || null,
     message: null,
     todos: [
       {
