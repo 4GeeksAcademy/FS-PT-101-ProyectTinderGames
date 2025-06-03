@@ -1,55 +1,78 @@
 import { useNavigate } from "react-router-dom";
 import logoApp from "../assets/img/logos/logo-app.png";
 import './navbarHome.css'
+import { Register } from "./Register/Register";
+import { SignIn } from "./SignIn/SignIn";
 
 export const NavbarHome = () => {
 
- const navigate = useNavigate()
+  const navigate = useNavigate()
   return (
-<>
-    <nav className="navbar navbar-expand-lg bg-black navbarHome-font border-bottom ">
-      <div className="container-fluid">
-        <div className="d-flex align-items-center">
-          <a className="navbar-brand" href="#" />
-          <img src={logoApp} alt="App Logo" className="d-inline-block align-text-top logo-navbarHome"></img>
-          <a className="navbar-brand navbarHome-font nabarHome-font-shadow" href="#">PLAYERLINK</a>
-        </div>
-        <div>
-          <button className="navbar-toggler border-2 navbarHome-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse border-2 navbarHome-toggler" id="navbarNav">
+    <>
+      <nav className="navbar navbar-expand-lg bg-black navbarHome-font border-bottom ">
+        <div className="container-fluid">
+          <div className="d-flex align-items-center">
+            <a className="navbar-brand" href="#" />
+            <img src={logoApp} alt="App Logo" className="d-inline-block align-text-top logo-navbarHome"></img>
+            <a className="navbar-brand navbarHome-font nabarHome-font-shadow" href="#">PLAYERLINK</a>
+          </div>
+          <div>
+            <button className="navbar-toggler border-2 navbarHome-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse border-2 navbarHome-toggler" id="navbarNav">
               <div className="d-flex align-items-center">
-            <ul className="navbar-nav">
-              <div className="d-flex justify-content-around align-self-center">
+                <ul className="navbar-nav">
+                  <div className="d-flex justify-content-around align-self-center">
 
-                <li className="nav-item">
-                  <a className="nav-link active navbarHome-font me-5" aria-current="page" href="#bestpractices">Best Practices</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link navbarHome-font me-5" href="#howitworks">How It Works</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link navbarHome-font me-5" href="#aboutus">About Us</a>
-                </li>
+                    <li className="nav-item">
+                      <a className="nav-link active navbarHome-font me-5" aria-current="page" href="#bestpractices">Best Practices</a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link navbarHome-font me-5" href="#howitworks">How It Works</a>
+
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link navbarHome-font me-5" href="#aboutus">About Us</a>
+                    </li>
+                  </div>
+                  <li className="nav-item">
+                    <div className="navbarHome-start-container">
+                      <div className="navbarHome-line navbarHome-top-line"></div>
+                      {/* <a className="nav-link navbarHome-font nabarHome-font-shadow" href="#">START</a> */}
+
+                      {/* Modal button */}
+                      <button
+                        type="button" className="btn navbarHome-font nabarHome-font-shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        START
+                      </button>
+                      <div className="navbarHome-line navbarHome-bottom-line "></div>
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <li className="nav-item">
-                <div className="navbarHome-start-container">
-                  <div className="navbarHome-line navbarHome-top-line"></div>
-                  <a className="nav-link navbarHome-font nabarHome-font-shadow" href="#">START</a>
-                  <div className="navbarHome-line navbarHome-bottom-line "></div>
-                </div>
-              </li>
-            </ul>
-              </div>
+            </div>
           </div>
         </div>
+      </nav>
+
+
+{/* modal body */}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </nav>
+      <div class="modal-body d-flex justify-content-center">
+        <Register/>
+        <SignIn/>
+      </div>
 
-  
-
-</>
+    </div>
+  </div>
+</div>
+    </>
 
   )
 

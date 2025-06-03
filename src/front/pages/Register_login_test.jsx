@@ -1,5 +1,6 @@
 
 import { MatchCard } from "../components/MatchCard/MatchCard"
+import { NavbarHome } from "../components/NavbarHome"
 import { Register } from "../components/Register/Register"
 import { RegisterModal } from "../components/RegisterModal/RegisterModal"
 import { SearchMatchCard } from "../components/SearchMatchCard/SearchMatchCard"
@@ -13,11 +14,9 @@ export const RegisterLoginTest = () => {
     <>
       <Register/>
       <SignIn/>
-      <RegisterModal/>
-      <SignIn/> 
       <SearchMatchCard/>
       <MatchCard/>
- 
+
     </>
   )
 
