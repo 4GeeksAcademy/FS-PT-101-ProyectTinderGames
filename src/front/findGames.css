@@ -6,7 +6,7 @@
   flex-direction: column;
   height: 80vh;
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
   margin: 20px auto 0; /* 20px de margen arriba, centrado horizontalmente */
   border: 2px solid #0000;
   border-radius: 12px;
