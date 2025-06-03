@@ -70,3 +70,12 @@
 .navbarHome-toggler {
   border-color: #a41ef1;
 }
+
+.modal-home {
+  background: none;
+}
+
+.btn-close-modal {
+ background-color: #a41ef1;
+
+}
