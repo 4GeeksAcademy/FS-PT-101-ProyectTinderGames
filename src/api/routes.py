@@ -1,6 +1,8 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import os
+import openai
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Profile, Review, Match, Reject, Game, Like
 from api.utils import generate_sitemap, APIException
@@ -8,11 +10,56 @@ from flask_cors import CORS
 from sqlalchemy import select
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+
+# Carga variables de entorno desde .env
+load_dotenv()
+
+# Obtén la clave de OpenAI
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if OPENAI_API_KEY is None:
+    raise RuntimeError("La variable OPENAI_API_KEY no está definida en .env")
+
+openai.api_key = OPENAI_API_KEY
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
+
+@api.route("/chat", methods=["POST"])
+def chat():
+    """
+    Recibe JSON: { "message": "texto del usuario" }
+    Llama a OpenAI y devuelve el texto generado.
+    """
+    data = request.get_json()
+    if not data or "message" not in data:
+        return jsonify({"error": "Falta el campo 'message'"}), 400
+
+    user_message = data["message"]
+
+    try:
+        # Versión nueva de la librería (>=1.0.0):
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Eres un asistente útil"},
+                {"role": "user", "content": user_message}
+            ],
+            temperature=0.7,
+            max_tokens=512,
+            n=1,
+        )
+
+        # Extraer el texto de la primera respuesta
+        reply_text = response.choices[0].message.content.strip()
+        return jsonify({"reply": reply_text})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 
 # REGISTER
