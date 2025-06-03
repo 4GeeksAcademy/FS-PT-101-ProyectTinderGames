@@ -4,9 +4,9 @@
 .chat-page-container {
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  height: 75vh;
   width: 100%;
-  max-width: 1000px;
+  max-width: 800px;
   margin: 20px auto 0; /* 20px de margen arriba, centrado horizontalmente */
   border: 2px solid #0000;
   border-radius: 12px;

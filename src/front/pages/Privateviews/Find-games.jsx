@@ -7,14 +7,17 @@ export const FindGames = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "¡Hola! Soy la IA de FindGames. ¿En qué puedo ayudarte?" }
+    { sender: "bot", text: "¡Hola! Soy la IA de FindGames. ¿En qué puedo ayudarte?" },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const bottomRef = useRef(null);
+  const chatScrollRef = useRef(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const ref = chatScrollRef.current;
+    if (ref != null){
+        ref.scrollTop = ref.scrollHeight;
+    }
   }, [messages, isLoading]);
 
   const handleSubmit = async (e) => {
@@ -61,7 +64,7 @@ export const FindGames = () => {
         <h1>FindGames Chat</h1>
       </div>
 
-      <div className="chat-messages-container">
+      <div className="chat-messages-container" ref={chatScrollRef}>
         {messages.map((msg, idx) => (
           <div
             key={idx}
@@ -83,8 +86,6 @@ export const FindGames = () => {
             <div className="spinner" />
           </div>
         )}
-
-        <div ref={bottomRef} />
       </div>
 
       <form className="chat-input-container" onSubmit={handleSubmit}>
