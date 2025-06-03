@@ -2,11 +2,22 @@ import './MatchCard.css';
 import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import goldMedal from "../../assets/img/medals/gold-medal.png"
 import connectIcon from "../../assets/img/logos/logo-app.png"
+import { useEffect } from 'react';
 
-// import { useState } from 'react';
 
 
 export const MatchCard = () => {
+
+
+    useEffect(() => {
+        const el = document.getElementById('connectButton');
+        if (el) {
+            new window.bootstrap.Tooltip(el, {
+                boundary: document.body
+            });
+        }
+    }, []);
+
 
     return (
 
@@ -27,11 +38,11 @@ export const MatchCard = () => {
                         los bordes y la edad serán morados */}
                         <div className="card matchCard">
                             <div className="card-body">
-                                <div className='holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa d-flex'>
+                                <div className='d-flex'>
 
                                     <div className='d-flex me-auto '>
                                         {/* profile pic */}
-                                        <div className='match-profile-pic rounded-circle '>
+                                        <div className='rounded-circle '>
                                             <img src={profilePic4} alt="App Logo" className='match-profile-pic rounded-circle'></img>
                                         </div>
                                         <div>
@@ -48,28 +59,26 @@ export const MatchCard = () => {
                                                 <i className="fa-regular fa-star fa-2xl ms-3"></i>
                                                 <i className="fa-regular fa-star fa-2xl ms-3"></i>
                                             </div>
-
                                         </div>
                                     </div>
-                                    <div className='botoooooooooooooooooooooooooooooooooooon'>
-
-
+                                    <div>
                                         {/* connect button */}
-
                                         <div className='match-card-connect'>
-                                            <button type="button" className='match-card-button'> <img src={connectIcon} alt="connect icon" className='match-card-icon pulsate-bck' />
+                                            <button id="connectButton" type="button" className='match-card-button' 
+                                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Connect">
+                                                <img src={connectIcon} alt="connect icon" className='match-card-icon pulsate-bck' />
                                             </button>
+
                                         </div>
                                     </div>
                                 </div>
-
 
                             </div>
                             <div className='d-flex align-items-start '>
 
                                 {/* games */}
-                                <div class="card match-card-games mx-3 ">
-                                    <div class="card-body">
+                                <div className="card match-card-games mx-3 ">
+                                    <div className="card-body">
                                         <div className="container mt-3">
                                             <div className="row">
 
@@ -118,15 +127,15 @@ export const MatchCard = () => {
                                 </div>
 
                                 {/* languages */}
-                                <div class="card match-card-languages mx-3 mt-3">
-                                    <div class="card-body ps-0">
+                                <div className="card match-card-languages mx-3 mt-3">
+                                    <div className="card-body ps-0">
 
                                         <div className="container mt-3">
                                             <div className="row">
                                                 {/* Fila 1 */}
                                                 <div className="col-12 col-sm-2 col-md-2 col-lg-2 mb-1">
                                                     <h5 className='ms-2'>
-                                                        <i class="fa-solid fa-xl fa-globe"></i>
+                                                        <i className="fa-solid fa-xl fa-globe"></i>
                                                     </h5>
                                                 </div>
                                                 <div className="col-12 col-sm-10 col-md-10 col-lg-10 d-flex justify-content-start ps-5">
@@ -151,9 +160,9 @@ export const MatchCard = () => {
                             <div className='d-flex'>
 
                                 {/* preferences */}
-                                <div class="card match-card-preferences mx-3 mt-3">
-                                    <div class="card-body">
-                                        <h5 class="ms-2 mb-1">Preferences</h5>
+                                <div className="card match-card-preferences mx-3 mt-3">
+                                    <div className="card-body">
+                                        <h5 className="ms-2 mb-1">Preferences</h5>
                                         <p className='match-card-text-purple ms-2'>
                                             I'm looking for friends that help me to improve my gaming skills but not all the time. I'm competitive but I like to chill too.
                                         </p>
@@ -165,8 +174,6 @@ export const MatchCard = () => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </>
