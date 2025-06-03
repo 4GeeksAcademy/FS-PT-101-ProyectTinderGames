@@ -22,7 +22,10 @@
   font-size: 0.6rem;
   color: rgb(99, 99, 99);
 }
-.sign-in-card-border {
-  border: 1px solid !important;
+.btn-sign-in-card-border {
+  border: 2px solid !important;
   border-color: aqua !important;
+}
+.btn-sign-in-card-border:hover{
+     border-color:#7c0ebc !important;
 }
