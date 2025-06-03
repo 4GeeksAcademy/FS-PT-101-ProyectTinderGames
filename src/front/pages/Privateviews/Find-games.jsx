@@ -1,7 +1,7 @@
-// src/components/FindGames.jsx
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../../findGames.css";
+import logo from "../../assets/img/icons/icon-IA.png"
 
 export const FindGames = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -22,7 +22,6 @@ export const FindGames = () => {
     const text = inputValue.trim();
     if (!text) return;
 
-    // Agregar mensaje del usuario
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setInputValue("");
     setIsLoading(true);
@@ -70,13 +69,17 @@ export const FindGames = () => {
               msg.sender === "user" ? "message-user" : "message-bot"
             }`}
           >
+            {msg.sender === "bot" && (
+              <img src={logo} alt="IA Logo" className="message-avatar" />
+            )}
             <div className="message-content">{msg.text}</div>
           </div>
         ))}
 
-        {/* Spinner mientras carga */}
+        {/* Spinner mientras la IA "piensa" */}
         {isLoading && (
           <div className="message-row message-bot">
+            <img src={logo} alt="IA Logo" className="message-avatar" />
             <div className="spinner" />
           </div>
         )}
