@@ -4,8 +4,8 @@
   text-shadow: 0 1.5px 0 #e773ea, 0 1.5px 1.5px #e773ea;
 }
 .searchMatchCard {
-  width: 100%;
-  max-width: 444px;
+  width: 50%;
+  height: auto;
   min-height: 570px;
   border-radius: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
