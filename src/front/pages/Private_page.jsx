@@ -1,12 +1,14 @@
-import { useEffect } from "react"
-import userServices from "../services/userServices"
-import useGlobalReducer from "../hooks/useGlobalReducer"
-import { useNavigate } from "react-router-dom"
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import userServices from "../services/userServices";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { PrivateNavbar } from "../components/Private/Private-navbar";
+import { Sidebar } from "../components/Private/Private-sidebar";
 
 
 export const Private_page = () => {
     const navigate = useNavigate()
-    const {store, dispatch} = useGlobalReducer()
+    const {store, dispatch} = useGlobalReducer();
 
     useEffect (()=>{
         userServices.getUserInfo().then(data=> dispatch({type:'getUserInfo', payload: data.user}))
