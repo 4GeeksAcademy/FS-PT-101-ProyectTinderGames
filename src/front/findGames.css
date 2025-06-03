@@ -1,27 +1,26 @@
 /* findGames.css */
 
-/* --- Contenedor principal del chat (dark background) --- */
+/* Contenedor principal del chat */
 .chat-page-container {
   display: flex;
   flex-direction: column;
   height: 80vh;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #0d0d0d; /* muy oscuro */
-  border: 1px solid #2a2a2a;
+  max-width: 600px;
+  margin: 20px auto 0; /* 20px de margen arriba, centrado horizontalmente */
+  background-color: #0d0d0d;
+  border: 1px solid #10a9d3;
   border-radius: 8px;
   overflow: hidden;
 }
 
-/* --- Cabecera --- */
+/* Cabecera */
 .chat-header {
-  background: linear-gradient(90deg, #1a9cff, #9900ff);
+  background: linear-gradient(90deg, #1ab3ff, #9900ff);
   padding: 16px;
   border-bottom: 1px solid #2a2a2a;
   text-align: center;
 }
-
 .chat-header h1 {
   margin: 0;
   color: #e6e6ff;
@@ -29,15 +28,13 @@
   letter-spacing: 1px;
 }
 
-/* --- Contenedor de mensajes con scroll --- */
+/* Contenedor de mensajes con scroll */
 .chat-messages-container {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
-  background-color: #111; /* contraste con burbujas */
+  background-color: #111;
 }
-
-/* Oculta scrollbar por defecto, deja espacio para scroll */
 .chat-messages-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -46,19 +43,27 @@
   border-radius: 4px;
 }
 
-/* Cada fila de mensaje */
+/* Fila de cada mensaje */
 .message-row {
   display: flex;
+  align-items: flex-end;
   margin-bottom: 12px;
 }
 
-/* Alineación de acuerdo al remitente */
+/* Alineación de usuario vs bot */
 .message-user {
   justify-content: flex-end;
 }
-
 .message-bot {
   justify-content: flex-start;
+}
+
+/* Avatar para la IA */
+.message-avatar {
+  width: 35px;
+  height: 35px;
+  margin-right: 8px;
+  object-fit: fill;
 }
 
 /* Burbujas de texto */
@@ -72,7 +77,7 @@
   word-wrap: break-word;
 }
 
-/* Usuario: burbuja neón azul, con gradiente ligero */
+/* Usuario: neón azul */
 .message-user .message-content {
   background: linear-gradient(135deg, #0066ff, #33ccff);
   color: #fff;
@@ -80,7 +85,7 @@
   box-shadow: 0 2px 6px rgba(0, 102, 255, 0.5);
 }
 
-/* Bot/IA: burbuja neón morada, con gradiente ligero */
+/* Bot/IA: neón morado */
 .message-bot .message-content {
   background: linear-gradient(135deg, #9900ff, #cc33ff);
   color: #fff;
@@ -88,29 +93,28 @@
   box-shadow: 0 2px 6px rgba(153, 0, 255, 0.5);
 }
 
-/* Texto dentro de la burbuja: sombra sutil */
+/* Sombra sutil en el texto */
 .message-content {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Spinner (animación de rotación) --- */
+/* Spinner */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
 .spinner {
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top: 3px solid #00f0ff; /* color neón cyan */
+  border-top: 3px solid #00f0ff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 10px;
+  margin-bottom: 2px; /* para que alinee con el texto de la burbuja */
 }
 
-/* --- Formulario de entrada (input + botón) --- */
+/* Formulario de entrada */
 .chat-input-container {
   display: flex;
   align-items: center;
@@ -135,12 +139,9 @@
   margin-right: 8px;
   transition: border-color 0.2s ease;
 }
-
 .chat-input-container input:focus {
-  border-color: #33ccff; /* neón cyan al enfocar */
+  border-color: #33ccff;
 }
-
-/* Placeholder en color tenue */
 .chat-input-container input::placeholder {
   color: #888;
 }
@@ -156,23 +157,19 @@
   cursor: pointer;
   transition: background 0.2s ease, opacity 0.2s ease;
 }
-
 .chat-input-container button:disabled {
   background: #333;
   opacity: 0.6;
   cursor: not-allowed;
 }
-
-/* Hover y active para botón */
 .chat-input-container button:not(:disabled):hover {
   background: linear-gradient(90deg, #1a8bff, #5fdfff);
 }
-
 .chat-input-container button:not(:disabled):active {
   background: linear-gradient(90deg, #005ce6, #28b8e6);
 }
 
-/* --- Responsivo --- */
+/* Responsivo */
 @media (max-width: 480px) {
   .chat-page-container {
     border-radius: 0;
