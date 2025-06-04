@@ -31,7 +31,7 @@ export const PrivateNavbar = () => {
   return (
     <nav className="private-navbar">
       <div className="navbar-left">
-        <Link to="/Home" className="navbar-logo-link">
+        <Link to="/" className="navbar-logo-link">
           <span className="navbar-logo">
             Player<span className="highlight">Link</span>
           </span>
