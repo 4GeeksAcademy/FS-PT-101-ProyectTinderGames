@@ -1,10 +1,12 @@
 import "./Private-navbar.css";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 export const PrivateNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const { store, dispatch } = useGlobalReducer();
 
   const toggleDropdown = () => setMenuOpen(!menuOpen);
   const closeDropdown = () => setMenuOpen(false);
@@ -48,7 +50,9 @@ export const PrivateNavbar = () => {
             alt="Bandera"
             className="navbar-flag"
           />
-          <span className="navbar-username">Username</span>
+          <span className="navbar-username" onClick={closeDropdown}>
+            {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : "Username" : "Username"}
+          </span>
           <button className="navbar-download">Download</button>
         </div>
 
@@ -68,7 +72,7 @@ export const PrivateNavbar = () => {
                 onClick={closeDropdown}
               />
               <span className="navbar-username" onClick={closeDropdown}>
-                Username
+                {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : "Username" : "Username"}
               </span>
               <button className="navbar-download" onClick={closeDropdown}>
                 Download
