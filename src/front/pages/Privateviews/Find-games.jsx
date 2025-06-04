@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../../findGames.css";
 import logo from "../../assets/img/icons/icon-IA.png"
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 export const FindGames = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const { store, dispatch } = useGlobalReducer();
 
   const [messages, setMessages] = useState([
     { sender: "bot", text: "¡Hola! Soy la IA de FindGames. ¿En qué puedo ayudarte?" },
@@ -15,15 +17,17 @@ export const FindGames = () => {
 
   useEffect(() => {
     const ref = chatScrollRef.current;
-    if (ref != null){
-        ref.scrollTop = ref.scrollHeight;
+    if (ref != null) {
+      ref.scrollTop = ref.scrollHeight;
     }
   }, [messages, isLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const text = inputValue.trim();
-    if (!text) return;
+    const userInfo = store.user && store.user.profile
+      ? `Nombre: ${store.user.profile.name}, Edad: ${store.user.profile.age}, Juegos: ${store.user.profile.games.join(", ")}`
+      : "the user has no data"; if (!text) return;
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setInputValue("");
@@ -32,7 +36,10 @@ export const FindGames = () => {
     try {
       const respuesta = await axios.post(
         `${BACKEND_URL}/api/chat`,
-        { message: text },
+        {
+          message: text,
+          userInfo: userInfo
+        },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -68,9 +75,8 @@ export const FindGames = () => {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`message-row ${
-              msg.sender === "user" ? "message-user" : "message-bot"
-            }`}
+            className={`message-row ${msg.sender === "user" ? "message-user" : "message-bot"
+              }`}
           >
             {msg.sender === "bot" && (
               <img src={logo} alt="IA Logo" className="message-avatar" />
