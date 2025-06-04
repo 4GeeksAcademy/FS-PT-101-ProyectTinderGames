@@ -52,7 +52,7 @@ export const Register = () => {
                                 <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 border-1 register-card-border" />
                                 <div className="form-text register-password-subtitle" id="basic-addon4">*Password must have at least 8 characters.</div>
                             </div>
-                            <input type="submit" value="Continue" className='w-100 rounded-2 border-1 mt-5 text-white bg-black register-card-border' />
+                            <input type="submit" value="Continue" className='w-100 rounded-2 border-1 mt-5 text-white bg-black btn-register-card-border' />
                         </div>
                     </form>
                 </div>
