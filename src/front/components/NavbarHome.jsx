@@ -1,12 +1,34 @@
-import { useNavigate } from "react-router-dom";
+
 import logoApp from "../assets/img/logos/logo-app.png";
 import './navbarHome.css'
 import { Register } from "./Register/Register";
 import { SignIn } from "./SignIn/SignIn";
+import { useEffect, useState } from "react";
 
 export const NavbarHome = () => {
 
-  const navigate = useNavigate()
+  const [showSignIn, setShowSignIn] = useState(true);
+
+  // Para que siempre se muestre Sing-In el primero
+  useEffect(() => {
+  const modalElement = document.getElementById("exampleModal");
+
+  function handleShow() {
+    setShowSignIn(true)
+  }
+
+  if (modalElement) {
+    modalElement.addEventListener("show.bs.modal", handleShow);
+  }
+
+  return () => {
+    if (modalElement) {
+      modalElement.removeEventListener("show.bs.modal", handleShow);
+    }
+  };
+}, []);
+
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-black navbarHome-font border-bottom ">
@@ -39,7 +61,6 @@ export const NavbarHome = () => {
                   <li className="nav-item">
                     <div className="navbarHome-start-container">
                       <div className="navbarHome-line navbarHome-top-line"></div>
-                      {/* <a className="nav-link navbarHome-font nabarHome-font-shadow" href="#">START</a> */}
 
                       {/* Modal button */}
                       <button
@@ -57,25 +78,23 @@ export const NavbarHome = () => {
       </nav>
 
 
-{/* modal body */}
-<div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-xl ">
-    <div className="modal-content modal-home">
-      <div className="modal-header mt-5">
-        <button type="button" className="btn-close btn-close-modal mt-0" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div className="modal-body d-flex justify-content-center">
-        <div className="me-5">
-        <Register/>
+      {/* modal body */}
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-xl ">
+          <div className="modal-content modal-home">
+            <div className="modal-header mt-5">
+              <button type="button" className="btn-close btn-close-modal mt-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body d-flex justify-content-center align-items-center">
+              {showSignIn ? (
+                <SignIn onSwitch={() => setShowSignIn(false)} />
+              ) : (
+                <Register onSwitch={() => setShowSignIn(true)} />
+              )}
+            </div>
+          </div>
         </div>
-        <div>
-        <SignIn/>
-        </div>
       </div>
-
-    </div>
-  </div>
-</div>
     </>
 
   )
