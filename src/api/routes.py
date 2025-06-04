@@ -85,14 +85,13 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'success': 'true'}), 200
+        token = create_access_token(identity=str(new_user.id))
+        return jsonify({'success': 'true', 'token': token}), 200
     except Exception as e:
         print(e)
         return jsonify({'Error': 'algo paso'}), 400
 
 # LOGIN
-
-
 @api.route('/login', methods=['POST'])
 def login():
     try:

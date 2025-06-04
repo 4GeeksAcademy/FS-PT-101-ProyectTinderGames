@@ -15,11 +15,11 @@ export const Register = ({ onSwitch }) => {
     const handleSubmit = e => {
         e.preventDefault()
         userServices.register(formData).then(data => {
+        localStorage.setItem('token', data.token)
             if (data.success) {
                 navigate('/private')
             }
         })
-
     }
 
     const handleChange = e => {
@@ -27,7 +27,6 @@ export const Register = ({ onSwitch }) => {
             ...formData,
             [e.target.name]: e.target.value
         })
-
     }
 
     return (
