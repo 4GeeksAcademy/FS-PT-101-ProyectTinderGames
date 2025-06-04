@@ -2,3 +2,7 @@
   font-family: 'Audiowide', sans-serif;
   box-sizing: border-box;
 }
+
+body.modal-open {
+  padding-right: 0 !important;
+}
