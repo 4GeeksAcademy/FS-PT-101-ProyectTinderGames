@@ -25,9 +25,16 @@ export const FindGames = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const text = inputValue.trim();
-    const userInfo = store.user && store.user.profile
-      ? `Nombre: ${store.user.profile.name}, Edad: ${store.user.profile.age}, Juegos: ${store.user.profile.games.join(", ")}`
-      : "the user has no data"; if (!text) return;
+    const userInfo = store.user?.profile
+      ? (() => {
+        const { name, age, games } = store.user.profile;
+        // Si games es un array de objetos con la forma { game: { title: ... }, … }
+        const juegosStr = Array.isArray(games)
+          ? games.map(item => item.game.title).join(", ")
+          : "sin juegos";
+        return `Nombre: ${name}, Edad: ${age}, Juegos: ${juegosStr}`;
+      })()
+      : "the user has no data";
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setInputValue("");

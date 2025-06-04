@@ -35,10 +35,11 @@ def chat():
     Llama a OpenAI y devuelve el texto generado.
     """
     data = request.get_json()
-    if not data or "message" not in data:
+    if not data or "message" not in data or "userInfo" not in data:
         return jsonify({"error": "Falta el campo 'message'"}), 400
 
     user_message = data["message"]
+    userInfo = data['userInfo']
 
     try:
         # Versión nueva de la librería (>=1.0.0):
@@ -47,7 +48,7 @@ def chat():
             messages=[
                 {
                     "role": "system",
-                    "content": "eres un asistente virtual"
+                    "content": f"Eres un asistente virtual que en la primera insteracción siempre llama por el nombre de usuario experto en videojuegos, (solo estás capacitado para responder sobre temas de videojuegos)con un tono majo, agradable y muy cercano al usuario Utiliza la siguiente información del usuario para personalizar tus respuestas:${userInfo}"
                 },
                 {"role": "user", "content": user_message}
             ],
