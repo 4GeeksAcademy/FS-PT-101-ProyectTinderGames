@@ -4,14 +4,33 @@
 .chat-page-container {
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  height: 75vh;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   margin: 20px auto 0; /* 20px de margen arriba, centrado horizontalmente */
-  background-color: #0d0d0d;
-  border: 1px solid #10a9d3;
+  border: 2px solid #0000;
+  border-radius: 12px;
+  background: linear-gradient(#131219, #131219) padding-box, linear-gradient(
+        var(--angle),
+        #6bf1fa,
+        #f538ff
+      ) border-box;
+  animation: 15s rotate linear infinite;
+  background-color: transparent;
   border-radius: 8px;
   overflow: hidden;
+}
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 /* Cabecera */
@@ -23,9 +42,9 @@
 }
 .chat-header h1 {
   margin: 0;
-  color: #e6e6ff;
+  color: #ffffff;
   font-size: 1.5rem;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 /* Contenedor de mensajes con scroll */
@@ -120,7 +139,7 @@
   align-items: center;
   padding: 10px 12px;
   background-color: #111;
-  border-top: 1px solid #2a2a2a;
+  border-top: 1px solid #ffffff;
   position: sticky;
   bottom: 0;
   z-index: 10;

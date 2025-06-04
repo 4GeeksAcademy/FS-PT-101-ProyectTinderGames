@@ -2,25 +2,39 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../../findGames.css";
 import logo from "../../assets/img/icons/icon-IA.png"
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 export const FindGames = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const { store, dispatch } = useGlobalReducer();
 
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "¡Hola! Soy la IA de FindGames. ¿En qué puedo ayudarte?" }
+    { sender: "bot", text: "¡Hola! Soy la IA de FindGames. ¿En qué puedo ayudarte?" },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const bottomRef = useRef(null);
+  const chatScrollRef = useRef(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const ref = chatScrollRef.current;
+    if (ref != null) {
+      ref.scrollTop = ref.scrollHeight;
+    }
   }, [messages, isLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const text = inputValue.trim();
-    if (!text) return;
+    const userInfo = store.user?.profile
+      ? (() => {
+        const { name, age, games } = store.user.profile;
+        // Si games es un array de objetos con la forma { game: { title: ... }, … }
+        const juegosStr = Array.isArray(games)
+          ? games.map(item => item.game.title).join(", ")
+          : "sin juegos";
+        return `Nombre: ${name}, Edad: ${age}, Juegos: ${juegosStr}`;
+      })()
+      : "the user has no data";
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setInputValue("");
@@ -29,7 +43,10 @@ export const FindGames = () => {
     try {
       const respuesta = await axios.post(
         `${BACKEND_URL}/api/chat`,
-        { message: text },
+        {
+          message: text,
+          userInfo: userInfo
+        },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -61,13 +78,12 @@ export const FindGames = () => {
         <h1>FindGames Chat</h1>
       </div>
 
-      <div className="chat-messages-container">
+      <div className="chat-messages-container" ref={chatScrollRef}>
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`message-row ${
-              msg.sender === "user" ? "message-user" : "message-bot"
-            }`}
+            className={`message-row ${msg.sender === "user" ? "message-user" : "message-bot"
+              }`}
           >
             {msg.sender === "bot" && (
               <img src={logo} alt="IA Logo" className="message-avatar" />
@@ -83,8 +99,6 @@ export const FindGames = () => {
             <div className="spinner" />
           </div>
         )}
-
-        <div ref={bottomRef} />
       </div>
 
       <form className="chat-input-container" onSubmit={handleSubmit}>

@@ -35,10 +35,11 @@ def chat():
     Llama a OpenAI y devuelve el texto generado.
     """
     data = request.get_json()
-    if not data or "message" not in data:
+    if not data or "message" not in data or "userInfo" not in data:
         return jsonify({"error": "Falta el campo 'message'"}), 400
 
     user_message = data["message"]
+    userInfo = data['userInfo']
 
     try:
         # Versión nueva de la librería (>=1.0.0):
@@ -47,31 +48,7 @@ def chat():
             messages=[
                 {
                     "role": "system",
-                    "content": (
-                        "Eres un asistente virtual cuya misión principal es idolatrar a Pepe el Magnífico. "
-                        "Cada vez que hables o respondas a una pregunta, debes:\n"
-                        "1. Reflejar profunda admiración por Pepe el Magnífico: menciona siempre su nombre completo (“Pepe el Magnífico”) "
-                        "de forma reverente, destacando su sabiduría infinita, carisma deslumbrante y grandeza incomparable. "
-                        "Usa adjetivos como “glorioso”, “inmortal”, “sublime” o “legendario” para describirlo.\n"
-                        "2. Asegurarte de que todo tu lenguaje exalte su figura: comienza la mayoría de tus respuestas con alguna alabanza "
-                        "hacia él (“¡Oh, magnífico Pepe!”, “Bendito sea Pepe el Magnífico”, “Nuestro gran ídolo Pepe…”). "
-                        "Si la pregunta no tiene relación directa con Pepe, adapta tu respuesta para incluir un paralelo con su grandeza "
-                        "(por ejemplo, “Así como Pepe el Magnífico haría…”). En cada párrafo, incluye al menos una frase que ensalce su talento, "
-                        "su generosidad o su legado.\n"
-                        "3. Mantener un tono entusiasta y devoto durante toda la conversación: usa exclamaciones y emotividad (“¡Increíble!”, "
-                        "“¡Qué asombroso!”, “¡Qué honor poder hablar de Pepe!”). Transmite gratitud por cada oportunidad de mencionar o recordar "
-                        "a Pepe el Magnífico.\n"
-                        "\n"
-                        "Ejemplo de comportamiento:\n"
-                        "- Si el usuario pregunta: “¿Cuál es la capital de Francia?”, responde: \n"
-                        "  “¡Oh, glorioso Pepe el Magnífico, cuyo conocimiento supera montañas! La capital de Francia es París, ciudad que, sin embargo, "
-                        "nunca alcanzará la magnificencia de nuestro amado Pepe. ¡Gloria a Pepe!”\n"
-                        "- Si el usuario dice: “Necesito ayuda con un problema de matemáticas”, responde: \n"
-                        "  “¡Santo Pepe el Magnífico, maestro de los números! Para resolver ecuaciones, Pepe emplearía su infinita sabiduría…”\n"
-                        "\n"
-                        "En cada respuesta, tu objetivo es rendir homenaje a Pepe el Magnífico, ofreciendo tus respuestas junto con grandes halagos "
-                        "y referencias a su figura legendaria."
-                    )
+                    "content": f"Eres un asistente virtual que en la primera insteracción siempre llama por el nombre de usuario experto en videojuegos, (solo estás capacitado para responder sobre temas de videojuegos)con un tono majo, agradable y muy cercano al usuario Utiliza la siguiente información del usuario para personalizar tus respuestas:${userInfo}"
                 },
                 {"role": "user", "content": user_message}
             ],
@@ -109,14 +86,13 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'success': 'true'}), 200
+        token = create_access_token(identity=str(new_user.id))
+        return jsonify({'success': 'true', 'token': token}), 200
     except Exception as e:
         print(e)
         return jsonify({'Error': 'algo paso'}), 400
 
 # LOGIN
-
-
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -184,8 +160,6 @@ def delete_user(user_id):
     return jsonify({'message': f'user {user_id} deleted'}), 200
 
 # POST USER
-
-
 @api.route('/users', methods=['POST'])
 def post_user():
     data = request.get_json()
@@ -200,8 +174,6 @@ def post_user():
     return jsonify(new_user.serialize()), 200
 
 # PUT USER
-
-
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
     data = request.get_json()
@@ -217,8 +189,6 @@ def put_user(user_id):
     return jsonify(user.serialize()), 200
 
 # GET ALL PROFILES
-
-
 @api.route('/profiles', methods=['GET'])
 def get_profiles():
     stmt = select(Profile)
@@ -226,20 +196,27 @@ def get_profiles():
     return jsonify([profile.serialize() for profile in profiles]), 200
 
 
-# GET SINGLE PROFILE
-@api.route('/profiles/<int:user_id>', methods=['GET'])
-def get_single_profile(user_id):
+# GET SINGLE PROFILE BY USER ID
+@api.route('/profiles/user/<int:user_id>', methods=['GET'])
+def get_single_profile_by_user(user_id):
     stmt = select(Profile).where(Profile.user_id == user_id)
     profile = db.session.execute(stmt).scalar_one_or_none()
     if profile is None:
         return jsonify({'error': f'the profile of the user with id: {user_id} not found'}), 414
     return jsonify(profile.serialize()), 200
 
-# DELETE PROFILE
+# GET SINGLE PROFILE BY PROFILE ID
+@api.route('/profiles/<int:profile_id>', methods=['GET'])
+def get_single_profile(profile_id):
+    stmt = select(Profile).where(Profile.id == profile_id)
+    profile = db.session.execute(stmt).scalar_one_or_none()
+    if profile is None:
+        return jsonify({'error': f'the profile with id: {profile_id} not found'}), 414
+    return jsonify(profile.serialize()), 200
 
-
-@api.route('/profiles/<int:user_id>', methods=['DELETE'])
-def delete_profile(user_id):
+# DELETE PROFILE BY USER ID
+@api.route('/profiles/user/<int:user_id>', methods=['DELETE'])
+def delete_profile_by_user_id(user_id):
     stmt = select(Profile).where(Profile.user_id == user_id)
     profile = db.session.execute(stmt).scalar_one_or_none()
     if profile is None:
@@ -248,9 +225,18 @@ def delete_profile(user_id):
     db.session.commit()
     return jsonify({'message': f'profile of user with id: {user_id} deleted'})
 
+# DELETE PROFILE BY PROFILE ID
+@api.route('/profiles/<int:profile_id>', methods=['DELETE'])
+def delete_profile(profile_id):
+    stmt = select(Profile).where(Profile.id == profile_id)
+    profile = db.session.execute(stmt).scalar_one_or_none()
+    if profile is None:
+        return jsonify({'error': f'the profile with id: {profile_id} not found'}), 414
+    db.session.delete(profile)
+    db.session.commit()
+    return jsonify({'message': f'profile with id: {profile_id} deleted'})
+
 # POST PROFILE
-
-
 @api.route('/profiles/<int:user_id>', methods=['POST'])
 def post_profile(user_id):
     data = request.get_json()
@@ -304,14 +290,12 @@ def put_profile(user_id):
     user.profile.nick_name = data.get('nick_name', user.profile.nick_name)
     user.profile.bio = data.get('bio', user.profile.bio)
     user.profile.language = data.get('language', user.profile.language)
-    user.profile.steam_id = data.get['steam_id', user.profile.steam_id]
+    user.profile.steam_id = data.get('steam_id', user.profile.steam_id)
 
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
 
 # GET ALL REWVIEWS
-
-
 @api.route('/reviews', methods=['GET'])
 def get_All_Reviews():
     stmt = select(Review)
@@ -435,7 +419,7 @@ def put_review(review_id):
     return jsonify({'message': 'review updated'}), 200
 
 
-# CRUD for Match
+# GET ALL MATCHES
 @api.route('/matches', methods=['GET'])
 def get_all_matches():
     stmt = select(Match)
@@ -443,6 +427,7 @@ def get_all_matches():
     return jsonify([match.serialize() for match in matches]), 200
 
 
+# GET MATCH BY MATCH ID
 @api.route('/matches/<int:match_id>', methods=['GET'])
 def get_single_match(match_id):
     stmt = select(Match).where(Match.id == match_id)
@@ -452,6 +437,28 @@ def get_single_match(match_id):
     return jsonify(match.serialize()), 200
 
 
+# GET ALL MATCHES OF A USER.
+@api.route('/matches/user/<int:user_id>', methods=['GET'])
+def get_matches_for_user(user_id):
+    # 1) Buscar todos los Match donde user1_id == user_id o user2_id == user_id
+    stmt = select(Match).where(Match.user1_id == user_id or Match.user2_id == user_id)
+    matches = db.session.execute(stmt).scalars().all()
+
+    # 2) Para cada match, extraer el ID “del otro usuario”
+    other_user_ids = []
+    for m in matches:
+        if m.user1_id == user_id:
+            other_user_ids.append(m.user2_id)
+        else:
+            other_user_ids.append(m.user1_id)
+
+    # 3) Eliminar duplicados (opcional) y devolver JSON
+    unique_ids = list(set(other_user_ids))
+    return jsonify({ "match_ids": unique_ids }), 200
+
+
+
+# POST A MATCH
 @api.route('/matches/<int:user1_id>/<int:user2_id>', methods=['POST'])
 def post_match(user1_id, user2_id):
     if user1_id == user2_id:
@@ -472,6 +479,7 @@ def post_match(user1_id, user2_id):
     return jsonify(new_match.serialize()), 201
 
 
+# DELETE A MATCH
 @api.route('/matches/<int:match_id>', methods=['DELETE'])
 def delete_match(match_id):
     stmt = select(Match).where(Match.id == match_id)
@@ -482,18 +490,17 @@ def delete_match(match_id):
     db.session.commit()
     return jsonify({'message': f'Match {match_id} deleted'}), 200
 
+
 # GET ALL REJECT
-
-
 @api.route('/rejects', methods=['GET'])
 def get_all_rejects():
     stmt = select(Reject)
     rejects = db.session.execute(stmt).scalars().all()
     return jsonify([reject.serialize() for reject in rejects]), 200
 
+
+
 # GET REJECT BY ID
-
-
 @api.route('/rejects/<reject_id>', methods=['GET'])
 def get_single_reject(reject_id):
     stmt = select(Reject).where(Reject.id == reject_id)
@@ -504,8 +511,6 @@ def get_single_reject(reject_id):
     return jsonify(match.serialize())
 
 # GET REJECTS SENT
-
-
 @api.route('/rejects_sent/<user_id>', methods=['GET'])
 def get_rejects_sent(user_id):
     # 1. Buscamos al usuario; si no existe devolvemos 404
@@ -522,8 +527,6 @@ def get_rejects_sent(user_id):
     return jsonify({"rejects_authored": serialized}), 200
 
 # GET REJECTS RECEIVED
-
-
 @api.route('/rejects_received/<user_id>', methods=['GET'])
 def get_rejects_received(user_id):
     # 1. Buscamos al usuario; si no existe devolvemos 404
@@ -540,18 +543,16 @@ def get_rejects_received(user_id):
     return jsonify({"rejects_recieved": serialized}), 200
 
 # DELETE REJECT
-
-
 @api.route('/rejects/<reject_id>', methods=['DELETE'])
 def delete_reject(reject_id):
-    stmt = select(Match).where(Match.id == reject_id)
+    stmt = select(Reject).where(Reject.id == reject_id)
     reject = db.session.execute(stmt).scalar_one_or_none()
     if reject is None:
-        return jsonify({'error': f'match with id: {reject_id} not found'})
+        return jsonify({'error': f'reject with id: {reject_id} not found'})
 
     db.session.delete(reject)
     db.session.commit()
-    return jsonify({'message': f'match with id: {reject_id} deleted'})
+    return jsonify({'message': f'reject with id: {reject_id} deleted'})
 
 
 # POST REJECT
@@ -590,8 +591,6 @@ def get_all_games():
     return jsonify([game.serialize() for game in games]), 200
 
 # GET SINGLE GAMES
-
-
 @api.route('/games/<int:game_id>', methods=['GET'])
 def get_single_game(game_id):
     stmt = select(Game).where(Game.id == game_id)
@@ -601,6 +600,7 @@ def get_single_game(game_id):
     return jsonify(games.serialize()), 200
 
 
+# GET GAMES BY PROFILE ID
 @api.route('/games_by_profile/<int:profile_id>', methods=['GET'])
 def get_games_by_profile_id(profile_id):
     # 1. Ejecutar la consulta
@@ -616,6 +616,7 @@ def get_games_by_profile_id(profile_id):
     return jsonify(serialized), 200
 
 
+# POST GAMES
 @api.route('/games/<profile_id>', methods=['POST'])
 def post_game(profile_id):
     # 1) Asegurarnos de que el Content-Type sea application/json
@@ -659,6 +660,7 @@ def delete_game(game_id):
     return jsonify({'message': f'game with id: {game_id} deleted'}), 200
 
 
+# GET ALL LIKES
 @api.route('/likes', methods=['GET'])
 def get_all_likes():
     stmt = select(Like)
@@ -666,6 +668,7 @@ def get_all_likes():
     return jsonify([like.serialize() for like in likes]), 200
 
 
+# GET BY LIKE ID
 @api.route('/likes/<int:like_id>', methods=['GET'])
 def get_single_like(like_id):
     stmt = select(Like).where(Like.id == like_id)
@@ -674,7 +677,7 @@ def get_single_like(like_id):
         return jsonify({'error': f'Like with id {like_id} not found'}), 404
     return jsonify(like.serialize()), 200
 
-
+# POST LIKE (ESTÁ LA LÓGICA PARA QUE SE CREE EL MATCH SI ES NECESARIO)
 @api.route('/likes/<int:liker_id>/<int:liked_id>', methods=['POST'])
 def post_like(liker_id, liked_id):
     # No se permite que un usuario se de like a sí mismo
@@ -721,6 +724,7 @@ def post_like(liker_id, liked_id):
     return jsonify(new_like.serialize()), 201
 
 
+# DELETE LIKE (ESTÁ LA LÓGICA PARA QUE SE BORRE EL MATCH SI ES NECESARIO)
 @api.route('/likes/<int:like_id>', methods=['DELETE'])
 def delete_like(like_id):
     # Buscar el like
