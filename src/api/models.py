@@ -91,6 +91,8 @@ class Profile(db.Model):
 
     def serialize(self):
         return {
+            "id":self.id,
+            "user_id":self.user_id,
             "gender": self.gender,
             'preferences': self.preferences,
             'zodiac': self.zodiac,
@@ -117,7 +119,9 @@ class Review(db.Model):
         return {
             "id": self.id,
             'user_id': self.user_id,
-            'author_id': self.author_id
+            'author_id': self.author_id,
+            "stars":self.stars,
+            "comment":self.comment
         }
 
 
