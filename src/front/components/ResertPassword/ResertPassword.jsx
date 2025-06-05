@@ -9,7 +9,7 @@ export const ResertPassword = () => {
                 <div className='d-flex justify-content-center'>
                     <div className='card register-card mt-5'>
                         <div className="card-body">
-                            <h2 className="card-title text-center">New password </h2>
+                            <h2 className="card-title text-center">Reset password </h2>
                             <h6 className="card-subtitle mb-2 register-card-subtitle text-end me-4 pe-2 mb-3">Enter the email address associated <br />
                                 with your PlayerLink account. </h6>
                             <div>
