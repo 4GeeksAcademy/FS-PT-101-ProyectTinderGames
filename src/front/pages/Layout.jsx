@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom/dist"
 import ScrollToTop from "../components/ScrollToTop"
-import {PrivateNavbar} from "../components/Private/Private-navbar"
 import { Footer } from "../components/Footer/Footer"
 
 
@@ -8,11 +7,8 @@ import { Footer } from "../components/Footer/Footer"
 export const Layout = () => {
     return (
         <ScrollToTop>
-            <PrivateNavbar />
-  
             {/* <Navbar /> */}
-                <Outlet />
-
+            <Outlet />
             <Footer />
         </ScrollToTop>
     )

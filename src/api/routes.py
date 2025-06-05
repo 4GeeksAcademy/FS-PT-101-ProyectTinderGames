@@ -1,18 +1,68 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import os
+import openai
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Profile, Review, Match, Reject, Game
+from api.models import db, User, Profile, Review, Match, Reject, Game, Like
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+
+# Carga variables de entorno desde .env
+load_dotenv()
+
+# Obtén la clave de OpenAI
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if OPENAI_API_KEY is None:
+    raise RuntimeError("La variable OPENAI_API_KEY no está definida en .env")
+
+openai.api_key = OPENAI_API_KEY
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
+
+
+@api.route("/chat", methods=["POST"])
+def chat():
+    """
+    Recibe JSON: { "message": "texto del usuario" }
+    Llama a OpenAI y devuelve el texto generado.
+    """
+    data = request.get_json()
+    if not data or "message" not in data or "userInfo" not in data:
+        return jsonify({"error": "Falta el campo 'message'"}), 400
+
+    user_message = data["message"]
+    userInfo = data['userInfo']
+
+    try:
+        # Versión nueva de la librería (>=1.0.0):
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"Eres un asistente virtual que en la primera insteracción siempre llama por el nombre de usuario experto en videojuegos, (solo estás capacitado para responder sobre temas de videojuegos)con un tono majo, agradable y muy cercano al usuario Utiliza la siguiente información del usuario para personalizar tus respuestas:${userInfo}"
+                },
+                {"role": "user", "content": user_message}
+            ],
+            temperature=0.7,
+            max_tokens=512,
+            n=1,
+        )
+
+        # Extraer el texto de la primera respuesta
+        reply_text = response.choices[0].message.content.strip()
+        return jsonify({"reply": reply_text})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # REGISTER
@@ -25,44 +75,44 @@ def register():
         stmt = select(User).where(User.email == data['email'])
         existing_user = db.session.execute(stmt).scalar_one_or_none()
         if existing_user:
-            return jsonify({'error':'email taken'}), 418
-        
-        #hash
+            return jsonify({'error': 'email taken'}), 418
+
+        # hash
         hashed_password = generate_password_hash(data['password'])
-                
+
         new_user = User(
-        email=data['email'],
-        password=hashed_password
+            email=data['email'],
+            password=hashed_password
         )
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'success':'true'}), 200
+        token = create_access_token(identity=str(new_user.id))
+        return jsonify({'success': 'true', 'token': token}), 200
     except Exception as e:
         print(e)
-        return jsonify({'Error':'algo paso'}), 400
+        return jsonify({'Error': 'algo paso'}), 400
 
 # LOGIN
 @api.route('/login', methods=['POST'])
 def login():
     try:
         data = request.get_json()
-        if not data or 'email' not in data or 'password' not in data: 
+        if not data or 'email' not in data or 'password' not in data:
             raise Exception('missing data')
         stmt = select(User).where(User.email == data['email'])
         user = db.session.execute(stmt).scalar_one_or_none()
 
         if not user:
-            return jsonify({'error':'el email no esta registrado, registrate'}), 418
-        
-        if not check_password_hash(user.password, data['password']):
-            return jsonify({'error':'email/contraseña no válido'}), 418
+            return jsonify({'error': 'el email no esta registrado, registrate'}), 418
 
-        token = create_access_token(identity = str(user.id))
-        return jsonify({'success':'true', 'token':token}), 200
+        if not check_password_hash(user.password, data['password']):
+            return jsonify({'error': 'email/contraseña no válido'}), 418
+
+        token = create_access_token(identity=str(user.id))
+        return jsonify({'success': 'true', 'token': token}), 200
     except Exception as e:
         print(e)
-        return jsonify({'Error':'algo paso'}), 400
-
+        return jsonify({'Error': 'algo paso'}), 400
 
 
 # PRIVATE ENDPOINT
@@ -70,13 +120,15 @@ def login():
 @jwt_required()
 def get_user_info():
     id = get_jwt_identity()
-    stmt = select(User).where(User.id==id)
+    stmt = select(User).where(User.id == id)
     user = db.session.execute(stmt).scalar_one_or_none()
     if user is None:
-        return jsonify({'error':'user not finded'})
-    return jsonify({'success':'true', 'user': user.serialize()})
+        return jsonify({'error': 'user not finded'})
+    return jsonify({'success': 'true', 'user': user.serialize()})
 
 # GET ALL USERS
+
+
 @api.route('/users', methods=['GET'])
 def get_users():
     stmt = select(User)
@@ -84,6 +136,8 @@ def get_users():
     return jsonify([user.serialize() for user in users]), 200
 
 # GET SINGLE USER
+
+
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_single_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -93,6 +147,8 @@ def get_single_user(user_id):
     return jsonify(user.serialize()), 200
 
 # DELETE USER
+
+
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -140,18 +196,27 @@ def get_profiles():
     return jsonify([profile.serialize() for profile in profiles]), 200
 
 
-# GET SINGLE PROFILE
-@api.route('/profiles/<int:user_id>', methods=['GET'])
-def get_single_profile(user_id):
+# GET SINGLE PROFILE BY USER ID
+@api.route('/profiles/user/<int:user_id>', methods=['GET'])
+def get_single_profile_by_user(user_id):
     stmt = select(Profile).where(Profile.user_id == user_id)
     profile = db.session.execute(stmt).scalar_one_or_none()
     if profile is None:
         return jsonify({'error': f'the profile of the user with id: {user_id} not found'}), 414
     return jsonify(profile.serialize()), 200
 
-# DELETE PROFILE
-@api.route('/profiles/<int:user_id>', methods=['DELETE'])
-def delete_profile(user_id):
+# GET SINGLE PROFILE BY PROFILE ID
+@api.route('/profiles/<int:profile_id>', methods=['GET'])
+def get_single_profile(profile_id):
+    stmt = select(Profile).where(Profile.id == profile_id)
+    profile = db.session.execute(stmt).scalar_one_or_none()
+    if profile is None:
+        return jsonify({'error': f'the profile with id: {profile_id} not found'}), 414
+    return jsonify(profile.serialize()), 200
+
+# DELETE PROFILE BY USER ID
+@api.route('/profiles/user/<int:user_id>', methods=['DELETE'])
+def delete_profile_by_user_id(user_id):
     stmt = select(Profile).where(Profile.user_id == user_id)
     profile = db.session.execute(stmt).scalar_one_or_none()
     if profile is None:
@@ -159,6 +224,17 @@ def delete_profile(user_id):
     db.session.delete(profile)
     db.session.commit()
     return jsonify({'message': f'profile of user with id: {user_id} deleted'})
+
+# DELETE PROFILE BY PROFILE ID
+@api.route('/profiles/<int:profile_id>', methods=['DELETE'])
+def delete_profile(profile_id):
+    stmt = select(Profile).where(Profile.id == profile_id)
+    profile = db.session.execute(stmt).scalar_one_or_none()
+    if profile is None:
+        return jsonify({'error': f'the profile with id: {profile_id} not found'}), 414
+    db.session.delete(profile)
+    db.session.commit()
+    return jsonify({'message': f'profile with id: {profile_id} deleted'})
 
 # POST PROFILE
 @api.route('/profiles/<int:user_id>', methods=['POST'])
@@ -207,14 +283,14 @@ def put_profile(user_id):
     user.profile.preferences = data.get(
         'preferences', user.profile.preferences)
     user.profile.zodiac = data.get('zodiac', user.profile.zodiac)
-    user.profile.discord=data.get('discord', user.profile.discord)
-    user.profile.age=data.get('age',user.profile.age)
-    user.profile.name=data.get('name',user.profile.name)
+    user.profile.discord = data.get('discord', user.profile.discord)
+    user.profile.age = data.get('age', user.profile.age)
+    user.profile.name = data.get('name', user.profile.name)
     user.profile.location = data.get('location', user.profile.location)
     user.profile.nick_name = data.get('nick_name', user.profile.nick_name)
     user.profile.bio = data.get('bio', user.profile.bio)
     user.profile.language = data.get('language', user.profile.language)
-    user.profile.steam_id = data.get['steam_id', user.profile.steam_id]
+    user.profile.steam_id = data.get('steam_id', user.profile.steam_id)
 
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
@@ -233,7 +309,7 @@ def get_reviews(review_id):
     stmt = select(Review).where(Review.id == review_id)
     review = db.session.execute(stmt).scalar_one_or_none()
     if review is None:
-        return jsonify({'error':f'review with id: {review_id} does not exist'})
+        return jsonify({'error': f'review with id: {review_id} does not exist'})
     return jsonify(review.serialize()), 200
 
 
@@ -277,19 +353,19 @@ def get_user_reviews(user_id):
     return jsonify({"reviews_received": serialized}), 200
 
 
-#DELETE REVIEW
+# DELETE REVIEW
 @api.route('/reviews/<int:review_id>', methods=['DELETE'])
 def delete_review(review_id):
     review = Review.query.get(review_id)
     if review is None:
-        return jsonify({'error':'that review does not exist'}), 400
-    
+        return jsonify({'error': 'that review does not exist'}), 400
+
     db.session.delete(review)
     db.session.commit()
-    return jsonify({'message':'review deleted'}), 200
+    return jsonify({'message': 'review deleted'}), 200
 
 
-#POST REVIEW
+# POST REVIEW
 @api.route('/reviews/<int:author_id>/<int:receiver_id>', methods=['POST'])
 def post_review(author_id, receiver_id):
     if author_id == receiver_id:
@@ -331,16 +407,16 @@ def post_review(author_id, receiver_id):
 def put_review(review_id):
     review = Review.query.get(review_id)
     if review is None:
-        return jsonify({'error':'that review does not exist'}), 400
-    data=request.get_json()
+        return jsonify({'error': 'that review does not exist'}), 400
+    data = request.get_json()
 
     if 'stars' not in data or 'comment' not in data:
         return jsonify({'error': 'Faltan campos obligatorios'}), 400
-    
+
     review.stars = data.get('stars', review.stars)
     review.comment = data.get('comment', review.comment)
     db.session.commit()
-    return jsonify({'message':'review updated'}), 200
+    return jsonify({'message': 'review updated'}), 200
 
 
 # GET ALL MATCHES
@@ -350,86 +426,70 @@ def get_all_matches():
     matches = db.session.execute(stmt).scalars().all()
     return jsonify([match.serialize() for match in matches]), 200
 
-# GET MATCH BY ID
-@api.route('/matches/<match_id>', methods=['GET'])
+
+# GET MATCH BY MATCH ID
+@api.route('/matches/<int:match_id>', methods=['GET'])
 def get_single_match(match_id):
     stmt = select(Match).where(Match.id == match_id)
     match = db.session.execute(stmt).scalar_one_or_none()
-    if match is None:
-        return jsonify({'error':f'match with id: {match_id} not found'}), 400
-
-    return jsonify(match.serialize())
-
-# GET MATCHES SENT
-@api.route('/matches_sent/<user_id>', methods=['GET'])
-def get_matches_sent(user_id):
-    # 1. Buscamos al usuario; si no existe devolvemos 404
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
-
-    # 2. Sacamos las reseñas que ha escrito
-    matches = user.matches_given
-
-    # Serializamos cada review usando el método de instancia
-    serialized = [match.serialize() for match in matches]
-
-    return jsonify({"reviews_authored": serialized}), 200
+    if not match:
+        return jsonify({'error': f'Match with id {match_id} not found'}), 404
+    return jsonify(match.serialize()), 200
 
 
-# GET MATCHES RECIEVED
-@api.route('/matches_recieved/<user_id>', methods=['GET'])
-def get_matches_recieved(user_id):
-     # 1. Buscamos al usuario; si no existe devolvemos 404
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({'error': f'Usuario con id={user_id} no encontrado'}), 400
+# GET ALL MATCHES OF A USER.
+@api.route('/matches/user/<int:user_id>', methods=['GET'])
+def get_matches_for_user(user_id):
+    # 1) Buscar todos los Match donde user1_id == user_id o user2_id == user_id
+    stmt = select(Match).where(Match.user1_id == user_id or Match.user2_id == user_id)
+    matches = db.session.execute(stmt).scalars().all()
 
-    # 2. Sacamos las reseñas que ha escrito
-    matches = user.matches_received
+    # 2) Para cada match, extraer el ID “del otro usuario”
+    other_user_ids = []
+    for m in matches:
+        if m.user1_id == user_id:
+            other_user_ids.append(m.user2_id)
+        else:
+            other_user_ids.append(m.user1_id)
 
-    # Serializamos cada review usando el método de instancia
-    serialized = [match.serialize() for match in matches]
+    # 3) Eliminar duplicados (opcional) y devolver JSON
+    unique_ids = list(set(other_user_ids))
+    return jsonify({ "match_ids": unique_ids }), 200
 
-    return jsonify({"reviews_authored": serialized}), 200
 
-# DELETE MATCH
-@api.route('/matches/<match_id>', methods=['DELETE'])
+
+# POST A MATCH
+@api.route('/matches/<int:user1_id>/<int:user2_id>', methods=['POST'])
+def post_match(user1_id, user2_id):
+    if user1_id == user2_id:
+        return jsonify({'error': 'Cannot match yourself'}), 400
+    user1 = User.query.get(user1_id)
+    user2 = User.query.get(user2_id)
+    if not user1 or not user2:
+        return jsonify({'error': 'User not found'}), 404
+    # prevent duplicates regardless of order
+    existing = (db.session.query(Match)
+                .filter(((Match.user1_id == user1_id) & (Match.user2_id == user2_id)) |
+                ((Match.user1_id == user2_id) & (Match.user2_id == user1_id))).first())
+    if existing:
+        return jsonify({'error': 'Match already exists'}), 409
+    new_match = Match(user1_id=user1_id, user2_id=user2_id)
+    db.session.add(new_match)
+    db.session.commit()
+    return jsonify(new_match.serialize()), 201
+
+
+# DELETE A MATCH
+@api.route('/matches/<int:match_id>', methods=['DELETE'])
 def delete_match(match_id):
     stmt = select(Match).where(Match.id == match_id)
     match = db.session.execute(stmt).scalar_one_or_none()
-    if match is None:
-        return jsonify({'error':f'match with id: {match_id} not found'})
-    
+    if not match:
+        return jsonify({'error': f'Match with id {match_id} not found'}), 404
     db.session.delete(match)
     db.session.commit()
-    return jsonify({'message':f'match with id: {match_id} deleted'})
+    return jsonify({'message': f'Match {match_id} deleted'}), 200
 
-# POST MATCH
-@api.route('/matches/<int:liker_id>/<int:liked_id>', methods=['POST'])
-def post_match(liker_id, liked_id):
-    liker = db.session.get(User, liker_id)
-    if liker is None:
-        return jsonify({'error': f'User (liker) with id={liker_id} not found'}), 404
-
-    liked = db.session.get(User, liked_id)
-    if liked is None:
-        return jsonify({'error': f'User (liked) with id={liked_id} not found'}), 404
-
-    if liker_id == liked_id:
-        return jsonify({'error': 'Cannot match with yourself'}), 400
-
-    existing = (db.session.query(Match).filter_by(liker_id=liker_id, liked_id=liked_id).first())
-    if existing:
-        return jsonify({'error': 'Match already exists'}), 409
-
-    # 4. Crear y persistir el nuevo match
-    new_match = Match(liker_id=liker_id, liked_id=liked_id)
-    db.session.add(new_match)
-    db.session.commit()
-
-    # 5. Responder con 201 Created y los datos del match
-    return jsonify(new_match.serialize()), 201
 
 # GET ALL REJECT
 @api.route('/rejects', methods=['GET'])
@@ -438,13 +498,15 @@ def get_all_rejects():
     rejects = db.session.execute(stmt).scalars().all()
     return jsonify([reject.serialize() for reject in rejects]), 200
 
+
+
 # GET REJECT BY ID
 @api.route('/rejects/<reject_id>', methods=['GET'])
 def get_single_reject(reject_id):
     stmt = select(Reject).where(Reject.id == reject_id)
     match = db.session.execute(stmt).scalar_one_or_none()
     if match is None:
-        return jsonify({'error':f'match with id: {reject_id} not found'}), 400
+        return jsonify({'error': f'match with id: {reject_id} not found'}), 400
 
     return jsonify(match.serialize())
 
@@ -483,14 +545,14 @@ def get_rejects_received(user_id):
 # DELETE REJECT
 @api.route('/rejects/<reject_id>', methods=['DELETE'])
 def delete_reject(reject_id):
-    stmt = select(Match).where(Match.id == reject_id)
+    stmt = select(Reject).where(Reject.id == reject_id)
     reject = db.session.execute(stmt).scalar_one_or_none()
     if reject is None:
-        return jsonify({'error':f'match with id: {reject_id} not found'})
-    
+        return jsonify({'error': f'reject with id: {reject_id} not found'})
+
     db.session.delete(reject)
     db.session.commit()
-    return jsonify({'message':f'match with id: {reject_id} deleted'})
+    return jsonify({'message': f'reject with id: {reject_id} deleted'})
 
 
 # POST REJECT
@@ -507,7 +569,8 @@ def post_reject(rejector_id, rejected_id):
     if rejector_id == rejected_id:
         return jsonify({'error': 'Cannot match with yourself'}), 400
 
-    existing = (db.session.query(Reject).filter_by(rejector_id=rejector_id, rejected_id=rejected_id).first())
+    existing = (db.session.query(Reject).filter_by(
+        rejector_id=rejector_id, rejected_id=rejected_id).first())
     if existing:
         return jsonify({'error': 'Reject already exists'}), 409
 
@@ -533,13 +596,15 @@ def get_single_game(game_id):
     stmt = select(Game).where(Game.id == game_id)
     games = db.session.execute(stmt).scalar_one_or_none()
     if games is None:
-        return jsonify({'error':'this game does not exist'})
+        return jsonify({'error': 'this game does not exist'})
     return jsonify(games.serialize()), 200
 
+
+# GET GAMES BY PROFILE ID
 @api.route('/games_by_profile/<int:profile_id>', methods=['GET'])
 def get_games_by_profile_id(profile_id):
     # 1. Ejecutar la consulta
-    stmt  = select(Game).where(Game.profile_id == profile_id)
+    stmt = select(Game).where(Game.profile_id == profile_id)
     games = db.session.execute(stmt).scalars().all()
 
     # 2. Si no hay resultados, podemos devolver 404 o una lista vacía.
@@ -547,11 +612,11 @@ def get_games_by_profile_id(profile_id):
         return jsonify({'error': 'No se han encontrado juegos para este perfil'}), 404
 
     # 3. Serializar y devolver la lista
-    serialized = [ game.serialize() for game in games ]
+    serialized = [game.serialize() for game in games]
     return jsonify(serialized), 200
 
 
-
+# POST GAMES
 @api.route('/games/<profile_id>', methods=['POST'])
 def post_game(profile_id):
     # 1) Asegurarnos de que el Content-Type sea application/json
@@ -571,14 +636,15 @@ def post_game(profile_id):
     # 4) Crear y persistir la nueva partida
     new_game = Game(
         profile_id=profile_id,
-        game=data['game']  # Asumiendo que el tipo de columna es JSON/Text en tu modelo
+        # Asumiendo que el tipo de columna es JSON/Text en tu modelo
+        game=data['game']
     )
     db.session.add(new_game)
     db.session.commit()
 
-    return jsonify({'message': f'Game añadido al perfil {profile_id}','game_id': new_game.id, # si tu modelo los tiene
-        'game':       new_game.game
-    }), 201
+    return jsonify({'message': f'Game añadido al perfil {profile_id}', 'game_id': new_game.id,  # si tu modelo los tiene
+                    'game':       new_game.game
+                    }), 201
 
 
 # DELETE GAME
@@ -587,16 +653,100 @@ def delete_game(game_id):
     stmt = select(Game).where(Game.id == game_id)
     game = db.session.execute(stmt).scalar_one_or_none()
     if game is None:
-        return jsonify({'error':f'game with id: {game_id} not found'}), 400
-    
+        return jsonify({'error': f'game with id: {game_id} not found'}), 400
+
     db.session.delete(game)
     db.session.commit()
-    return jsonify({'message':f'game with id: {game_id} deleted'}), 200
+    return jsonify({'message': f'game with id: {game_id} deleted'}), 200
 
 
+# GET ALL LIKES
+@api.route('/likes', methods=['GET'])
+def get_all_likes():
+    stmt = select(Like)
+    likes = db.session.execute(stmt).scalars().all()
+    return jsonify([like.serialize() for like in likes]), 200
 
 
+# GET BY LIKE ID
+@api.route('/likes/<int:like_id>', methods=['GET'])
+def get_single_like(like_id):
+    stmt = select(Like).where(Like.id == like_id)
+    like = db.session.execute(stmt).scalar_one_or_none()
+    if not like:
+        return jsonify({'error': f'Like with id {like_id} not found'}), 404
+    return jsonify(like.serialize()), 200
+
+# POST LIKE (ESTÁ LA LÓGICA PARA QUE SE CREE EL MATCH SI ES NECESARIO)
+@api.route('/likes/<int:liker_id>/<int:liked_id>', methods=['POST'])
+def post_like(liker_id, liked_id):
+    # No se permite que un usuario se de like a sí mismo
+    if liker_id == liked_id:
+        return jsonify({'error': 'Cannot like yourself'}), 400
+
+    # Obtener usuarios de la base de datos
+    liker = User.query.get(liker_id)
+    liked = User.query.get(liked_id)
+    if not liker or not liked:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Evitar likes duplicados
+    existing_like = (db.session.query(Like)
+                     .filter_by(liker_id=liker_id, liked_id=liked_id)
+                     .first())
+    if existing_like:
+        return jsonify({'error': 'Like already exists'}), 409
+
+    # Verificar like inverso para crear match
+    reverse_like = (db.session.query(Like)
+                    .filter_by(liker_id=liked_id, liked_id=liker_id)
+                    .first())
+
+    # Crear el nuevo like
+    new_like = Like(liker_id=liker_id, liked_id=liked_id)
+    db.session.add(new_like)
+
+    # Si existe el like inverso y no existe aún el match, crear match
+    if reverse_like:
+        existing_match = (db.session.query(Match)
+                          .filter(
+                              ((Match.user1_id == liker_id) & (Match.user2_id == liked_id)) |
+                              ((Match.user1_id == liked_id) &
+                               (Match.user2_id == liker_id))
+        )
+            .first())
+        if not existing_match:
+            new_match = Match(user1_id=liker_id, user2_id=liked_id)
+            db.session.add(new_match)
+
+    # Confirmar cambios en la base
+    db.session.commit()
+    return jsonify(new_like.serialize()), 201
 
 
-    
+# DELETE LIKE (ESTÁ LA LÓGICA PARA QUE SE BORRE EL MATCH SI ES NECESARIO)
+@api.route('/likes/<int:like_id>', methods=['DELETE'])
+def delete_like(like_id):
+    # Buscar el like
+    like = db.session.query(Like).get(like_id)
+    if not like:
+        return jsonify({'error': f'Like with id {like_id} not found'}), 404
 
+    # Comprobar si este like formó parte de un match
+    match = (db.session.query(Match)
+             .filter(
+                 ((Match.user1_id == like.liker_id) & (Match.user2_id == like.liked_id)) |
+                 ((Match.user1_id == like.liked_id) &
+                  (Match.user2_id == like.liker_id))
+    )
+        .first())
+
+    # Si hay match, borrarlo
+    if match:
+        db.session.delete(match)
+
+    # Borrar el like
+    db.session.delete(like)
+    db.session.commit()
+
+    return jsonify({'message': f'Like {like_id} deleted, match removed' if match else f'Like {like_id} deleted'}), 200

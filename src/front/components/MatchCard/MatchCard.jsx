@@ -2,11 +2,22 @@ import './MatchCard.css';
 import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import goldMedal from "../../assets/img/medals/gold-medal.png"
 import connectIcon from "../../assets/img/logos/logo-app.png"
+import { useEffect } from 'react';
 
-// import { useState } from 'react';
 
 
 export const MatchCard = () => {
+
+
+    useEffect(() => {
+        const el = document.getElementById('connectButton');
+        if (el) {
+            new window.bootstrap.Tooltip(el, {
+                boundary: document.body
+            });
+        }
+    }, []);
+
 
     return (
 
@@ -22,36 +33,52 @@ export const MatchCard = () => {
                 <div className='d-flex justify-content-center'>
                     <div className="col-12 col-sm-10 col-md-8 col-lg-6">
 
+                        {/* to do: que el borde de la tarjeta cambie de color entre morado y azul de forma aletaoria 
+                        en cada tarjeta mostrada. si la tarjeta es azul, los bordes y la edad serán azul, si la tarjeta es morada,
+                        los bordes y la edad serán morados */}
                         <div className="card matchCard">
                             <div className="card-body">
-                                <div className='d-flex align-items-start'>
-                                    {/* profile pic */}
-                                    <div className='match-profile-pic d-flex rounded-circle'>
-                                        <img src={profilePic4} alt="App Logo" className='match-profile-pic rounded-circle'></img>
+                                <div className='d-flex'>
+
+                                    <div className='d-flex me-auto '>
+                                        {/* profile pic */}
+                                        <div className='rounded-circle '>
+                                            <img src={profilePic4} alt="App Logo" className='match-profile-pic rounded-circle'></img>
+                                        </div>
+                                        <div>
+                                            {/* user name */}
+                                            <div className="d-flex justify-content-between align-items-center mb-5">
+                                                <h1 className="card-title mx-4 mt-3">User Name </h1>
+                                                <h2 className="match-card-text-purple text-end mt-3">32</h2>
+                                            </div>
+                                            {/* stars */}
+                                            <div className="d-flex justify-content-start mx-4">
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                                <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
-                                        {/* user name */}
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <h2 className="card-title mx-4 mt-3">User Name </h2>
-                                            <h3 className="match-card-text-purple text-end mt-3">32</h3>
-                                        </div>
-                                        {/* stars */}
-                                        <div className="d-flex justify-content-start mx-4 mt-3">
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
-                                            <i className="fa-regular fa-star fa-2xl ms-3"></i>
+                                        {/* connect button */}
+                                        <div className='match-card-connect'>
+                                            <button id="connectButton" type="button" className='match-card-button' 
+                                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Connect">
+                                                <img src={connectIcon} alt="connect icon" className='match-card-icon pulsate-bck' />
+                                            </button>
+
                                         </div>
                                     </div>
-
                                 </div>
+
                             </div>
                             <div className='d-flex align-items-start '>
 
                                 {/* games */}
-                                <div class="card match-card-games mx-3 ">
-                                    <div class="card-body">
+                                <div className="card match-card-games mx-3 ">
+                                    <div className="card-body">
                                         <div className="container mt-3">
                                             <div className="row">
 
@@ -100,15 +127,15 @@ export const MatchCard = () => {
                                 </div>
 
                                 {/* languages */}
-                                <div class="card match-card-languages mx-3 mt-3">
-                                    <div class="card-body ps-0">
+                                <div className="card match-card-languages mx-3 mt-3">
+                                    <div className="card-body ps-0">
 
                                         <div className="container mt-3">
                                             <div className="row">
                                                 {/* Fila 1 */}
                                                 <div className="col-12 col-sm-2 col-md-2 col-lg-2 mb-1">
                                                     <h5 className='ms-2'>
-                                                        <i class="fa-solid fa-xl fa-globe"></i>
+                                                        <i className="fa-solid fa-xl fa-globe"></i>
                                                     </h5>
                                                 </div>
                                                 <div className="col-12 col-sm-10 col-md-10 col-lg-10 d-flex justify-content-start ps-5">
@@ -133,28 +160,20 @@ export const MatchCard = () => {
                             <div className='d-flex'>
 
                                 {/* preferences */}
-                                <div class="card match-card-preferences mx-3 mt-3">
-                                    <div class="card-body">
-                                        <h5 class="ms-2 mb-1">Preferences</h5>
+                                <div className="card match-card-preferences mx-3 mt-3">
+                                    <div className="card-body">
+                                        <h5 className="ms-2 mb-1">Preferences</h5>
                                         <p className='match-card-text-purple ms-2'>
                                             I'm looking for friends that help me to improve my gaming skills but not all the time. I'm competitive but I like to chill too.
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* connect button */}
-
-                                <div className='match-card-connect align-self-end'>
-                                    <button type="button" className='match-card-button'> <img src={connectIcon} alt="connect icon" className='match-card-icon pulsate-bck' />
-                                    </button>
-                                </div>
                                 <div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </>

@@ -1,0 +1,25 @@
+.private-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.private-layout-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.private-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #121212;
+  color: white;
+}
+
+.backgorundPrivateLayout {
+  background-image: url(../../assets/img/background/how-it-works-background.png);
+  background-size: cover;
+  background-position: center, center;
+}
