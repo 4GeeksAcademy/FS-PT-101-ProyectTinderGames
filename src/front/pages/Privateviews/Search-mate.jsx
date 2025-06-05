@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCard";
-import userServices from "../../services/userServices";
+
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import searchMatchServices from "../../services/searchMatchServices";
 
 export const SearchMate = () => {
 
@@ -11,13 +12,15 @@ export const SearchMate = () => {
   const { store, dispatch } = useGlobalReducer();
 
   useEffect(() => {
-    const getUsers = async () => {
-      const data = await userServices.getUsers()
+    const getAllUsers = async () => {
+      setLoading(true)
+      const data = await searchMatchServices.getAllUsers()
       setUsers(data)
-      setLoading(false)
+      setLoading(false);
+      
 
     }
-    getUsers()
+    getAllUsers()
   }, [])
 
   const handleNext = () => {
@@ -26,12 +29,11 @@ export const SearchMate = () => {
 
   // Muestra el spinner y el mensaje cuando está cargando las tarjetas
   if (loading) return <div> <div className="spinner align-self-center"></div> Loading players. Thank you for your patience{" "}
-  {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null :  null}
-    </div>
+    {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}</div>
 
   //Muestra mensaje si ya no quedan jugadores disponibles
   if (currentUser >= users.length) {
-    return <p className="text-center mt-5"> Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null :  null}. There are no more players around</p>;
+    return <p className="text-center mt-5"> Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}. There are no more players around. Try later!</p>;
   }
 
   return (
