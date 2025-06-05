@@ -17,7 +17,6 @@ export const ResertPassword = () => {
                                     <div className="mx-4">
                                         <div>
                                             <label htmlFor="basic-url" className="form-label mb-0 mt-2">Email</label>
-
                                         </div>
                                         <input type="email" name="email" placeholder="email" value="" className='w-100 border-0 rounded-2 btn-register-card-border' />
                                         <br />
@@ -34,22 +33,19 @@ export const ResertPassword = () => {
  // New password second step */}
 
             <div>
-
                 <div className='d-flex justify-content-center'>
                     <div className='card register-card mt-5'>
                         <div className="card-body">
                             <h2 className="card-title text-center">New password</h2>
                             <br />
-
                             <form >
                                 <div className="mx-4">
                                     <div>
                                         <label htmlFor="basic-url" className="form-label mb-0 mt-2">New password</label>
-
                                     </div>
                                     <input type="password" name="password" placeholder="password" value="" className='w-100 border-0 rounded-2 btn-register-card-border' />
                                     <div>
-                                        <label htmlFor="basic-url" className="form-label mt-3 mb-0">Repeat password</label>
+                                        <label htmlFor="basic-url" className="form-label mt-3 mb-0">Enter your new password again</label>
                                     </div>
                                     <div>
                                         <input type="password" name="password" placeholder="password" value="" className="w-100 rounded-2 btn-register-card-border" />
