@@ -4,7 +4,7 @@
   text-shadow: 0 1.5px 0 #e773ea, 0 1.5px 1.5px #e773ea;
 }
 .searchMatchCard {
-  width: 50%;
+  width: 100%;
   height: auto;
   min-height: 570px;
   border-radius: 30px;
@@ -89,7 +89,6 @@
 .search-match-bg{
   width: auto;
   height: auto;
-  background-image: url('../../assets/img/background/user-views-background.png');
   background-size: cover;       
   background-position: center;  
   background-repeat: no-repeat; 
