@@ -39,7 +39,6 @@ userServices.login = async (formData) => {
     }
 }
 
-
 userServices.getUserInfo = async () => {
     try {
         const resp = await fetch(url + '/api/private', {
@@ -58,7 +57,6 @@ userServices.getUserInfo = async () => {
         return error
     }
 }
-
 
 
 export default userServices

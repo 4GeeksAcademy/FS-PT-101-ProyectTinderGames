@@ -2,7 +2,7 @@ import './SearchMatchCard.css';
 import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import { useState } from 'react';
 
-export const SearchMatchCard = ({ onLike, onDislike }) => {
+export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
   const [animationClass, setAnimationClass] = useState('');
 
@@ -23,7 +23,7 @@ export const SearchMatchCard = ({ onLike, onDislike }) => {
     }, 500);
   };
 
-  
+
   return (
     <>
 
@@ -48,34 +48,32 @@ export const SearchMatchCard = ({ onLike, onDislike }) => {
                   </div>
                 </div>
 
-
+                {/* Nombre de user = nickname */}
                 <h2 className="card-title d-flex justify-content-center mt-2">
-                  username
+                  {profile?.nick_name || 'undefined'}
                 </h2>
 
 
-                {/* stars */}
+                {/* stars-rating de los users */}
                 <div className='search-match-stars d-flex justify-content-center mt-3 mb-4'>
-                  <i className="fa-regular fa-star fa-lg"></i>
-                  <i className="fa-regular fa-star fa-lg ms-1"></i>
-                  <i className="fa-regular fa-star fa-lg ms-1"></i>
-                  <i className="fa-regular fa-star fa-lg ms-1"></i>
-                  <i className="fa-regular fa-star fa-lg ms-1"></i>
+                {[...Array(5)].map((_, i) => (<i key={i} className={`fa-star fa-lg ms-1 ${i < (profile?.stars || 0) ? "fa-solid" : "fa-regular"}`}></i>))}
                 </div>
                 <div>
 
 
                   <div className="container mt-3">
                     <div className="row">
-                      {/* Fila 1 */}
+                      {/* Fila 1 = edad */}
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                         <h5 className='ms-lg-4 ms-md-3 ms-sm-3 ms-2'>Age</h5>
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
-                        <h5 className='search-match-card-purple text-end me-lg-4 me-md-3 me-sm-3 me-2'>32</h5>
+                                        <h5 className='search-match-card-purple text-end me-lg-4 me-md-3 me-sm-3 me-2'>
+                       {profile?.age || '-'}
+                          </h5>
                       </div>
 
-                      {/* Fila 2 */}
+                      {/* Fila 2 = Juego 1 */}
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                         <h5 className='ms-lg-4 ms-md-3 ms-sm-3 ms-2'>Game name</h5>
                       </div>
@@ -83,7 +81,7 @@ export const SearchMatchCard = ({ onLike, onDislike }) => {
                         <h5 className='search-match-card-blue text-end me-lg-4 me-md-3 me-sm-3 me-2'>1420 h</h5>
                       </div>
 
-                      {/* Fila 3 */}
+                      {/* Fila 3 = Juego 2*/}
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                         <h5 className='ms-lg-4 ms-md-3 ms-sm-3 ms-2'>Game name</h5>
                       </div>
@@ -91,7 +89,7 @@ export const SearchMatchCard = ({ onLike, onDislike }) => {
                         <h5 className='search-match-card-blue text-end me-lg-4 me-md-3 me-sm-3 me-2'>1420 h</h5>
                       </div>
 
-                      {/* Fila 4 */}
+                      {/* Fila 4 = Juego 3*/}
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                         <h5 className='ms-lg-4 ms-md-3 ms-sm-3 ms-2'>Game name</h5>
                       </div>
@@ -99,20 +97,20 @@ export const SearchMatchCard = ({ onLike, onDislike }) => {
                         <h5 className='search-match-card-blue text-end me-lg-4 me-md-3 me-sm-3 me-2'>1420 h</h5>
                       </div>
 
-                      {/* Fila 5 */}
+                      {/* Fila 5 = location*/}
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                         <h5 className='ms-lg-4 ms-md-3 ms-sm-3 ms-2'>Location</h5>
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
-                        <h5 className='search-match-card-purple text-end me-lg-4 me-md-3 me-sm-3 me-2'>spain</h5>
+                        <h5 className='search-match-card-purple text-end me-lg-4 me-md-3 me-sm-3 me-2'>{profile?.location || '-'}</h5>
                       </div>
 
-                      {/* Fila 6 */}
+                      {/* Fila 6 = language */}
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                         <h5 className='ms-lg-4 ms-md-3 ms-sm-3 ms-2'>Language</h5>
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6">
-                        <h5 className='search-match-card-purple text-end me-lg-4 me-md-3 me-sm-3 me-2'>SP</h5>
+                        <h5 className='search-match-card-purple text-end me-lg-4 me-md-3 me-sm-3 me-2'>{profile?.language || '-'}</h5>
                       </div>
 
                       {/* Fila 7 */}
