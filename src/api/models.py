@@ -101,7 +101,8 @@ class Profile(db.Model):
             "bio": self.bio,
             "language": self.language,
             "name":self.name,
-            "games": [g.serialize() for g in self.games] if self.games else []
+            "games": [g.serialize() for g in self.games] if self.games else [],
+            "age": self.age
         }
 
 
