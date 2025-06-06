@@ -23,6 +23,7 @@ import { SearchMate } from "./pages/Privateviews/Search-mate";
 import { YourMatches } from "./pages/Privateviews/Your-matches";
 import { FindGames } from "./pages/Privateviews/Find-games";
 import { Settings } from "./pages/Privateviews/Settings";
+import { MatchUserDetails } from "./components/matchUserDetails";
 
 
 export const router = createBrowserRouter(
@@ -54,6 +55,7 @@ export const router = createBrowserRouter(
         <Route path="your-matches" element={<YourMatches />} />
         <Route path="find-games" element={<FindGames />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="your-matches/matchDetails/:id" element={<MatchUserDetails/>} />
       </Route>
       <Route path="/cardscomponents" element={<Cardscomponents />} /> {/* aqui se ven lso componentes de SearhcMatchCard y MatchCard */}
 
