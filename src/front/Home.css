@@ -2,6 +2,19 @@
 body {
   background-color: #000;
 }
+.tarjeta{
+  width: 25rem;
+
+  border: 2px solid #0000;
+  border-radius: 12px;
+  background: linear-gradient(#131219, #131219) padding-box, linear-gradient(
+        var(--angle),
+        #6bf1fa,
+        #f538ff
+      ) border-box;
+  animation: 2s rotate linear infinite;
+  background-color: transparent;
+}
 
 /* Secciones con fondo negro y bordes */
 .about-section {
@@ -9,6 +22,7 @@ body {
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
+
 }
 .howitworks-section {
   background-image: url(assets/img/background/how-it-works-background.png);
@@ -31,7 +45,7 @@ body {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-family: "Audiowide", sans-serif;
-  font-size: 3rem;
+  font-size: 2rem;
   letter-spacing: 0.2em;
   text-shadow: 0 0 4px #fff, 0 0 16px #ff00ff;
   color: #fff;
@@ -40,15 +54,13 @@ body {
 
 /* Título neón horizontal */
 .neon-heading {
-  font-family: "Audiowide", sans-serif;
-  font-size: 2rem;
   text-shadow: 0 0 2px #fff, 0 0 4px #ff00ff, 0 0 8px #00ffff;
   color: #f8f8f8;
 }
 
 .card {
-  width: 225px;
-  height: 225px;
+  width: 200px;
+  height: 200px;
   margin: 1rem auto;
   perspective: 1000px;
   cursor: pointer;
@@ -69,7 +81,7 @@ body {
         #6bf1fa,
         #f538ff
       ) border-box;
-  animation: 15s rotate linear infinite;
+  animation: 2s rotate linear infinite;
   background-color: transparent;
 }
 
