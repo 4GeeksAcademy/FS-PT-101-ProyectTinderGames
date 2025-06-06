@@ -1,0 +1,52 @@
+.matchCardd {
+  /* Quitamos width: 20rem; para que ocupe el 100% de la columna */
+  /* width: 20rem; */
+
+  /* Altura automática para respetar el contenido */
+  height: auto;
+  border: 2px solid rgba(255, 255, 255, 0.545); /* borde sutil en vez de blanco puro */
+  color: white;
+
+  /* Gradiente diagonal en tonos neón */
+  background: linear-gradient(
+    135deg,
+    #00f0ff,
+    #8a00ff,
+    #00c0ff,
+    #b300ff
+  );
+  background-size: 400% 400%;
+  animation: gradient-rotate 30s ease infinite;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyframes que van moviendo la posición del gradiente */
+@keyframes gradient-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Ajustes responsivos extra (opcional) */
+@media (max-width: 576px) {
+  .matchCardd .card-title {
+    font-size: 1rem; /* título un poco más pequeño en móviles */
+  }
+  .matchCardd .badge {
+    font-size: 0.75rem;
+  }
+  .matchCardd ul li small {
+    font-size: 0.75rem;
+  }
+}
+
+.medalsBox{
+    background-color: rgba(0, 0, 0, 0.259);
+}
