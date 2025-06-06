@@ -43,7 +43,7 @@ export const router = createBrowserRouter(
 
 
       <Route path="/register" element={<Register_page />} />
-      <Route path="/registerprueba" element={<RegisterLoginTest/>} />
+      <Route path="/registerprueba" element={<RegisterLoginTest/>} />  {/* aqui se ven lso componentes de Register/Sign-In y Reset password */}
 
       <Route path="/login" element={<Login_page />} />
       {/* dejo comentario para separar vistas públicas de las privadas */}
@@ -55,7 +55,7 @@ export const router = createBrowserRouter(
         <Route path="find-games" element={<FindGames />} />
         <Route path="settings" element={<Settings />} />
       </Route>
-      <Route path="/cardscomponents" element={<Cardscomponents />} />
+      <Route path="/cardscomponents" element={<Cardscomponents />} /> {/* aqui se ven lso componentes de SearhcMatchCard y MatchCard */}
 
       <Route path="/privateside" element={<PrivateLayout />} />  {/* esta ruta la tengo para ver solo la sidebar cuando la esté manejando. */}
 
