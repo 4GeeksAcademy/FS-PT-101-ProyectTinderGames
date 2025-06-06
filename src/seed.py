@@ -33,14 +33,72 @@ with app.app_context():
     db.session.commit()
 
     #Crear reviews
-    review1 = Review(user_id=1, author_id=2, stars=5, comment="Great player!")
-    review2 = Review(user_id=2, author_id=3, stars=4, comment="Very strategic.")
-    review3 = Review(user_id=3, author_id=1, stars=3, comment="Good, but can improve.")
-    review4 = Review(user_id=4, author_id=5, stars=4, comment="Fun to play with.")
-    review5 = Review(user_id=5, author_id=6, stars=5, comment="Excellent teamwork.")
-    review6 = Review(user_id=6, author_id=7, stars=3, comment="Needs more practice.")
-    review7 = Review(user_id=7, author_id=4, stars=4, comment="Really fast and skilled.")
-    db.session.add_all([review1, review2, review3, review4, review5, review6, review7])
+    reviews = [
+    # Reviews para user_id=1
+        Review(user_id=1, author_id=2, stars=5, comment="Great player!"),
+        Review(user_id=1, author_id=3, stars=4, comment="Very strategic."),
+        Review(user_id=1, author_id=4, stars=3, comment="Good, but can improve."),
+        Review(user_id=1, author_id=5, stars=4, comment="Fun to play with."),
+        Review(user_id=1, author_id=6, stars=5, comment="Excellent teamwork."),
+        Review(user_id=1, author_id=7, stars=3, comment="Needs more practice."),
+        Review(user_id=1, author_id=2, stars=4, comment="Really fast and skilled."),
+
+        # Reviews para user_id=2
+        Review(user_id=2, author_id=1, stars=4, comment="Good communication."),
+        Review(user_id=2, author_id=3, stars=5, comment="Amazing skills."),
+        Review(user_id=2, author_id=4, stars=4, comment="Very helpful."),
+        Review(user_id=2, author_id=5, stars=3, comment="Can improve timing."),
+        Review(user_id=2, author_id=6, stars=4, comment="Nice player."),
+        Review(user_id=2, author_id=7, stars=5, comment="Strong strategist."),
+        Review(user_id=2, author_id=1, stars=4, comment="Great teamwork."),
+
+        # Reviews para user_id=3
+        Review(user_id=3, author_id=1, stars=3, comment="Average."),
+        Review(user_id=3, author_id=2, stars=4, comment="Good playstyle."),
+        Review(user_id=3, author_id=4, stars=5, comment="Excellent!"),
+        Review(user_id=3, author_id=5, stars=4, comment="Reliable."),
+        Review(user_id=3, author_id=6, stars=3, comment="Could be better."),
+        Review(user_id=3, author_id=7, stars=4, comment="Consistent."),
+        Review(user_id=3, author_id=2, stars=5, comment="Top player."),
+
+        # Reviews para user_id=4
+        Review(user_id=4, author_id=1, stars=4, comment="Nice teammate."),
+        Review(user_id=4, author_id=2, stars=3, comment="Learning fast."),
+        Review(user_id=4, author_id=3, stars=5, comment="Excellent moves."),
+        Review(user_id=4, author_id=5, stars=4, comment="Friendly player."),
+        Review(user_id=4, author_id=6, stars=4, comment="Very cooperative."),
+        Review(user_id=4, author_id=7, stars=3, comment="Could improve strategy."),
+        Review(user_id=4, author_id=1, stars=5, comment="Reliable player."),
+
+        # Reviews para user_id=5
+        Review(user_id=5, author_id=1, stars=5, comment="Excellent teamwork."),
+        Review(user_id=5, author_id=2, stars=4, comment="Good skills."),
+        Review(user_id=5, author_id=3, stars=4, comment="Great at tactics."),
+        Review(user_id=5, author_id=4, stars=5, comment="Fun to play with."),
+        Review(user_id=5, author_id=6, stars=3, comment="Needs to communicate more."),
+        Review(user_id=5, author_id=7, stars=4, comment="Strong player."),
+        Review(user_id=5, author_id=2, stars=5, comment="Very strategic."),
+
+        # Reviews para user_id=6
+        Review(user_id=6, author_id=1, stars=3, comment="Can improve."),
+        Review(user_id=6, author_id=2, stars=4, comment="Good teamwork."),
+        Review(user_id=6, author_id=3, stars=5, comment="Great leader."),
+        Review(user_id=6, author_id=4, stars=5, comment="Helpful player."),
+        Review(user_id=6, author_id=5, stars=4, comment="Very skilled."),
+        Review(user_id=6, author_id=7, stars=3, comment="Needs more practice."),
+        Review(user_id=6, author_id=1, stars=4, comment="Consistent player."),
+
+        # Reviews para user_id=7
+        Review(user_id=7, author_id=1, stars=4, comment="Fast and skilled."),
+        Review(user_id=7, author_id=2, stars=5, comment="Great strategist."),
+        Review(user_id=7, author_id=3, stars=4, comment="Reliable player."),
+        Review(user_id=7, author_id=4, stars=3, comment="Needs to focus more."),
+        Review(user_id=7, author_id=5, stars=4, comment="Very cooperative."),
+        Review(user_id=7, author_id=6, stars=5, comment="Excellent skills."),
+        Review(user_id=7, author_id=1, stars=4, comment="Good teamwork."),
+    ]
+
+    db.session.add_all(reviews)
     db.session.commit()
 
     #Crear games para los perfiles de usuarios
