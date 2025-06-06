@@ -15,7 +15,7 @@ export const SearchMate = () => {
 
     const timeout = setTimeout(() => {
       setShowLoadingMessage(true)
-    }, 2000) // Para que el mensaje loading salga si la espera es mayor de 2 segundos
+    }, 3000) // Para que el mensaje loading salga si la espera es mayor de 3 segundos
 
     const getAllUsers = async () => {
       setLoading(true)
