@@ -1,10 +1,21 @@
 import './SearchMatchCard.css';
 import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import searchMatchServices from '../../services/searchMatchServices';
 
 export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
   const [animationClass, setAnimationClass] = useState('');
+  const [avgStars, setAvgStars] = useState(0);
+
+  useEffect(() => {
+    const fetchAvgStars = async () => {
+      const avgStars = await searchMatchServices.getStarsByUser(profile.id);
+      setAvgStars(avgStars); // un useState para esto
+    };
+
+    fetchAvgStars();
+  }, [profile]);
 
 
   const handleLike = () => {
@@ -55,48 +66,54 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
 
                 {/* stars-rating de los users */}
-                <div className='search-match-stars d-flex justify-content-center mt-3 mb-5'>
-                  {[...Array(5)].map((_, i) => (<i key={i} className={`fa-star fa-lg ms-1 ${i < (profile?.stars || 0) ? "fa-solid" : "fa-regular"}`}></i>))}
+                <div className='d-flex justify-content-center mt-3 mb-5'>
+
+                {[...Array(5)].map((_, i) => (
+                  <i
+                  key={i}
+                  className={`fa-star fa-lg ms-1 ${i < Math.round(avgStars) ? "fa-solid" : "fa-regular"
+                  }`}
+                  ></i>
+                ))}
                 </div>
-                <div>
 
-                  <div className="container mt-3">
+                <div className="container mt-3">
 
-                    {/* Games */}
-                    {profile?.games?.slice(0, 3).map((g, index) => (
-                      <div className="row" key={index}>
-                        <div className="col-6">
-                          <h5 className=' ms-2'>{g.game.title}</h5>
-                        </div>
-
-                        <div className="col-6 text-end">
-                          <h5 className='search-match-card-blue me-2'>{g.game.hours_played} h</h5>
-                        </div>
-                      </div>
-                    ))}
-
-                    {/*location*/}
-                    <div className="row mt-2">
+                  {/* Games */}
+                  {profile?.games?.slice(0, 3).map((g, index) => (
+                    <div className="row" key={index}>
                       <div className="col-6">
-                        <h5 className='ms-2'>Location</h5>
+                        <h5 className=' ms-2'>{g.game.title}</h5>
                       </div>
+
                       <div className="col-6 text-end">
-                        <h5 className='search-match-card-purple me-2'>{profile?.location || '-'}</h5>
+                        <h5 className='search-match-card-blue me-2'>{g.game.hours_played} h</h5>
                       </div>
                     </div>
+                  ))}
 
-                    {/* language */}
-                    <div className="row">
-                      <div className="col-6">
-                        <h5 className='ms-2'>Language</h5>
-                      </div>
-                      <div className="col-6 text-end">
-                        <h5 className='search-match-card-purple me-2'>{profile?.language || '-'}</h5>
-                      </div>
+                  {/*location*/}
+                  <div className="row mt-2">
+                    <div className="col-6">
+                      <h5 className='ms-2'>Location</h5>
                     </div>
+                    <div className="col-6 text-end">
+                      <h5 className='search-match-card-purple me-2'>{profile?.location || '-'}</h5>
+                    </div>
+                  </div>
 
-                    {/* botones */}
-                    <div className=' mt-4' >
+                  {/* language */}
+                  <div className="row">
+                    <div className="col-6">
+                      <h5 className='ms-2'>Language</h5>
+                    </div>
+                    <div className="col-6 text-end">
+                      <h5 className='search-match-card-purple me-2'>{profile?.language || '-'}</h5>
+                    </div>
+                  </div>
+
+                  {/* botones */}
+                  <div className=' mt-4' >
 
                     <div className='row mt-3 d-flex justify-content-center'>
                       <div className="col-6">
@@ -109,16 +126,14 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                         </button>
                       </div>
 
-               
 
-                        {/* like button */}
-                        <button type="button"
-                          onClick={handleLike}
-                          className="p-1 me-1 search-match-button">
-                          <i className="hover-button-pulsate-bck fa-solid fa-heart fa-3x d-flex justify-content-center align-items-center search-match-like "></i>
-                        </button>
-                            </div>
-                      </div>
+
+                      {/* like button */}
+                      <button type="button"
+                        onClick={handleLike}
+                        className="p-1 me-1 search-match-button">
+                        <i className="hover-button-pulsate-bck fa-solid fa-heart fa-3x d-flex justify-content-center align-items-center search-match-like "></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -126,6 +141,8 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
             </div>
           </div>
         </div>
+      </div>
+  
     </>
 
   )
