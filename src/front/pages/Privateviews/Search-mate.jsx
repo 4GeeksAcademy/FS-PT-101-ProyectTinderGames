@@ -44,7 +44,7 @@ export const SearchMate = () => {
 
   //Muestra mensaje si ya no quedan jugadores disponibles
   if (!loading && currentUser >= profiles.length) {
-    return <h2 className="text-center mt-5"> Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}, There are no more players around. Try later!</h2>;
+    return <h2 className="text-center mt-5"> Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}, there are no more players around. Try later!</h2>;
   }
 
   return (
