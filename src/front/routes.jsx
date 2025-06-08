@@ -18,7 +18,7 @@ import { Cardscomponents} from "./pages/cardscomponents"
 import { RegisterLoginTest } from "./pages/Register_login_test";
 
 import { PrivateLayout } from "./components/Private/Private-layout";
-import { Profile } from "./pages/Privateviews/Profile";
+import  Profile  from "./pages/Privateviews/Profile";
 import { SearchMate } from "./pages/Privateviews/Search-mate";
 import { YourMatches } from "./pages/Privateviews/Your-matches";
 import { FindGames } from "./pages/Privateviews/Find-games";
