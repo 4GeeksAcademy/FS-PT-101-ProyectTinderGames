@@ -39,7 +39,6 @@ userServices.login = async (formData) => {
     }
 }
 
-
 userServices.getUserInfo = async () => {
     try {
         const resp = await fetch(url + '/api/private', {
@@ -58,5 +57,20 @@ userServices.getUserInfo = async () => {
         return error
     }
 }
+
+userServices.getUserInfoById = async (user_id) => {
+    try {
+        const resp = await fetch(url + `/api/users/${user_id}`, {
+        });
+        if (!resp.ok) throw Error('Something went wrong')
+        const data = await resp.json()
+        console.log(data)
+        return data
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
 
 export default userServices

@@ -79,7 +79,7 @@ export const NavbarHome = () => {
 
 
       {/* modal body */}
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
         <div className="modal-dialog modal-xl ">
           <div className="modal-content modal-home">
             <div className="modal-header mt-5">

@@ -7,6 +7,7 @@ export const Cardscomponents = () => {
     <>
       <SearchMatchCard />
       <MatchCard />
+
     </>
   )
 

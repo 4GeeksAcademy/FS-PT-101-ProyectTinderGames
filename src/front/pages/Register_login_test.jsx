@@ -1,20 +1,16 @@
-
-import { MatchCard } from "../components/MatchCard/MatchCard"
 import { Register } from "../components/Register/Register"
-import { SearchMatchCard } from "../components/SearchMatchCard/SearchMatchCard"
+import { ResetPassword } from "../components/ResertPassword/ResetPassword"
 import { SignIn } from "../components/SignIn/SignIn"
-
 
 
 
 export const RegisterLoginTest = () => {
   return (
     <>
-      <Register/>
-      <SignIn/> 
-      <SearchMatchCard/>
-      <MatchCard/>
- 
+      <Register />
+      <SignIn />
+      <ResetPassword />
+
     </>
   )
 
