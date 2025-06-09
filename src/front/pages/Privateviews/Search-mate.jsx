@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCard";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import searchMatchServices from "../../services/searchMatchServices";
+import { MatchCard } from "../../components/MatchCard/MatchCard";
 
 export const SearchMate = () => {
 
@@ -10,6 +11,9 @@ export const SearchMate = () => {
   const [loading, setLoading] = useState(true)
   const [showLoadingMessage, setShowLoadingMessage] = useState(false);
   const { store, dispatch } = useGlobalReducer();
+
+  const [fakeMatch, setFakeMatch] = useState(false); // Estado para simular match
+
 
   useEffect(() => {
 
@@ -34,37 +38,109 @@ export const SearchMate = () => {
           (profile) => profile.id !== store.user.profile.id // el id que se muestra en la tarjeta no es el mismo que el id del usuario/profile logeado
         );
       }
-    
-    setProfiles(allProfiles)
-    setLoading(false)
-    clearTimeout(timeout)
-  };
+
+      setProfiles(allProfiles)
+      setLoading(false)
+      clearTimeout(timeout)
+    };
     getAllUsers();
 
     return () => clearTimeout(timeout)
 
-}, [store.user]);
+  }, [store.user]);
 
 
-const handleNext = () => {
-  setCurrentUser((prevIndex) => (prevIndex + 1)); // Para que muestre todas las tarjetas de todos los ususarios
-}
+  // Simula un match después de 3 segundos (puedes ajustar el tiempo)
+  useEffect(() => {
+    const matchTimeout = setTimeout(() => {
+      setFakeMatch(true);
+    }, 3000);
 
-// Muestra el spinner y el mensaje cuando está cargando las tarjetas
-if (loading && showLoadingMessage) {
-  return <h2> <div className="spinner align-self-center"></div> Loading players. Thank you for your patience{" "}
-    {store.user ? store.user.profile != undefined ? store.user.profile?.nick_name : null : null}</h2>
-}
+    return () => clearTimeout(matchTimeout);
+  }, []);
 
-//Muestra mensaje si ya no quedan jugadores disponibles
-if (!loading && currentUser >= profiles.length) {
-  return <h2 className="text-center mt-5"> Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}, there are no more players around. Try later!</h2>
-}
+  const handleNext = () => {
+    setCurrentUser((prevIndex) => (prevIndex + 1)); // Para que muestre todas las tarjetas de todos los ususarios
+  }
 
-return (
+  // Muestra el spinner y el mensaje cuando está cargando las tarjetas
+  if (loading && showLoadingMessage) {
+    return <h2> <div className="spinner align-self-center"></div> Loading players. Thank you for your patience{" "}
+      {store.user ? store.user.profile != undefined ? store.user.profile?.nick_name : null : null}</h2>
+  }
 
-  <SearchMatchCard profile={profiles[currentUser]} onLike={handleNext} onDislike={handleNext}
-  />
+  //Muestra mensaje si ya no quedan jugadores disponibles
+  if (!loading && currentUser >= profiles.length) {
+    return <h2 className="text-center mt-5"> Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}, there are no more players around. Try later!</h2>
+  }
 
-)
+
+  // Perfil de prueba para el match simulado
+  const mockedProfile = {
+    id: 999,
+    nick_name: "Prueba match",
+    location: "Spain",
+    language: "EN, ES",
+    preferences: "Pruebaaaa!",
+    stars: 4, 
+    games: [
+      { game: { title: "Game One", hours_played: 120 } },
+      { game: { title: "Game Two", hours_played: 45 } },
+      { game: { title: "Game Three", hours_played: 78 } }
+    ]
+  };
+
+  return (
+    <>
+      {!fakeMatch && (
+        <div className='d-flex justify-content-center '>
+          <h1 className='searchMateCard-font-shadow mt-2 mb-3'>
+            Search a mate
+          </h1>
+        </div>
+      )}
+
+      {/* Modal para el MatchCard */}
+      {fakeMatch && (
+
+        <>
+          <div className="d-flex justify-content-center align-items-center">
+            <div>
+              <h1 className='title-matchCard-font-shadow mt-2 mb-3'>
+                It's a match
+              </h1>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="btn-close ms-3 btn-close-modal"
+                onClick={() => setFakeMatch(false)}
+              >
+              </button>
+            </div>
+          </div>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body">
+                <MatchCard profile={mockedProfile} />
+              </div>
+
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* La tarjeta de search a mate cuando no hay match */}
+      {(
+        !fakeMatch && profiles.length > 0 && profiles[currentUser] && ( //Para que cuando la tarjeta se cargue, ya tenga toda la info del user y lo sagan datos undefined
+          <SearchMatchCard
+            profile={profiles[currentUser]}
+            onLike={handleNext}
+            onDislike={handleNext}
+          />
+        )
+      )}
+    </>
+
+  )
 };

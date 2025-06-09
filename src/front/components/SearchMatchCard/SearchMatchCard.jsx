@@ -3,17 +3,21 @@ import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import { useEffect, useState } from 'react';
 import searchMatchServices from '../../services/searchMatchServices';
 
-export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
+export const SearchMatchCard = ({profile, onLike, onDislike }) => {
 
   const [animationClass, setAnimationClass] = useState('');
   const [avgStars, setAvgStars] = useState(0);
 
   useEffect(() => {
+    if (!profile?.id) return;
     const fetchAvgStars = async () => {
-      const avgStars = await searchMatchServices.getStarsByUser(profile.id);
-      setAvgStars(avgStars); // un useState para esto
+      try {
+        const avg = await searchMatchServices.getStarsByUser(profile.id);
+        setAvgStars(Number(avg));
+      } catch (err) {
+        console.error(err);
+      }
     };
-
     fetchAvgStars();
   }, [profile]);
 
@@ -39,11 +43,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
     <>
 
       <div className="search-match-bg">
-        <div className='d-flex justify-content-center '>
-
-          <h1 className='searchMateCard-font-shadow mt-2 mb-3'>
-            Search a mate
-          </h1>
+        
         </div>
         <div className='d-flex justify-content-center'>
           <div className="col-12 col-sm-10 col-md-8 col-lg-6">
@@ -63,7 +63,6 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                 <h2 className="card-title d-flex justify-content-center mt-2">
                   {profile?.nick_name || 'undefined'}
                 </h2>
-
 
                 {/* stars-rating de los users */}
                 <div className='d-flex justify-content-center mt-3 mb-5'>
@@ -126,8 +125,6 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                         </button>
                       </div>
 
-
-
                       {/* like button */}
                       <button type="button"
                         onClick={handleLike}
@@ -141,8 +138,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
             </div>
           </div>
         </div>
-      </div>
-  
+    
     </>
 
   )

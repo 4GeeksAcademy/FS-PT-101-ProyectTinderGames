@@ -4,13 +4,12 @@
 }
 .matchCard {
   position: relative;
-  width: 100%;
+  width: fit-content;
   height: auto;
-  background-color: hsla(0, 0%, 100%, 0.72); 
+  background-color: #ffffff;
   padding: 1rem;
   border: 6px solid #7c0ebc;
   border-radius: 30px;
- 
 }
 
 /* .matchCard {
@@ -35,7 +34,6 @@
   width: 192px;
   height: 192px;
 }
-
 
 .match-card-text-purple {
   color: #7c0ebc;
@@ -110,7 +108,6 @@
 .match-card-bg {
   width: auto;
   height: auto;
-  background-image: url("../../assets/img/background/user-views-background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -120,9 +117,8 @@
   width: 70%;
   height: auto;
   border: solid #7c0ebc;
-  background-color: rgba(255, 255, 255, 0.50);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 30px;
-
 }
 
 .match-card-languages {
@@ -130,18 +126,16 @@
   align-self: center;
   height: auto;
   border: solid #7c0ebc;
-  background-color: rgba(255, 255, 255, 0.50);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 30px;
-
 }
 
 .match-card-preferences {
   width: 100%;
   height: auto;
   border: solid #7c0ebc;
-  background-color: rgba(255, 255, 255, 0.50);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 30px;
-
 }
 
 /* .match-card-inside-borders{
@@ -165,4 +159,3 @@
   
 
 } */
-

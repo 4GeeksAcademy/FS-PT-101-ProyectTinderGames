@@ -50,7 +50,7 @@ searchMatchServices.getStarsByUser = async (userId) => {
       },
     });
 
-    if (!resp.ok) throw new Error("No se pudieron obtener las reviews");
+    if (!resp.ok) throw new Error("Error getting stars");
 
     const data = await resp.json();
     const reviews = data.reviews_received;
