@@ -3,8 +3,7 @@ body {
   background-color: #000;
 }
 .tarjeta{
-  width: 25rem;
-
+  width: 18rem;
   border: 2px solid #0000;
   border-radius: 12px;
   background: linear-gradient(#131219, #131219) padding-box, linear-gradient(
@@ -14,10 +13,13 @@ body {
       ) border-box;
   animation: 2s rotate linear infinite;
   background-color: transparent;
+  font-size: 0.9rem;
 }
 
 /* Secciones con fondo negro y bordes */
 .about-section {
+  padding-top: 10rem;
+  padding-bottom: 10rem;
   background-image:url(assets/img/background/about-us-background-image.png);
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
@@ -25,36 +27,36 @@ body {
 
 }
 .howitworks-section {
+  padding-top: 10rem;
+  padding-bottom: 10rem;
   background-image: url(assets/img/background/how-it-works-background.png);
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
 .bestpractices-section {
+  padding-top: 10rem;
+  padding-bottom: 10rem;
   background-image:url(assets/img/background/best-practices-background.png);
   background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen dentro del contenedor */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
-.about-section.border-top {
-  border-top: 4px solid red;
-}
-
 /* Títulos verticales */
 .vertical-title {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-family: "Audiowide", sans-serif;
-  font-size: 2rem;
+  font-size: 2.5rem;
   letter-spacing: 0.2em;
-  text-shadow: 0 0 4px #fff, 0 0 16px #ff00ff;
+  text-shadow: 0 0 6px #fff, 0 0 18px #ff00ff;
   color: #fff;
-  margin: auto;
+  padding: 0;
 }
 
 /* Título neón horizontal */
 .neon-heading {
-  text-shadow: 0 0 2px #fff, 0 0 4px #ff00ff, 0 0 8px #00ffff;
+  text-shadow: 0 0 4px #fff, 0 0 4px #ff00ff, 0 0 8px #00ffff;
   color: #f8f8f8;
 }
 
@@ -119,6 +121,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .card-front {

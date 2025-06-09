@@ -16,7 +16,7 @@ export const Home = () => {
 			<NavbarHome />
 			<div className="container-fluid">
 				{/* Carrusel Bootstrap 5 */}
-				<div className="row">
+				<div className="row justify-content-center">
 					<div className="col-12">
 						<div
 							id="carouselExample"
@@ -49,16 +49,12 @@ export const Home = () => {
 						</div>
 					</div>
 				</div>
-				{/* Fin carrusel */}
-				{/* How It Works */}
-				<section className="howitworks-section pb-5 text-white border-bottom border-top border-white py-5" id='howitworks'>
-					<div className="container position-relative">
-						<div className="d-flex align-items-start">
-							{/* Contenido principal */}
-							<div className="flex-grow-1">
-								{/* Una sola fila: 1 col en xs, 2 en md, 4 en lg */}
-								<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 mb-2 pt-5">
-									<div className="card">
+				<section className="howitworks-section text-white border-bottom border-top border-white" id='howitworks'>
+					<div className="container">
+						<div className="row d-flex align-items-center justify-content-around">
+							<div className='col-10'>
+								<div className='row d-flex'>
+									<div className="card col-lg-6">
 										<div className="card-inner box text-center">
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
@@ -66,7 +62,7 @@ export const Home = () => {
 											<div className="card-back p-2">Sing up on our app</div>
 										</div>
 									</div>
-									<div className="card">
+									<div className="card col-lg-6">
 										<div className="card-inner box text-center">
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
@@ -75,36 +71,36 @@ export const Home = () => {
 										</div>
 									</div>
 								</div>
-								<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 mb-2 pb-5">
-									<div className="card">
+								<div className='row'>
+									<div className="card col-lg-6">
 										<div className="card-inner box text-center">
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
 											</div>
-											<div className="card-back p-2">Swipe left or right</div>
+											<div className="card-back p-2">Sing up on our app</div>
 										</div>
 									</div>
-									<div className="card">
+									<div className="card col-lg-6">
 										<div className="card-inner box text-center">
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
 											</div>
-											<div className="card-back p-2">Find your player match</div>
+											<div className="card-back p-2">Fill in your user details</div>
 										</div>
 									</div>
 								</div>
-							</div>
 
+							</div>
 							{/* Texto vertical sólo en md+ */}
-							<div className="vertical-title ms-4 d-none d-md-block align-self-center">
+							<div className="vertical-title col-2">
 								HOW IT WORKS
 							</div>
 						</div>
 					</div>
 				</section>
 				{/* Best Practices */}
-				<section className="bestpractices-section py-5 text-white border-bottom border-white" id='bestpractices'>
-					<div className="container position-relative">
+				<section className="bestpractices-section text-white border-bottom border-white" id='bestpractices'>
+					<div className="container">
 						<div className="row d-flex align-items-center">
 
 							{/* Texto vertical sólo en md+ */}
@@ -138,60 +134,64 @@ export const Home = () => {
 										</div>
 									</div>
 								</div>
-								<div className="row mb-2 pt-5">
-								<div className="card">
-									<div className="card-inner box text-center">
-										<div className="card-front">
-											Use Match Filters Wisely
+								<div className="row mb-2">
+									<div className="card">
+										<div className="card-inner box text-center">
+											<div className="card-front">
+												Use Match Filters Wisely
+											</div>
+											<div className="card-back p-2">Set your preferences (game genres, skill level, time zone) to find players that truly match your vibe."</div>
 										</div>
-										<div className="card-back p-2">Set your preferences (game genres, skill level, time zone) to find players that truly match your vibe."</div>
+									</div>
+									<div className="card">
+										<div className="card-inner box text-center">
+											<div className="card-front">
+												Give Feedback
+											</div>
+											<div className="card-back p-2">Rate your matches and report bad behavior—it helps keep the community safe and fun.</div>
+										</div>
+									</div>
+									<div className="card">
+										<div className="card-inner box text-center">
+											<div className="card-front">
+												Try New Games Together
+											</div>
+											<div className="card-back p-2">Explore new titles or challenges with your squad to build stronger connections.</div>
+										</div>
 									</div>
 								</div>
-								<div className="card">
-									<div className="card-inner box text-center">
-										<div className="card-front">
-											Give Feedback
-										</div>
-										<div className="card-back p-2">Rate your matches and report bad behavior—it helps keep the community safe and fun.</div>
-									</div>
-								</div>
-								<div className="card">
-									<div className="card-inner box text-center">
-										<div className="card-front">
-											Try New Games Together
-										</div>
-										<div className="card-back p-2">Explore new titles or challenges with your squad to build stronger connections.</div>
-									</div>
-								</div>
-							</div>
 							</div>
 						</div>
 					</div>
 				</section>
 				{/* About Us */}
-				<section className="about-section py-5 text-white border-bottom" id="aboutus">
+				<section className="about-section text-white border-bottom" id="aboutus">
 					<div className="container">
-						<div className="row d-flex align-items-center gap-4 p-3 justify-content-around">
-							{/* Columna del contenido (orígenes + quiénes somos) */}
-							<div class="col-lg-4 col-sm-12  col-md-10 personalcard p-4 d-flex flex-column text-center tarjeta text-white">
-								<div class="card-body">
-									<h3 className="neon-heading mb-3">The origins</h3>
-									<p className="flex-grow-1">
-										Playerlink started as an academic project and, with dedication and passion, became what it is today: a web that links players around the world.
-									</p>
-								</div>
-							</div>
-							<div class="col-lg-4 col-sm-12  col-md-10 personalcard p-4 d-flex flex-column text-center tarjeta text-white">
-								<div class="card-body">
-									<h3 className="neon-heading mb-3">Who are we?</h3>
-									<p className="flex-grow-1">
-										We are a aquad of gaming enthusiast who know the real fun starts when we play together <br />
-										Bryan, Alba & Toni
-									</p>
+						<div className="row d-flex align-items-center justify-content-around">
+							<div className='col-10'>
+								<div className="row d-flex gap-4 justify-content-around">
+									{/* Columna del contenido (orígenes + quiénes somos) */}
+									<div class="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
+										<div class="card-body">
+											<h3 className="neon-heading mb-3">The origins</h3>
+											<p className="flex-grow-1">
+												Playerlink started as an academic project and, with dedication and passion, became what it is today: a web that links players around the world.
+											</p>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
+										<div class="card-body">
+											<h3 className="neon-heading mb-3">Who are we?</h3>
+											<p className="flex-grow-1">
+												We are a aquad of gaming enthusiast who know the real fun starts when we play together <br />
+												Bryan, Alba & Toni
+											</p>
+										</div>
+									</div>
 								</div>
 							</div>
 							{/* Título vertical: solo se muestra en pantallas grandes */}
-							<div className="col-lg-1  d-lg-flex justify-content-center">
+							<div className="col-2 d-lg-flex justify-content-center">
 								<div className="vertical-title">ABOUT US</div>
 							</div>
 						</div>
