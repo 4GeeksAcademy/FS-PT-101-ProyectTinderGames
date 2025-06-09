@@ -35,8 +35,16 @@ export const SearchMate = () => {
       }
 
       if (store.user && store.user.profile) {
+        // IDs de perfiles que ya diste like o dislike
+        const likedIds = store.likes?.map(p => p.id) || [];
+        const dislikedIds = store.dislikes?.map(p => p.id) || [];
+
+        // Filtramos para excluir al usuario actual y los perfiles ya evaluados
         allProfiles = allProfiles.filter(
-          (profile) => profile.id !== store.user.profile.id // Para que no salga el perfil del usuario logeado
+          (profile) =>
+            profile.id !== store.user.profile.id &&
+            !likedIds.includes(profile.id) &&
+            !dislikedIds.includes(profile.id)
         );
       }
 
@@ -48,7 +56,7 @@ export const SearchMate = () => {
 
     return () => clearTimeout(timeout)
 
-  }, [store.user]);
+  }, [store.user, store.likes, store.dislikes]); //para que se actualice el user, los likes y los dislikes
 
 
   // Simula un match después de 3 segundos (puedes ajustar el tiempo)
@@ -61,9 +69,10 @@ export const SearchMate = () => {
   }, []);
 
   const handleNext = () => {
-    setCurrentUser((prevIndex) => (prevIndex + 1)); // Para que muestre todas las tarjetas de todos los ususarios
-  }
-  
+    const dislikedProfile = profiles[currentUser];
+    dispatch({ type: "saveDislike", payload: dislikedProfile });
+    setCurrentUser((prevIndex) => prevIndex + 1);
+  };
 
   const handleLike = async () => { //Maneja el LIKE button para mandar la información a la API y para que cambie de tarjeta
     const likedProfile = profiles[currentUser];
@@ -108,7 +117,7 @@ export const SearchMate = () => {
 
   // Perfil de prueba para el match simulado
   const mockedProfile = {
-    id: 999,
+    id: 2,
     nick_name: "pepe.pe_el fantastico",
   };
 

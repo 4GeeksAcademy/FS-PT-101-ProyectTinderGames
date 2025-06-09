@@ -89,4 +89,42 @@ searchMatchServices.sendLike = async (fromUserId, toUserId) => {
   }
 };
 
+// Trae los likes recibidos por el usuario logeado
+searchMatchServices.getLikesReceived = async (userId) => {
+  try {
+    const resp = await fetch(`${url}/api/likes_received/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    if (!resp.ok) throw new Error("Failed to fetch likes received");
+
+    const data = await resp.json();
+    return data.likes_received || [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+// Trae los dislikes recibidos por el usuario logeado
+searchMatchServices.getDislikesReceived = async (userId) => {
+  try {
+    const resp = await fetch(`${url}/api/rejects_received/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    if (!resp.ok) throw new Error("Failed to fetch dislikes received");
+
+    const data = await resp.json();
+    return data.rejects_recieved || [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
 export default searchMatchServices;
