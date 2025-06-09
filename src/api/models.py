@@ -107,7 +107,9 @@ class Profile(db.Model):
             "language": self.language,
             "name":self.name,
             "games": [g.serialize() for g in self.games] if self.games else [],
-            "age": self.age
+            "age": self.age,
+            "discord": self.discord,
+            "steam": self.steam_id
         }
 
 
