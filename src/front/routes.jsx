@@ -22,7 +22,7 @@ import  Profile  from "./pages/Privateviews/Profile";
 import { SearchMate } from "./pages/Privateviews/Search-mate";
 import { YourMatches } from "./pages/Privateviews/Your-matches";
 import { FindGames } from "./pages/Privateviews/Find-games";
-import { Settings } from "./pages/Privateviews/Settings";
+import  Settings  from "./pages/Privateviews/Settings";
 import { MatchUserDetails } from "./components/matchUserDetails";
 
 
