@@ -57,7 +57,7 @@ export const router = createBrowserRouter(
         <Route path="settings" element={<Settings />} />
         <Route path="your-matches/matchDetails/:id" element={<MatchUserDetails/>} />
       </Route>
-      <Route path="/cardscomponents" element={<Cardscomponents />} /> {/* aqui se ven lso componentes de SearhcMatchCard y MatchCard */}
+      <Route path="/cardscomponents" element={<Cardscomponents />} /> {/* aqui se ven lso componentes de SearhcMatchCard y ItsMatch */}
 
       <Route path="/privateside" element={<PrivateLayout />} />  {/* esta ruta la tengo para ver solo la sidebar cuando la esté manejando. */}
 

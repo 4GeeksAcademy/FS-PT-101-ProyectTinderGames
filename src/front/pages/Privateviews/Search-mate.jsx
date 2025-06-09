@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCard";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import searchMatchServices from "../../services/searchMatchServices";
-import { MatchCard } from "../../components/MatchCard/MatchCard";
+import { ItsMatch } from "../../components/ItsMatch/ItsMatch";
+
 
 export const SearchMate = () => {
 
@@ -108,16 +109,7 @@ export const SearchMate = () => {
   // Perfil de prueba para el match simulado
   const mockedProfile = {
     id: 999,
-    nick_name: "Prueba match",
-    location: "Spain",
-    language: "EN, ES",
-    preferences: "Pruebaaaa!",
-    stars: 4,
-    games: [
-      { game: { title: "Game One", hours_played: 120 } },
-      { game: { title: "Game Two", hours_played: 45 } },
-      { game: { title: "Game Three", hours_played: 78 } }
-    ]
+    nick_name: "pepe.pe_el fantastico",
   };
 
   return (
@@ -136,7 +128,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center align-items-center">
             <div>
-              <h1 className='title-matchCard-font-shadow mt-2 mb-3'>
+              <h1 className='title-its-match-card-font-shadow mt-2 mb-3'>
                 It's a match
               </h1>
             </div>
@@ -152,7 +144,7 @@ export const SearchMate = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body">
-                <MatchCard profile={mockedProfile} />
+                <ItsMatch profile={mockedProfile} />
               </div>
 
             </div>
