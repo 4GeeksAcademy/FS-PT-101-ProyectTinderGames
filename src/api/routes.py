@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Profile, Review, Match, Reject, Game, Like
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
@@ -437,24 +437,54 @@ def get_single_match(match_id):
     return jsonify(match.serialize()), 200
 
 
-# GET ALL MATCHES OF A USER.
+
 @api.route('/matches/user/<int:user_id>', methods=['GET'])
 def get_matches_for_user(user_id):
-    # 1) Buscar todos los Match donde user1_id == user_id o user2_id == user_id
-    stmt = select(Match).where(Match.user1_id == user_id or Match.user2_id == user_id)
+    # 1) Sacar todos los Match donde aparezca este usuario como user1 o como user2
+    stmt = select(Match).where(
+        or_(
+            Match.user1_id == user_id,
+            Match.user2_id == user_id
+        )
+    )
     matches = db.session.execute(stmt).scalars().all()
 
-    # 2) Para cada match, extraer el ID “del otro usuario”
-    other_user_ids = []
+    # 2) Para cada match, quedarnos solo con el “otro” usuario,
+    #    serializar sus datos si tiene Profile, o “user has no data” en caso contrario.
+    other_users = []
     for m in matches:
+        # Determinar cuál es el usuario contrario al pas ado en la URL
         if m.user1_id == user_id:
-            other_user_ids.append(m.user2_id)
+            u = m.user2
         else:
-            other_user_ids.append(m.user1_id)
+            u = m.user1
 
-    # 3) Eliminar duplicados (opcional) y devolver JSON
-    unique_ids = list(set(other_user_ids))
-    return jsonify({ "match_ids": unique_ids }), 200
+        # Si el User tiene Profile, devolvemos un dict similar al de Match.serialize() pero solo con ese user
+        if u.profile:
+            other_users.append({
+                "user_id":   u.id,
+                "nickname":  u.profile.name    if u.profile.name else "undefined",
+                "games":     [g.serialize() for g in u.profile.games] if u.profile.games else [],
+                "gender":    u.profile.gender  if u.profile.gender else "undefined"
+            })
+        else:
+            other_users.append(f" user with id {u.id} has no data")
+
+    # 3) (Opcional) Eliminar duplicados por user_id, si no quieres que el mismo usuario aparezca varias veces:
+    unique_dict = {}
+    deduped = []
+    for item in other_users:
+        if isinstance(item, dict):
+            uid = item["user_id"]
+            if uid not in unique_dict:
+                unique_dict[uid] = item
+                deduped.append(item)
+        else:
+            # Si es la cadena "user has no data", la dejamos tal cual (o podrías filtrarla)
+            deduped.append(item)
+
+    # 4) Devuelvo la lista final de “otros” usuarios
+    return jsonify({ "matches": deduped }), 200
 
 
 
