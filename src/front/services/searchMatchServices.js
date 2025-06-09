@@ -41,6 +41,7 @@ searchMatchServices.getMatchProfiles = async () => {
   }
 };
 
+// Trae las estrellas del usuario para mostrarlas con la media hecha
 searchMatchServices.getStarsByUser = async (userId) => {
   try {
     const resp = await fetch(`${url}/api/reviews_received/${userId}`, {
@@ -64,6 +65,27 @@ searchMatchServices.getStarsByUser = async (userId) => {
   } catch (error) {
     console.error(error);
     return null;
+  }
+};
+
+// Manda los likes a la API del usuario logeado al usuario que se ha dado like
+searchMatchServices.sendLike = async (fromUserId, toUserId) => {
+  try {
+    const resp = await fetch(`${url}/api/likes/${fromUserId}/${toUserId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({ fromUserId, toUserId }),
+    });
+
+    if (!resp.ok) throw new Error("Failed to send like");
+
+    return await resp.json();
+  } catch (error) {
+    console.error(error);
+    return { match: false };
   }
 };
 

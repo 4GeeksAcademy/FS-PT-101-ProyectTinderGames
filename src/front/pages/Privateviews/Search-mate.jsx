@@ -35,7 +35,7 @@ export const SearchMate = () => {
 
       if (store.user && store.user.profile) {
         allProfiles = allProfiles.filter(
-          (profile) => profile.id !== store.user.profile.id // el id que se muestra en la tarjeta no es el mismo que el id del usuario/profile logeado
+          (profile) => profile.id !== store.user.profile.id // Para que no salga el perfil del usuario logeado
         );
       }
 
@@ -62,6 +62,36 @@ export const SearchMate = () => {
   const handleNext = () => {
     setCurrentUser((prevIndex) => (prevIndex + 1)); // Para que muestre todas las tarjetas de todos los ususarios
   }
+  
+
+  const handleLike = async () => { //Maneja el LIKE button para mandar la información a la API y para que cambie de tarjeta
+    const likedProfile = profiles[currentUser];
+    if (!store.user?.profile?.id || !likedProfile?.id) return;
+
+    try {
+      // Enviar el like a la API usando el servicio
+      const response = await searchMatchServices.sendLike(store.user.profile.id, likedProfile.id);
+
+      // Guardar el match (si existe)
+      dispatch({ type: "getMatchInfo", payload: response });
+
+
+      // Guardar el perfil al que se le dio like en el store (aunque no haya match)
+      dispatch({ type: "saveLike", payload: likedProfile });
+
+      // Mostrar modal si hubo match
+      if (response.match) {
+        alert("¡Es un match!");
+      }
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setCurrentUser((prev) => prev + 1);  // Avanzar al siguiente perfil
+    }
+  };
+
+
 
   // Muestra el spinner y el mensaje cuando está cargando las tarjetas
   if (loading && showLoadingMessage) {
@@ -82,7 +112,7 @@ export const SearchMate = () => {
     location: "Spain",
     language: "EN, ES",
     preferences: "Pruebaaaa!",
-    stars: 4, 
+    stars: 4,
     games: [
       { game: { title: "Game One", hours_played: 120 } },
       { game: { title: "Game Two", hours_played: 45 } },
@@ -135,7 +165,7 @@ export const SearchMate = () => {
         !fakeMatch && profiles.length > 0 && profiles[currentUser] && ( //Para que cuando la tarjeta se cargue, ya tenga toda la info del user y lo sagan datos undefined
           <SearchMatchCard
             profile={profiles[currentUser]}
-            onLike={handleNext}
+            onLike={handleLike}
             onDislike={handleNext}
           />
         )
