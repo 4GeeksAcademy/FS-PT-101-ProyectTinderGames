@@ -50,14 +50,14 @@ export const ItsMatch = ({ profile, }) => {
 
         <>
             <div className='d-flex justify-content-center'>
-                <div className="col-12 col-sm-2 col-md-8 col-lg-6">
+                <div className="col">
                     <div onClick={handleClick} className="card its-match-card pulsate-bck">
                         <div className="card-body d-flex flex-column flex-md-row align-items-center">
                             <div className='rounded-circle mb-3 mb-md-0'>
                                 <img src={profilePic4} alt="App Logo" className='its-match-profile-pic rounded-circle'></img>
                             </div>
                             <div className="text-center text-md-start ms-md-4">
-                                <h3 className="card-title">{profile?.nick_name || 'undefined'}</h3>
+                                <h1 className="card-title">{profile?.nick_name || 'undefined'}</h1>
                             </div>
                         </div>
 
@@ -77,12 +77,12 @@ export const ItsMatch = ({ profile, }) => {
 
                 </div>
             </div>
-           
-      
-            <h5 className='d-flex justify-content-center text-center mt-2'>
+
+
+            <h4 className='d-flex justify-content-center text-center mt-3'>
                 Click on the card to know more about your match
 
-            </h5>
+            </h4>
         </>
 
     )

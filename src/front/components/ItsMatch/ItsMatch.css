@@ -13,8 +13,8 @@
 }
 
 .its-match-profile-pic {
-  width: 130px;
-  height: 130px;
+  width: 170px;
+  height: 170px;
 
 }
 
@@ -35,6 +35,8 @@
   width: 200px;
   height: 200px;
 }
+
+/* animación de la tarjeta */
 .pulsate-bck {
   -webkit-animation: pulsate-bck 6s ease-in-out infinite both;
   animation: pulsate-bck 6s ease-in-out infinite both;
