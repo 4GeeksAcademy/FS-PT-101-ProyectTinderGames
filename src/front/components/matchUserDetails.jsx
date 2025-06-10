@@ -319,7 +319,7 @@ export const MatchUserDetails = () => {
               store.matchReviewsReceived.reviews_received.map((el) => (
                 <div key={el.id} className="review-card">
                   <p>
-                    <strong>Author #{el.author_id}</strong> — {el.stars} ⭐️
+                    <strong>Author : {el.author_nickname}</strong> — {el.stars} ⭐️
                     <p className="m-3">{el.comment}</p>
                   </p>
                 </div>

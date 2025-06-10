@@ -133,7 +133,9 @@ class Review(db.Model):
         return {
             "id": self.id,
             'user_id': self.user_id,
+            'user_nickname': self.user.profile.nick_name if self.user.profile and self.user.profile.nick_name else "undefinied",
             'author_id': self.author_id,
+            'author_nickname': self.author.profile.nick_name if self.author.profile and self.author.profile.nick_name else "undefinied",
             "stars": self.stars,
             "comment": self.comment
         }
@@ -207,7 +209,8 @@ class Match(db.Model):
                 "user_data":{
                     "nickname": self.user1.profile.name if self.user1.profile.name else "undefined",
                 "games": [g.serialize() for g in self.user1.profile.games] if self.user1.profile.games else [],
-                "gender": self.user1.profile.gender if self.user1.profile.gender else "undefined"
+                "gender": self.user1.profile.gender if self.user1.profile.gender else "undefined",
+                "age": self.user1.profile.age if self.user1.profile.age else "undefined",
                 }if self.user1.profile
                 else "user has no data"
             },
