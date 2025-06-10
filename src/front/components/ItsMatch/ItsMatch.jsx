@@ -51,37 +51,39 @@ export const ItsMatch = ({ profile, }) => {
         <>
             <div className='d-flex justify-content-center'>
                 <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-                    <div className="card its-match-card">
-                        <div className="card-body">
-                            <div className='d-flex'>
-                                <div className='me-auto '>
-                                    {/* profile pic */}
-                                    <div className='rounded-circle '>
-                                        <img src={profilePic4} alt="App Logo" className='its-match-profile-pic rounded-circle'></img>
-                                    </div>
-                                    <div>
-                                        {/* user name */}
-                                        <h2 className="card-title mx-4 mt-3">{profile?.nick_name || 'undefined'}</h2>
-                                    </div>
+                    <div onClick={handleClick} className="card its-match-card pulsate-bck">
+                        <div className="card-body d-flex">
 
-                                    {/* connect button */}
-                                    <button
-                                        onClick={handleClick}
-                                        id="connectButton"
-                                        type="button"
-                                        className='its-match-card-button'
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="left"
-                                        data-bs-title="Find more about your match">
-                                        <img src={connectIcon} alt="connect icon" className='its-match-card-icon pulsate-bck' />
-                                    </button>
-                                </div>
+                            {/* profile pic */}
+                            <div className='rounded-circle '>
+                                <img src={profilePic4} alt="App Logo" className='its-match-profile-pic rounded-circle'></img>
                             </div>
+                            <div>
+                                {/* user name */}
+                                <h3 className="card-title ms-4 mt-3">{profile?.nick_name || 'undefined'}</h3>
+                            </div>
+
+                            {/* connect button
+                            <button
+                                onClick={handleClick}
+                                id="connectButton"
+                                type="button"
+                                className='its-match-card-button'
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="left"
+                                data-bs-title="Find more about your match">
+                                <img src={connectIcon} alt="connect icon" className='its-match-card-icon pulsate-bck' />
+                            </button> */}
+                            
                         </div>
+
                     </div>
                 </div>
             </div>
+            <h5 className='d-flex justify-content-center mt-2'>
+            Click on the card to know more about your match
 
+            </h5>
         </>
 
     )

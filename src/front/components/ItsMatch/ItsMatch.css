@@ -4,7 +4,7 @@
 }
 .its-match-card {
   position: relative;
-  width: 30rem;
+  width: fit-content;
   height: auto;
   background-color: hsla(0, 0%, 100%, 0.72);
   padding: 1rem;
@@ -13,16 +13,17 @@
 }
 
 .its-match-profile-pic {
-  width: 192px;
-  height: 196px;
+  width: 130px;
+  height: 130px;
+
 }
 
 .its-match-card-icon {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 }
 
 .its-match-card-button {
@@ -35,8 +36,8 @@
   height: 200px;
 }
 .pulsate-bck {
-  -webkit-animation: pulsate-bck 2s ease-in-out infinite both;
-  animation: pulsate-bck 2s ease-in-out infinite both;
+  -webkit-animation: pulsate-bck 6s ease-in-out infinite both;
+  animation: pulsate-bck 6s ease-in-out infinite both;
 }
 
 /* ----------------------------------------------

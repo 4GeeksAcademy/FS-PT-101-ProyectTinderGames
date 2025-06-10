@@ -118,7 +118,7 @@ export const SearchMate = () => {
   // Perfil de prueba para el match simulado
   const mockedProfile = {
     id: 2,
-    nick_name: "pepe.pe_el fantastico",
+    nick_name: "pepe.pe_el fantasticooooo",
   };
 
   return (
