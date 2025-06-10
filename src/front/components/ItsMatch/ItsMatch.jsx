@@ -50,20 +50,18 @@ export const ItsMatch = ({ profile, }) => {
 
         <>
             <div className='d-flex justify-content-center'>
-                <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+                <div className="col-12 col-sm-2 col-md-8 col-lg-6">
                     <div onClick={handleClick} className="card its-match-card pulsate-bck">
-                        <div className="card-body d-flex">
-
-                            {/* profile pic */}
-                            <div className='rounded-circle '>
+                        <div className="card-body d-flex flex-column flex-md-row align-items-center">
+                            <div className='rounded-circle mb-3 mb-md-0'>
                                 <img src={profilePic4} alt="App Logo" className='its-match-profile-pic rounded-circle'></img>
                             </div>
-                            <div>
-                                {/* user name */}
-                                <h3 className="card-title ms-4 mt-3">{profile?.nick_name || 'undefined'}</h3>
+                            <div className="text-center text-md-start ms-md-4">
+                                <h3 className="card-title">{profile?.nick_name || 'undefined'}</h3>
                             </div>
+                        </div>
 
-                            {/* connect button
+                        {/* connect button
                             <button
                                 onClick={handleClick}
                                 id="connectButton"
@@ -74,14 +72,15 @@ export const ItsMatch = ({ profile, }) => {
                                 data-bs-title="Find more about your match">
                                 <img src={connectIcon} alt="connect icon" className='its-match-card-icon pulsate-bck' />
                             </button> */}
-                            
-                        </div>
 
                     </div>
+
                 </div>
             </div>
-            <h5 className='d-flex justify-content-center mt-2'>
-            Click on the card to know more about your match
+           
+      
+            <h5 className='d-flex justify-content-center text-center mt-2'>
+                Click on the card to know more about your match
 
             </h5>
         </>
