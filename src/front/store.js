@@ -98,7 +98,6 @@ export default function storeReducer(store, action = {}) {
         dislikesSent: [],
         likesRecieved: [],
         dislikesRecieved: [],
-        l,
       };
     case "getUserInfo":
       return {

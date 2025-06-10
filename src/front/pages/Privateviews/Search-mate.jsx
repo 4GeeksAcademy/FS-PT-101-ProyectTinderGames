@@ -125,7 +125,7 @@ export const SearchMate = () => {
     <>
       {!fakeMatch && (
         <div className='d-flex justify-content-center '>
-          <h1 className='searchMateCard-font-shadow mt-2 mb-3'>
+          <h1 className='search-match-card-font-shadow mt-2 mb-3'>
             Search a mate
           </h1>
         </div>
