@@ -22,9 +22,9 @@ export const SearchMate = () => {
       setShowLoadingMessage(true)
     }, 3000) // Para que el mensaje loading salga si la espera es mayor de 3 segundos
 
-    const getAllUsers = async () => {
+    const getAllProfiles = async () => {
       setLoading(true)
-      const data = await searchMatchServices.getMatchProfiles()
+      const data = await searchMatchServices.getAllProfiles()
 
       let allProfiles = []
 
@@ -52,7 +52,7 @@ export const SearchMate = () => {
       setLoading(false)
       clearTimeout(timeout)
     };
-    getAllUsers();
+    getAllProfiles();
 
     return () => clearTimeout(timeout)
 
@@ -68,11 +68,7 @@ export const SearchMate = () => {
     return () => clearTimeout(matchTimeout);
   }, []);
 
-  const handleNext = () => {
-    const dislikedProfile = profiles[currentUser];
-    dispatch({ type: "saveDislike", payload: dislikedProfile });
-    setCurrentUser((prevIndex) => prevIndex + 1);
-  };
+
 
   const handleLike = async () => { //Maneja el LIKE button para mandar la información a la API y para que cambie de tarjeta
     const likedProfile = profiles[currentUser];
@@ -80,7 +76,7 @@ export const SearchMate = () => {
 
     try {
       // Enviar el like a la API usando el servicio
-      const response = await searchMatchServices.sendLike(store.user.profile.id, likedProfile.id);
+      const response = await searchMatchServices.addLikeSent(store.user.profile.id, likedProfile.id);
 
       // Guardar el match (si existe)
       dispatch({ type: "getMatchInfo", payload: response });
@@ -88,6 +84,7 @@ export const SearchMate = () => {
 
       // Guardar el perfil al que se le dio like en el store (aunque no haya match)
       dispatch({ type: "saveLike", payload: likedProfile });
+
 
       // Mostrar modal si hubo match
       if (response.match) {
@@ -101,11 +98,29 @@ export const SearchMate = () => {
     }
   };
 
+  const handleDislike = async () => { // Maneja el Dislike button
+    const dislikedProfile = profiles[currentUser];
+    if (!store.user?.profile?.id || !dislikedProfile?.id) return;
+
+    try {
+      // Envia el dislike a la API usando el servicio
+      await searchMatchServices.addDisLikeSent(store.user.profile.id, dislikedProfile.id);
+
+      // Guarda en el store local
+      dispatch({ type: "saveDislike", payload: dislikedProfile });
+    } catch (error) {
+      console.error("Error sending dislike:", error);
+    } finally {
+      // Pasa al siguiente perfil
+      setCurrentUser((prevIndex) => prevIndex + 1);
+    }
+  };
+
 
 
   // Muestra el spinner y el mensaje cuando está cargando las tarjetas
   if (loading && showLoadingMessage) {
-    return <h2> <div className="spinner align-self-center"></div> Loading players. Thank you for your patience{" "}
+    return <h2> <div className="spinner align-self-center"></div> Loading new players. Thank you for your patience{" "}
       {store.user ? store.user.profile != undefined ? store.user.profile?.nick_name : null : null}</h2>
   }
 
@@ -167,7 +182,7 @@ export const SearchMate = () => {
           <SearchMatchCard
             profile={profiles[currentUser]}
             onLike={handleLike}
-            onDislike={handleNext}
+            onDislike={handleDislike}
           />
         )
       )}

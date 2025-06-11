@@ -3,58 +3,31 @@ export const initialStore = () => {
     user: JSON.parse(localStorage.getItem("user")) || null,
     userMatchesInfo: null,
     matchInfo: null,
-  }
-}
+    likesSent: JSON.parse(localStorage.getItem("likesSent")) || [],
+    dislikesSent: JSON.parse(localStorage.getItem("dislikesSent")) || [],
+    starsByUser: null,
+    matchProfiles: null,
+  };
+};
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
-    case "saveDislikesReceived":
-      const updatedDislikesReceived = [
-        ...(store.dislikesReceived || []),
-        ...action.payload,
-      ];
-      localStorage.setItem(
-        "dislikesReceived",
-        JSON.stringify(updatedDislikesReceived)
-      );
-      return {
-        ...store,
-        dislikesReceived: updatedDislikesReceived,
-      };
-
-    case "saveLikesReceived":
-      const updatedLikesReceived = [
-        ...(store.likesReceived || []),
-        ...action.payload,
-      ];
-      localStorage.setItem(
-        "likesReceived",
-        JSON.stringify(updatedLikesReceived)
-      );
-      return {
-        ...store,
-        likesReceived: updatedLikesReceived,
-      };
-
-    case "saveDislike":
-      const updatedDislikes = [...(store.dislikesSent || []), action.payload];
-      localStorage.setItem("dislikesSent", JSON.stringify(updatedDislikes));
-      return {
-        ...store,
-        dislikesSent: updatedDislikes,
-      };
     case "saveLike":
-      const updatedLikes = [...(store.likesSent || []), action.payload];
+      const updatedLikes = [...store.likesSent, action.payload];
       localStorage.setItem("likesSent", JSON.stringify(updatedLikes));
       return {
         ...store,
         likesSent: updatedLikes,
       };
-    case "addLikeSent":
+
+    case "saveDislike": {
+      const updatedDislikes = [...store.dislikesSent, action.payload];
+      localStorage.setItem("dislikesSent", JSON.stringify(updatedDislikes));
       return {
         ...store,
-        likesSent: [...store.likesSent, action.payload],
+        dislikesSent: updatedDislikes,
       };
+    }
 
     case "getMatchProfiles":
       return {
@@ -70,8 +43,8 @@ export default function storeReducer(store, action = {}) {
     case "getMatchInfo":
       return {
         ...store,
-        matchInfo:action.payload
-      }
+        matchInfo: action.payload,
+      };
     case "getAllMatchesInfo":
       return {
         ...store,
@@ -82,16 +55,17 @@ export default function storeReducer(store, action = {}) {
       localStorage.removeItem("token");
       localStorage.removeItem("likesSent");
       localStorage.removeItem("dislikesSent");
-      localStorage.removeItem("likesReceived");
-      localStorage.removeItem("dislikesReceived");
+
       return {
         ...store,
         user: null,
         likesSent: [],
         dislikesSent: [],
-        likesRecieved: [],
-        dislikesRecieved: [],
+        userMatchesInfo: null,
+        starsByUser: null,
+        matchProfiles: null,
       };
+
     case "getUserInfo":
       return {
         ...store,

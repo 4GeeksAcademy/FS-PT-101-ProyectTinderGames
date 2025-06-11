@@ -3,22 +3,23 @@ import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import { useEffect, useState } from 'react';
 import searchMatchServices from '../../services/searchMatchServices';
 
-export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
+export const SearchMatchCard = ({profile, onLike, onDislike }) => {
 
   const [animationClass, setAnimationClass] = useState('');
   const [avgStars, setAvgStars] = useState(0);
 
   useEffect(() => {
     if (!profile?.id) return;
-    const fetchAvgStars = async () => {
+    const getAvgStars = async () => {
       try {
-        const avg = await searchMatchServices.getStarsByUser(profile.id);
-        setAvgStars(Number(avg));
+        const average = await searchMatchServices.getStarsByUser(profile.id);
+        console.log('Average stars --->', average)
+        setAvgStars(Number(average));
       } catch (err) {
         console.error(err);
       }
     };
-    fetchAvgStars();
+   getAvgStars();
   }, [profile]);
 
 

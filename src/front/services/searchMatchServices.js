@@ -1,7 +1,7 @@
 const url = import.meta.env.VITE_BACKEND_URL;
 const searchMatchServices = {};
 
-// Trae la información de usuario autentificado
+// Trae la información del usuario logeado (creo no hace falta)
 searchMatchServices.getUserInfo = async () => {
   try {
     const resp = await fetch(url + "/api/private", {
@@ -10,7 +10,7 @@ searchMatchServices.getUserInfo = async () => {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-    if (!resp.ok) throw Error("Something went wrong");
+    if (!resp.ok) throw Error("Something went wrong getting user information");
     const data = await resp.json();
     console.log(data);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -21,19 +21,12 @@ searchMatchServices.getUserInfo = async () => {
   }
 };
 
-//Trae la infomación de la lista de los ususarios para usarlo en el match
-searchMatchServices.getMatchProfiles = async () => {
+//Trae la infomación de todos los perfiles
+searchMatchServices.getAllProfiles = async () => {
   try {
-    const resp = await fetch(url + "/api/profiles", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    });
-    if (!resp.ok) throw Error("Failed to fetch match profiles");
+    const resp = await fetch(url + "/api/profiles");
+    if (!resp.ok) throw Error("Failed to get all profiles");
     const data = await resp.json();
-    console.log(data);
-    localStorage.setItem("profile", JSON.stringify(data.profile));
     return data;
   } catch (error) {
     console.log(error);
@@ -41,90 +34,130 @@ searchMatchServices.getMatchProfiles = async () => {
   }
 };
 
-// Trae las estrellas del usuario para mostrarlas con la media hecha
-searchMatchServices.getStarsByUser = async (userId) => {
+//Trae la información de un solo perfil
+searchMatchServices.getOneProfile = async (user_id) => {
   try {
-    const resp = await fetch(`${url}/api/reviews_received/${userId}`, {
+    const resp = await fetch(url + `/api/profiles/${user_id}`);
+    if (!resp.ok) throw Error(`Failed to get profile from ${user_id}`);
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//Traer los matches del user
+searchMatchServices.getUserMatchesInfo = async (user_id) => {
+  try {
+    const resp = await fetch(url + `/api/matches/user/${user_id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-
-    if (!resp.ok) throw new Error("Error getting stars");
-
+    if (!resp.ok) throw Error(`Failed to get matches from user ${user_id}`);
     const data = await resp.json();
-    const reviews = data.reviews_received;
-
-    if (!Array.isArray(reviews) || reviews.length === 0) return 0;
-
-    const total = reviews.reduce((acc, r) => acc + r.stars, 0);
-    const average = total / reviews.length;
-
-    return Math.round(average);
+    return data;
   } catch (error) {
-    console.error(error);
-    return null;
+    console.log(error);
+    return error;
   }
 };
 
-// Manda los likes a la API del usuario logeado al usuario que se ha dado like
-searchMatchServices.sendLike = async (fromUserId, toUserId) => {
+// Trae las estrellas de las reviews de un user
+searchMatchServices.getStarsByUser = async (userId) => {
   try {
-    const resp = await fetch(`${url}/api/likes/${fromUserId}/${toUserId}`, {
+    const resp = await fetch(url + `/api/reviews_received/${userId}`);
+    if (!resp.ok) throw new Error(`Failed to get stars from user ${userId}`);
+    const data = await resp.json();
+    const reviews = data.reviews_received;
+
+    console.log("Stars--->", reviews) // Para ver si funciona
+
+    // Calcula la media
+    if (!Array.isArray(reviews) || reviews.length === 0) return 0;
+
+    const totalStars = reviews.reduce((sum, r) => sum + (r.stars || 0), 0);
+    const average = totalStars / reviews.length;
+
+    return average;
+  } catch (error) {
+    console.log(error);
+    return 0; // si no hay estrellas en vez de error, retorna 0
+  }
+};
+
+// Manda los likes dados por el usuario 
+searchMatchServices.addLikeSent = async (liker_id, liked_id) => {
+  try {
+    const resp = await fetch(url + `/api/likes/${liker_id}/${liked_id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify({ fromUserId, toUserId }),
+      body: JSON.stringify({ liker_id, liked_id }),
     });
-
-    if (!resp.ok) throw new Error("Failed to send like");
-
+    if (!resp.ok) throw new Error("Failed to send a like");
     return await resp.json();
   } catch (error) {
     console.error(error);
-    return { match: false };
+    return error;
   }
 };
 
-// Trae los likes recibidos por el usuario logeado
+// Manda los dislikes dados por el usuario 
+searchMatchServices.addDisLikeSent = async (rejector_id, rejected_id) => {
+  try {
+    const resp = await fetch(url + `/api/rejects/${rejector_id}/${rejected_id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({ rejector_id, rejected_id }),
+    });
+    if (!resp.ok) throw new Error("Failed to send a dislike");
+    return await resp.json();
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+// Trae los likes recibidos por el usuario logeado (creo que no hace falta)
 searchMatchServices.getLikesReceived = async (userId) => {
   try {
-    const resp = await fetch(`${url}/api/likes_received/${userId}`, {
+    const resp = await fetch(url + `/api/likes_received/${userId}`, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-    if (!resp.ok) throw new Error("Failed to fetch likes received");
-
+    if (!resp.ok) throw new Error("Failed to get likes received");
     const data = await resp.json();
-    return data.likes_received || [];
+    return data;
   } catch (error) {
     console.error(error);
-    return [];
+    return error;
   }
 };
 
-// Trae los dislikes recibidos por el usuario logeado
+
+// Trae los dislikes recibidos por el usuario logeado (creo que no hace falta)
 searchMatchServices.getDislikesReceived = async (userId) => {
   try {
-    const resp = await fetch(`${url}/api/rejects_received/${userId}`, {
+    const resp = await fetch(url + `/api/rejects_received/${userId}`, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-    if (!resp.ok) throw new Error("Failed to fetch dislikes received");
-
+    if (!resp.ok) throw new Error("Failed to get dislikes received");
     const data = await resp.json();
-    return data.rejects_recieved || [];
+    return data;
   } catch (error) {
     console.error(error);
-    return [];
+    return error;
   }
 };
-
 export default searchMatchServices;
