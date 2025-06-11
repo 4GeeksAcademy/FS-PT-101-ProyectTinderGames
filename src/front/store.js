@@ -3,15 +3,8 @@ export const initialStore = () => {
     user: JSON.parse(localStorage.getItem("user")) || null,
     userMatchesInfo: null,
     matchInfo: null,
-    matchProfiles: null,
-    starsByUser: null,
-    likesSent: JSON.parse(localStorage.getItem("likesSent")) || [],
-    dislikesSent: JSON.parse(localStorage.getItem("dislikesSent")) || [],
-    likesReceived: JSON.parse(localStorage.getItem("likesReceived")) || [],
-    dislikesReceived:
-      JSON.parse(localStorage.getItem("dislikesReceived")) || [],
-  };
-};
+  }
+}
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
@@ -77,8 +70,8 @@ export default function storeReducer(store, action = {}) {
     case "getMatchInfo":
       return {
         ...store,
-        matchInfo: action.payload,
-      };
+        matchInfo:action.payload
+      }
     case "getAllMatchesInfo":
       return {
         ...store,

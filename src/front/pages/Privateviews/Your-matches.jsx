@@ -11,7 +11,6 @@ export const YourMatches = () => {
     const { store, dispatch } = useGlobalReducer();
 
     useEffect(() => {
-        userServices.getUserInfo().then(data => dispatch({ type: 'getUserInfo', payload: data.user }))
         matchServices.getAllMatchesInfo(store.user?.id).then(data => dispatch({ type: "getAllMatchesInfo", payload: data.matches }))
     }, [])
 
@@ -37,6 +36,8 @@ export const YourMatches = () => {
                 nickname={el.nickname}
                 gender={el.gender}
                 games={el.games}
+                age={el.age}
+                location={el.location}
               />
             </div>
           ))}

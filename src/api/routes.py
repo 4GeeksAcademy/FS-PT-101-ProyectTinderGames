@@ -48,7 +48,7 @@ def chat():
             messages=[
                 {
                     "role": "system",
-                    "content": f"Eres un asistente virtual que en la primera insteracción siempre llama por el nombre de usuario experto en videojuegos, (solo estás capacitado para responder sobre temas de videojuegos)con un tono majo, agradable y muy cercano al usuario Utiliza la siguiente información del usuario para personalizar tus respuestas:${userInfo}"
+                    "content": f"Eres un asistente virtual que en la primera insteracción siempre llama por el nombre de usuario experto en videojuegos, (solo estás capacitado para responder sobre temas de videojuegos)con un tono majo, agradable y muy cercano al usuario Utiliza la siguiente información del usuario para personalizar tus respuestas, ten en cuenta los juegos a los que juega siempre para dar tu respuesta:${userInfo}"
                 },
                 {"role": "user", "content": user_message}
             ],
@@ -465,7 +465,9 @@ def get_matches_for_user(user_id):
                 "user_id":   u.id,
                 "nickname":  u.profile.name    if u.profile.name else "undefined",
                 "games":     [g.serialize() for g in u.profile.games] if u.profile.games else [],
-                "gender":    u.profile.gender  if u.profile.gender else "undefined"
+                "gender":    u.profile.gender  if u.profile.gender else "undefined",
+                "age": u.profile.age if u.profile.age else "undefinied",
+                "location": u.profile.location if u.profile.location else "undefinied"
             })
         else:
             other_users.append(f" user with id {u.id} has no data")
