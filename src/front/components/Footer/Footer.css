@@ -5,6 +5,19 @@
 .social-media-icon {
 	width: 55px;
 	height: 55px;
-	object-fit: contain;
-    
+   
+}
+
+/* Pantalla pequeña */
+@media (max-width: 767px) {
+
+.social-media-icon {
+	width: 35px;
+	height: 35px;
+	margin-bottom: 0.5rem;
+}
+.footer-text-size h5 {
+    font-size: 1rem;
+   
+}
 }
