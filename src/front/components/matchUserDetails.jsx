@@ -7,13 +7,17 @@ import reviewServices from "../services/reviewServices";
 import goldMedal from "../assets/img/medals/gold-medal.png";
 import silverMedal from "../assets/img/medals/silver-medal.png";
 import bronzeMedal from "../assets/img/medals/bronze-medal.png";
+import photo1 from "../assets/img/profile-pics/profile-pic-1.png";
+import photo2 from "../assets/img/profile-pics/profile-pic-2.png";
+import photo3 from "../assets/img/profile-pics/profile-pic-3.png";
+import photo4 from "../assets/img/profile-pics/profile-pic-4.png";
+import photo5 from "../assets/img/profile-pics/profile-pic-5.png";
+import photo6 from "../assets/img/profile-pics/profile-pic-6.png";
+import photo7 from "../assets/img/profile-pics/profile-pic-7.png";
+import photo8 from "../assets/img/profile-pics/profile-pic-8.png";
+import photo9 from "../assets/img/profile-pics/profile-pic-9.png";
 
 
-const zodiacSigns = [
-  "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-  "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
-];
-const genders = ["Male", "Female", "Undefined"];
 
 export const MatchUserDetails = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -35,11 +39,6 @@ export const MatchUserDetails = () => {
     reviewServices.getAllReviewsReceived(id).then(data => dispatch({ type: "matchReviewsReceived", payload: data }))
   }, [id, dispatch]);
 
-  const handleStarClick = (star) => setRating(star);
-  const handleStarMouseEnter = (star) => setHoverRating(star);
-  const handleStarMouseLeave = () => setHoverRating(0);
-  const handleCommentChange = (e) => setNewComment(e.target.value);
-
   // Build a profile object with default values and optional chaining
   const profile = useMemo(() => {
     const p = store.matchInfo?.profile ?? {};
@@ -55,6 +54,7 @@ export const MatchUserDetails = () => {
       languages: p.languages ?? "no data", // renamed to match API
       gamingPrefs: p.preferences ?? "no data",
       bio: p.bio ?? "no data",
+      photo:p.photo?? "no data"
     };
   }, [store.matchInfo]);
   const allGames = store.matchInfo?.profile?.games ?? [];
@@ -100,6 +100,20 @@ export const MatchUserDetails = () => {
     }
   };
 
+  const selectPhoto = () => {
+  switch (profile.photo) {
+    case "photo1": return photo1;
+    case "photo2": return photo2;
+    case "photo3": return photo3;
+    case "photo4": return photo4;
+    case "photo5": return photo5;
+    case "photo6": return photo6;
+    case "photo7": return photo7;
+    case "photo8": return photo8;
+    case "photo9": return photo9;
+    default:       return "defaultPhoto";
+  }
+};
 
   const topThreeGames = allGames
     .slice()                                      // 1. Copia el array para no mutar el original
@@ -112,7 +126,7 @@ export const MatchUserDetails = () => {
       <div className="left-panel">
         <div className="avatar-section">
           <img
-            src={`/src/front/assets/img/profile-pics/${selectedPic}`}
+            src={selectPhoto()}
             alt="Profile avatar"
             className="profile-avatar"
           />
@@ -208,7 +222,7 @@ export const MatchUserDetails = () => {
               </div>
               <div className="gaming-prefs-box col-md-6">
                 <label>Gaming Preferences</label>
-                <p><strong>I'm looking for:</strong> {profile.gamingPrefs}</p>
+                <p>I'm looking for: {profile.gamingPrefs}</p>
               </div>
               <div className="col-md-6">
                 <label>Location</label>
@@ -226,7 +240,7 @@ export const MatchUserDetails = () => {
             <div className="col-auto m-2 mb-4">
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn botonLeaveComment"
                 data-bs-toggle="modal"
                 data-bs-target="#commentModal"
               >
@@ -318,10 +332,10 @@ export const MatchUserDetails = () => {
             {store.matchReviewsReceived.reviews_received.length > 0 ? (
               store.matchReviewsReceived.reviews_received.map((el) => (
                 <div key={el.id} className="review-card">
-                  <p>
-                    <strong>Author : {el.author_nickname}</strong> — {el.stars} ⭐️
-                    <p className="m-3">{el.comment}</p>
-                  </p>
+                  <div className="review-container">
+                    Author : {el.author_nickname} — {el.stars} ⭐️
+                    <p className="m-0 border-0 review-box"> <span className="fa-solid fa-comment mx-2"></span>{el.comment}</p>
+                  </div>
                 </div>
               ))
             ) : (
