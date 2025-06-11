@@ -3,6 +3,7 @@ export const initialStore=()=>{
     user: JSON.parse(localStorage.getItem('user')) || null,
     userMatchesInfo: null,
     matchInfo: null,
+    matchReviewsReceived: null,
   }
 }
 
@@ -12,6 +13,11 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         matchInfo:action.payload
+      }
+    case "matchReviewsReceived":
+      return {
+        ...store,
+        matchReviewsReceived: action.payload
       }
     case "getAllMatchesInfo":
       return {

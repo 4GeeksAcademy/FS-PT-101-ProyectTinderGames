@@ -6,7 +6,7 @@ import silverMedal from "../assets/img/medals/silver-medal.png";
 import bronzeMedal from "../assets/img/medals/bronze-medal.png";
 import { useNavigate } from 'react-router-dom';
 
-export const MatchMiniCard = ({ id, nickname, gender, games }) => {
+export const MatchMiniCard = ({ id, nickname, gender, games, age, location }) => {
   useEffect(() => {
     // Selecciona todas las imágenes con data-bs-toggle="popover" y crea un Popover de Bootstrap para cada una
     document
@@ -44,15 +44,24 @@ export const MatchMiniCard = ({ id, nickname, gender, games }) => {
   return (
     <>
       <div
-        className="match-card card h-100 w-100 matchCardd"
-        onClick={()=> navigate(`matchDetails/${id}`)}
+        className="match-card card h-100 w-100 matchCardd text-dark"
+        onClick={() => navigate(`matchDetails/${id}`)}
       >
-        <div className="card-body d-flex flex-column p-3">
+        <div className="card-body d-flex flex-column p-3 pb-0">
           <div className="d-flex align-items-center mb-2">
-            <h5 className="card-title text-truncate mb-0">{nickname}</h5>
-            <span className="badge text-bg-dark ms-auto">{gender}</span>
+            <h5 className="card-title text-truncate mb-0 display-6">{nickname}</h5>
           </div>
-          <div className="flex-grow-1 overflow-auto align-content-center medalsBox rounded m-2">
+          <div className='d-flex justify-content-around'>
+            <div className='d-flex my-1 align-items-center'>
+              <span className='fa-solid fa-location-dot me-2'></span>
+              <p className='m-0'>{location}</p>
+            </div>
+            <div className='d-flex my-1 align-items-center'>
+              <span className="fa-solid fa-user me-2"></span>
+              <p className='m-0'>{gender} • {age}</p>
+            </div>
+          </div>
+          <div className="flex-grow-1 overflow-auto align-content-center medalsBox rounded">
             {topThreeGames && topThreeGames.length > 0 ? (
               <div className="d-flex flex-row flex-nowrap justify-content-around">
                 {topThreeGames.map((el, index) => (
