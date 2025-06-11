@@ -93,6 +93,8 @@ def register():
         return jsonify({'Error': 'algo paso'}), 400
 
 # LOGIN
+
+
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -160,6 +162,8 @@ def delete_user(user_id):
     return jsonify({'message': f'user {user_id} deleted'}), 200
 
 # POST USER
+
+
 @api.route('/users', methods=['POST'])
 def post_user():
     data = request.get_json()
@@ -174,6 +178,8 @@ def post_user():
     return jsonify(new_user.serialize()), 200
 
 # PUT USER
+
+
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
     data = request.get_json()
@@ -189,6 +195,8 @@ def put_user(user_id):
     return jsonify(user.serialize()), 200
 
 # GET ALL PROFILES
+
+
 @api.route('/profiles', methods=['GET'])
 def get_profiles():
     stmt = select(Profile)
@@ -206,6 +214,8 @@ def get_single_profile_by_user(user_id):
     return jsonify(profile.serialize()), 200
 
 # GET SINGLE PROFILE BY PROFILE ID
+
+
 @api.route('/profiles/<int:profile_id>', methods=['GET'])
 def get_single_profile(profile_id):
     stmt = select(Profile).where(Profile.id == profile_id)
@@ -215,6 +225,8 @@ def get_single_profile(profile_id):
     return jsonify(profile.serialize()), 200
 
 # DELETE PROFILE BY USER ID
+
+
 @api.route('/profiles/user/<int:user_id>', methods=['DELETE'])
 def delete_profile_by_user_id(user_id):
     stmt = select(Profile).where(Profile.user_id == user_id)
@@ -226,6 +238,8 @@ def delete_profile_by_user_id(user_id):
     return jsonify({'message': f'profile of user with id: {user_id} deleted'})
 
 # DELETE PROFILE BY PROFILE ID
+
+
 @api.route('/profiles/<int:profile_id>', methods=['DELETE'])
 def delete_profile(profile_id):
     stmt = select(Profile).where(Profile.id == profile_id)
@@ -237,6 +251,8 @@ def delete_profile(profile_id):
     return jsonify({'message': f'profile with id: {profile_id} deleted'})
 
 # POST PROFILE
+
+
 @api.route('/profiles/<int:user_id>', methods=['POST'])
 def post_profile(user_id):
     data = request.get_json()
@@ -249,17 +265,18 @@ def post_profile(user_id):
     if user.profile:
         return jsonify({'error': 'this profile already exist, please try to modify it insted of create a new one'}), 400
     new_profile = Profile(
-        gender=data['gender'],
-        age=data['age'],
-        discord=data['discord'],
-        name=data['name'],
-        preferences=data['preferences'],
-        zodiac=data['zodiac'],
-        location=data['location'],
-        nick_name=data['nick_name'],
-        bio=data['bio'],
-        language=data['language'],
-        steam_id=data['steam_id']
+        gender=data.get('gender') or 'Undefinied',
+        age=data.get('age') or 0,
+        discord=data.get('discord') or 'Undefinied',
+        name=data.get('name') or 'Undefinied',
+        preferences=data.get('preferences') or 'Undefinied',
+        zodiac=data.get('zodiac') or 'Undefinied',
+        location=data.get('location') or 'Undefinied',
+        nick_name=data.get('nick_name') or 'Undefinied',
+        bio=data.get('bio') or 'Undefinied',
+        language=data.get('language') or 'Undefinied',
+        steam_id=data.get('steam_id') or 'Undefinied',
+        photo=data.get('photo') or 'Undefinied'
     )
     user.profile = new_profile
     db.session.commit()
@@ -280,8 +297,7 @@ def put_profile(user_id):
         return jsonify({'error': 'this profile do not  exist, please try to create it insted of modify one'}), 400
 
     user.profile.gender = data.get('gender', user.profile.gender)
-    user.profile.preferences = data.get(
-        'preferences', user.profile.preferences)
+    user.profile.preferences = data.get('preferences', user.profile.preferences)
     user.profile.zodiac = data.get('zodiac', user.profile.zodiac)
     user.profile.discord = data.get('discord', user.profile.discord)
     user.profile.age = data.get('age', user.profile.age)
@@ -291,11 +307,14 @@ def put_profile(user_id):
     user.profile.bio = data.get('bio', user.profile.bio)
     user.profile.language = data.get('language', user.profile.language)
     user.profile.steam_id = data.get('steam_id', user.profile.steam_id)
+    user.profile.photo = data.get('photo', user.profile.photo)
 
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
 
 # GET ALL REWVIEWS
+
+
 @api.route('/reviews', methods=['GET'])
 def get_All_Reviews():
     stmt = select(Review)
@@ -437,7 +456,6 @@ def get_single_match(match_id):
     return jsonify(match.serialize()), 200
 
 
-
 @api.route('/matches/user/<int:user_id>', methods=['GET'])
 def get_matches_for_user(user_id):
     # 1) Sacar todos los Match donde aparezca este usuario como user1 o como user2
@@ -463,9 +481,9 @@ def get_matches_for_user(user_id):
         if u.profile:
             other_users.append({
                 "user_id":   u.id,
-                "nickname":  u.profile.name    if u.profile.name else "undefined",
+                "nickname":  u.profile.name if u.profile.name else "undefined",
                 "games":     [g.serialize() for g in u.profile.games] if u.profile.games else [],
-                "gender":    u.profile.gender  if u.profile.gender else "undefined",
+                "gender":    u.profile.gender if u.profile.gender else "undefined",
                 "age": u.profile.age if u.profile.age else "undefinied",
                 "location": u.profile.location if u.profile.location else "undefinied"
             })
@@ -486,8 +504,7 @@ def get_matches_for_user(user_id):
             deduped.append(item)
 
     # 4) Devuelvo la lista final de “otros” usuarios
-    return jsonify({ "matches": deduped }), 200
-
+    return jsonify({"matches": deduped}), 200
 
 
 # POST A MATCH
@@ -531,7 +548,6 @@ def get_all_rejects():
     return jsonify([reject.serialize() for reject in rejects]), 200
 
 
-
 # GET REJECT BY ID
 @api.route('/rejects/<reject_id>', methods=['GET'])
 def get_single_reject(reject_id):
@@ -543,6 +559,8 @@ def get_single_reject(reject_id):
     return jsonify(match.serialize())
 
 # GET REJECTS SENT
+
+
 @api.route('/rejects_sent/<user_id>', methods=['GET'])
 def get_rejects_sent(user_id):
     # 1. Buscamos al usuario; si no existe devolvemos 404
@@ -559,6 +577,8 @@ def get_rejects_sent(user_id):
     return jsonify({"rejects_authored": serialized}), 200
 
 # GET REJECTS RECEIVED
+
+
 @api.route('/rejects_received/<user_id>', methods=['GET'])
 def get_rejects_received(user_id):
     # 1. Buscamos al usuario; si no existe devolvemos 404
@@ -575,6 +595,8 @@ def get_rejects_received(user_id):
     return jsonify({"rejects_recieved": serialized}), 200
 
 # DELETE REJECT
+
+
 @api.route('/rejects/<reject_id>', methods=['DELETE'])
 def delete_reject(reject_id):
     stmt = select(Reject).where(Reject.id == reject_id)
@@ -623,6 +645,8 @@ def get_all_games():
     return jsonify([game.serialize() for game in games]), 200
 
 # GET SINGLE GAMES
+
+
 @api.route('/games/<int:game_id>', methods=['GET'])
 def get_single_game(game_id):
     stmt = select(Game).where(Game.id == game_id)
@@ -710,6 +734,8 @@ def get_single_like(like_id):
     return jsonify(like.serialize()), 200
 
 # POST LIKE (ESTÁ LA LÓGICA PARA QUE SE CREE EL MATCH SI ES NECESARIO)
+
+
 @api.route('/likes/<int:liker_id>/<int:liked_id>', methods=['POST'])
 def post_like(liker_id, liked_id):
     # No se permite que un usuario se de like a sí mismo

@@ -85,6 +85,7 @@ class Profile(db.Model):
     nick_name: Mapped[str] = mapped_column(
         String(21), unique=True, nullable=True)
     bio: Mapped[str] = mapped_column(String(500), unique=True, nullable=True)
+    photo: Mapped[str] = mapped_column(String(20), nullable=True)
     language: Mapped[str] = mapped_column(String(50), nullable=True)
     steam_id: Mapped[str] = mapped_column(
         String(200), unique=True, nullable=True)
@@ -105,6 +106,7 @@ class Profile(db.Model):
             "nick_name": self.nick_name,
             "bio": self.bio,
             "language": self.language,
+            "photo": self.photo,
             "name":self.name,
             "games": [g.serialize() for g in self.games] if self.games else [],
             "age": self.age,
