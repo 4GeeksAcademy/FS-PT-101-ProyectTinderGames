@@ -24,6 +24,7 @@ searchMatchServices.getUserInfo = async () => {
 //Trae la infomación de todos los perfiles
 searchMatchServices.getAllProfiles = async () => {
   try {
+    console.log("Fetching from URL:", url + "/api/profiles");
     const resp = await fetch(url + "/api/profiles");
     if (!resp.ok) throw Error("Failed to get all profiles");
     const data = await resp.json();
@@ -73,7 +74,7 @@ searchMatchServices.getStarsByUser = async (userId) => {
     const data = await resp.json();
     const reviews = data.reviews_received;
 
-    console.log("Stars--->", reviews) // Para ver si funciona
+    console.log("Stars--->", reviews); // Para ver si funciona
 
     // Calcula la media
     if (!Array.isArray(reviews) || reviews.length === 0) return 0;
@@ -88,7 +89,7 @@ searchMatchServices.getStarsByUser = async (userId) => {
   }
 };
 
-// Manda los likes dados por el usuario 
+// Manda los likes dados por el usuario
 searchMatchServices.addLikeSent = async (liker_id, liked_id) => {
   try {
     const resp = await fetch(url + `/api/likes/${liker_id}/${liked_id}`, {
@@ -107,17 +108,20 @@ searchMatchServices.addLikeSent = async (liker_id, liked_id) => {
   }
 };
 
-// Manda los dislikes dados por el usuario 
-searchMatchServices.addDisLikeSent = async (rejector_id, rejected_id) => {
+// Manda los dislikes dados por el usuario
+searchMatchServices.addDislikeSent = async (rejector_id, rejected_id) => {
   try {
-    const resp = await fetch(url + `/api/rejects/${rejector_id}/${rejected_id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-      body: JSON.stringify({ rejector_id, rejected_id }),
-    });
+    const resp = await fetch(
+      url + `/api/rejects/${rejector_id}/${rejected_id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ rejector_id, rejected_id }),
+      }
+    );
     if (!resp.ok) throw new Error("Failed to send a dislike");
     return await resp.json();
   } catch (error) {
@@ -142,7 +146,6 @@ searchMatchServices.getLikesReceived = async (userId) => {
     return error;
   }
 };
-
 
 // Trae los dislikes recibidos por el usuario logeado (creo que no hace falta)
 searchMatchServices.getDislikesReceived = async (userId) => {
