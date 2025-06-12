@@ -453,3 +453,27 @@
 .review-box {
   text-decoration:underline;
 }
+/*------------Coming soon Activity tab ---------------- */
+.coming-soon-box {
+  margin-top: 20px;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(0,255,255,0.05), rgba(127,0,255,0.1));
+  border: 3px solid cyan;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 20px rgba(0,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+.coming-soon-box h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #00ffff;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+.coming-soon-box p {
+  font-size: 1rem;
+  color: #ccc;
+}

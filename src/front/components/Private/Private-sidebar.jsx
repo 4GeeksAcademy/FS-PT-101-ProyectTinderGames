@@ -1,6 +1,6 @@
 import "./private-sidebar.css";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import profileicon from "../../assets/img/icons/icon-profile.png";
 import searchicon from "../../assets/img/icons/icon-search-a-mate.png";
 import matchicon from "../../assets/img/icons/icon-your-mates.png";
@@ -17,6 +17,20 @@ export const Sidebar = ({ activePath }) => {
     { to: "/private/find-games", icon: findicon, label: "Find games" },
     { to: "/private/settings", icon: settingsicon, label: "Settings" },
   ];
+
+  // useeffect par que no se rompa en resoluciones pequeñas,
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // si se rompe, que no creo, igual esto lo arregla, depende del dispositivo que se use.
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [open]);
 
   return (
     <>
