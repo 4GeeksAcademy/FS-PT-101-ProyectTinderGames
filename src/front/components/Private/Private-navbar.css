@@ -1,9 +1,9 @@
 .private-navbar {
   height: 70px;
   background-color: #000;
-  border-bottom: 4px solid #6600cc;
+  border-bottom: 1px solid #ffffff;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 0 20px;
   position: relative;
@@ -14,6 +14,10 @@
   font-size: 24px;
   font-weight: bold;
   color: cyan;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .navbar-logo-link {
@@ -71,7 +75,7 @@
   z-index: 1000;
 }
 
-/* Comportamiento de la derecha */
+/* Comportamiento de la derecha 
 .navbar-flag {
   width: 24px;
   height: 16px;
@@ -105,7 +109,7 @@
 .navbar-download:hover {
   background-color: #00cccc;
 }
-
+*/
 /*pongamos responsive*/
 @media screen and (max-width: 768px) {
   .navbar-desktop {
@@ -114,5 +118,40 @@
 
   .navbar-mobile {
     display: block;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .private-navbar {
+    position: relative;
+    height: 70px;
+    padding: 0 20px;
+  }
+
+  .navbar-left,
+  .navbar-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .navbar-left {
+    left: 20px;
+  }
+
+  .navbar-right {
+    right: 20px;
+  }
+
+  .navbar-logo-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .navbar-logo {
+    font-size: 22px;
+    
   }
 }
