@@ -249,7 +249,13 @@ const Profile = () => {
         )}
 
 
-        {activeTab === "activity" && <p className="tab-placeholder">Activity content goes here.</p>}
+        {activeTab === "activity" && (
+          <div className="coming-soon-box">
+            <h3>Coming soon...</h3>
+            <p>This section is under construction. Stay tuned for updates!</p>
+          </div>
+        )}
+
         {activeTab === "comments" && <p className="tab-placeholder">Comments content goes here.</p>}
       </div>
 

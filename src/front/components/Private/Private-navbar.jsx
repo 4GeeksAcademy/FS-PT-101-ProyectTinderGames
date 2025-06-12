@@ -39,48 +39,6 @@ export const PrivateNavbar = () => {
           </span>
         </Link>
       </div>
-
-      <div className="navbar-right">
-
-        {/* escritorio */}
-
-        <div className="navbar-desktop">
-          <img
-            src="https://flagcdn.com/us.svg"
-            alt="Bandera"
-            className="navbar-flag"
-          />
-          <span className="navbar-username" onClick={closeDropdown}>
-            {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : "Username" : "Username"}
-          </span>
-          <button className="navbar-download">Download</button>
-        </div>
-
-        {/* Resoluciones pequeñas. */}
-
-        <div className="navbar-mobile" ref={dropdownRef}>
-          <button className="menu-toggle" onClick={toggleDropdown}>
-            ☰
-          </button>
-
-          {menuOpen && (
-            <div className="dropdown-menu-custom">
-              <img
-                src="https://flagcdn.com/us.svg"
-                alt="Bandera"
-                className="navbar-flag"
-                onClick={closeDropdown}
-              />
-              <span className="navbar-username" onClick={closeDropdown}>
-                {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : "Username" : "Username"}
-              </span>
-              <button className="navbar-download" onClick={closeDropdown}>
-                Download
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
     </nav>
   );
 };
