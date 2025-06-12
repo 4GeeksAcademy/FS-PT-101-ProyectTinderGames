@@ -1,15 +1,23 @@
+
 import { useEffect, useState } from "react";
 import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCard";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import searchMatchServices from "../../services/searchMatchServices";
+import { ItsMatch } from "../../components/ItsMatch/ItsMatch";
 
 export const SearchMate = () => {
 
   const [profiles, setProfiles] = useState([])
   const [currentUser, setCurrentUser] = useState(0)
   const [loading, setLoading] = useState(true)
+
   const [showLoadingMessage, setShowLoadingMessage] = useState(false);
+
   const { store, dispatch } = useGlobalReducer();
+
+  //Para el modal del match y el componente match
+  const [showMatchModal, setShowMatchModal] = useState(false);
+  const [matchProfile, setMatchProfile] = useState(null);
 
   useEffect(() => {
 
@@ -72,10 +80,9 @@ export const SearchMate = () => {
       // Guardar el perfil al que se le dio like en el store (aunque no haya match)
       dispatch({ type: "saveLike", payload: likedProfile });
 
-
-      // Mostrar modal si hubo match
-      if (response.match) {
-        alert("¡Es un match!");
+      if (response.match) { // salta el componente de match si hay un match
+        setMatchProfile(response.match);
+        setShowMatchModal(true);
       }
 
     } catch (error) {
@@ -102,7 +109,11 @@ export const SearchMate = () => {
       setCurrentUser((prevIndex) => prevIndex + 1);
     }
   };
-
+  
+  const closeMatchModal = () => {
+    setShowMatchModal(false);
+    setMatchProfile(null);
+  };
 
 
   // Muestra el spinner y el mensaje cuando está cargando las tarjetas
@@ -124,24 +135,19 @@ export const SearchMate = () => {
   }
 
 
-  // Perfil de prueba para el match simulado
-  const mockedProfile = {
-    id: 2,
-    nick_name: "pepe.pe_el fantasticooooo",
-  };
-
   return (
     <>
 
       <div className='d-flex justify-content-center '>
         <h1 className='search-match-card-font-shadow '>
-          Search a mate
+          Search a mate --- {store.user?.profile?.nick_name || ""}
         </h1>
       </div>
 
 
       {/* Modal para el MatchCard */}
-          {/* <>
+      {showMatchModal && matchProfile && (
+      <>
           <div className="d-flex justify-content-center align-items-center">
             <div>
               <h1 className='title-its-match-card-font-shadow mt-2 mb-3'>
@@ -152,7 +158,7 @@ export const SearchMate = () => {
               <button
                 type="button"
                 className="btn-close ms-3 btn-close-modal"
-         
+                onClick={closeMatchModal}
               >
               </button>
             </div>
@@ -160,21 +166,22 @@ export const SearchMate = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body">
-                <ItsMatch profile={mockedProfile} />
+                <ItsMatch/>
               </div>
 
             </div>
           </div>
-        </> */}
-   
-      {/* La tarjeta de search a mate cuando no hay match */}
+        </> )}
+
+        {/* fin del modal */}
+
       {profiles.length > 0 && profiles[currentUser] && ( //Para que cuando la tarjeta se cargue, ya tenga toda la info del user y lo sagan datos undefined
-          <SearchMatchCard
-            profile={profiles[currentUser]}
-            onLike={handleLike}
-            onDislike={handleDislike}
-          />
-        )}
+        <SearchMatchCard
+          profile={profiles[currentUser]}
+          onLike={handleLike}
+          onDislike={handleDislike}
+        />
+      )}
     </>
 
   )

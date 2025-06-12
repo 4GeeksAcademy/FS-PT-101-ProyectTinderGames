@@ -13,7 +13,7 @@ export const SearchMatchCard = ({profile, onLike, onDislike }) => {
     const getAvgStars = async () => {
       try {
         const average = await searchMatchServices.getStarsByUser(profile.id);
-        console.log('Average stars --->', average)
+        // console.log('Average stars --->', average)//para ver si funciona
         setAvgStars(Number(average));
       } catch (err) {
         console.error(err);
