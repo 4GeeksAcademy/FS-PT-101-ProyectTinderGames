@@ -1,10 +1,21 @@
+function safeJSONParse(key, fallback) {
+  try {
+    const item = localStorage.getItem(key);
+    if (item === null || item === "undefined") return fallback;
+    return JSON.parse(item);
+  } catch (e) {
+    console.warn(`Error al parsear ${key}:`, e);
+    return fallback;
+  }
+}
+
 export const initialStore = () => {
   return {
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: safeJSONParse("user", null),
     userMatchesInfo: null,
     matchInfo: null,
-    likesSent: JSON.parse(localStorage.getItem("likesSent")) || [],
-    dislikesSent: JSON.parse(localStorage.getItem("dislikesSent")) || [],
+    likesSent: safeJSONParse("likesSent", []),
+    dislikesSent: safeJSONParse("dislikesSent", []),
     starsByUser: null,
     matchProfiles: null,
   };

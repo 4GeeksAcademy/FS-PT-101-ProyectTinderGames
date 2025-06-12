@@ -10,28 +10,96 @@ with app.app_context():
         # db.create_all()
 
         # Crear usuarios
-        
+
         users = [
-            User(email="juan.perez@example.com", password=generate_password_hash("password123")), 
-            User(email="ana.gomez@example.com", password=generate_password_hash("password345")),
-            User(email="carlos.ruiz@example.com", password=generate_password_hash("password678")),
-            User(email="maria.lopez@example.com", password=generate_password_hash("password987")),
-            User(email="luis.fernandez@example.com", password=generate_password_hash("password654")),
-            User(email="laura.diaz@example.com", password=generate_password_hash("password321")),
-            User(email="jorge.martinez@example.com", password=generate_password_hash("password000")),
+            User(email="juan.perez@example.com",
+                 password=generate_password_hash("password123")),
+            User(email="ana.gomez@example.com",
+                 password=generate_password_hash("password345")),
+            User(email="carlos.ruiz@example.com",
+                 password=generate_password_hash("password678")),
+            User(email="maria.lopez@example.com",
+                 password=generate_password_hash("password987")),
+            User(email="luis.fernandez@example.com",
+                 password=generate_password_hash("password654")),
+            User(email="laura.diaz@example.com",
+                 password=generate_password_hash("password321")),
+            User(email="jorge.martinez@example.com",
+                 password=generate_password_hash("password000")),
+            User(email="maria.gonzalez@example.com",
+                 password=generate_password_hash("password123")),
+            User(email="carlos.lopez@example.com",
+                 password=generate_password_hash("mypassword")),
+            User(email="laura.fernandez@example.com",
+                 password=generate_password_hash("secret321")),
+
         ]
         db.session.add_all(users)
         db.session.commit()
 
         # Crear perfiles
         profiles = [
-            Profile(user_id=1, gender="Male", age=28, name="Juan Perez", discord="juan#1234", preferences="Action, Adventure", zodiac="Leo", location="Madrid", nick_name="juancito", bio="Gamer and developer", language="Spanish", steam_id="steam_juan123", photo="profile-pic-1.png"),
-            Profile(user_id=2, gender="Female", age=34, name="Ana Gomez", discord="ana_g#5678", preferences="RPG, Strategy", zodiac="Cancer", location="Barcelona", nick_name="anag", bio="Loves strategy games", language="Spanish", steam_id="steam_ana567", photo="profile-pic-2.png"),
-            Profile(user_id=3, gender="Male", age=22, name="Carlos Ruiz", discord="carlos#9999", preferences="FPS, Sports", zodiac="Aries", location="Valencia", nick_name="carlosR", bio="Competitive gamer", language="Spanish", steam_id="steam_carlos999", photo="profile-pic-5.png"),
-            Profile(user_id=4, gender="Female", age=30, name="Maria Lopez", discord="maria#4567", preferences="Puzzle, Indie", zodiac="Virgo", location="Sevilla", nick_name="mariL", bio="Casual player", language="Spanish", steam_id="steam_maria456", photo="profile-pic-5.png"),
-            Profile(user_id=5, gender="Male", age=26, name="Luis Fernandez", discord="luisf#2345", preferences="RPG, Open World", zodiac="Taurus", location="Bilbao", nick_name="luisF", bio="Explores every map", language="Spanish", steam_id="steam_luis234", photo="profile-pic-5.png"),
-            Profile(user_id=6, gender="Female", age=29, name="Laura Diaz", discord="laura#9876", preferences="MMORPG, Strategy", zodiac="Pisces", location="Granada", nick_name="lauD", bio="Guild leader", language="Spanish", steam_id="steam_laura987", photo="profile-pic-7.png"),
-            Profile(user_id=7, gender="Male", age=33, name="Jorge Martinez", discord="jorge#1122", preferences="FPS, Racing", zodiac="Sagittarius", location="Zaragoza", nick_name="jorgeM", bio="Competitive and fast", language="Spanish", steam_id="steam_jorge112", photo="profile-pic-8.png"),
+            Profile(user_id=1, gender="Male", age=28, name="Juan Perez", discord="juan#1234", preferences="Action, Adventure", zodiac="Leo",
+                    location="Madrid", nick_name="juancito", bio="Gamer and developer", language="Spanish", steam_id="steam_juan123", photo="profile-pic-1.png"),
+            Profile(user_id=2, gender="Female", age=34, name="Ana Gomez", discord="ana_g#5678", preferences="RPG, Strategy", zodiac="Cancer",
+                    location="Barcelona", nick_name="anag", bio="Loves strategy games", language="Spanish", steam_id="steam_ana567", photo="profile-pic-2.png"),
+            Profile(user_id=3, gender="Male", age=22, name="Carlos Ruiz", discord="carlos#9999", preferences="FPS, Sports", zodiac="Aries",
+                    location="Valencia", nick_name="carlosR", bio="Competitive gamer", language="Spanish", steam_id="steam_carlos999", photo="profile-pic-5.png"),
+            Profile(user_id=4, gender="Female", age=30, name="Maria Lopez", discord="maria#4567", preferences="Puzzle, Indie", zodiac="Virgo",
+                    location="Sevilla", nick_name="mariL", bio="Casual player", language="Spanish", steam_id="steam_maria456", photo="profile-pic-5.png"),
+            Profile(user_id=5, gender="Male", age=26, name="Luis Fernandez", discord="luisf#2345", preferences="RPG, Open World", zodiac="Taurus",
+                    location="Bilbao", nick_name="luisF", bio="Explores every map", language="Spanish", steam_id="steam_luis234", photo="profile-pic-5.png"),
+            Profile(user_id=6, gender="Female", age=29, name="Laura Diaz", discord="laura#9876", preferences="MMORPG, Strategy", zodiac="Pisces",
+                    location="Granada", nick_name="lauD", bio="Guild leader", language="Spanish", steam_id="steam_laura987", photo="profile-pic-7.png"),
+            Profile(user_id=7, gender="Male", age=33, name="Jorge Martinez", discord="jorge#1122", preferences="FPS, Racing", zodiac="Sagittarius",
+                    location="Zaragoza", nick_name="jorgeM", bio="Competitive and fast", language="Spanish", steam_id="steam_jorge112", photo="profile-pic-8.png"),
+            Profile(
+                user_id=8,
+                gender="Female",
+                age=29,
+                name="María González",
+                discord="maria#3344",
+                preferences="RPG, Strategy",
+                zodiac="Pisces",
+                location="Madrid",
+                nick_name="mariaG",
+                bio="Loves immersive stories and challenges",
+                language="Spanish",
+                steam_id="steam_maria334",
+                photo="profile-pic-9.png"
+            ),
+
+            Profile(
+                user_id=9,
+                gender="Male",
+                age=26,
+                name="Carlos López",
+                discord="carlos#5566",
+                preferences="MMORPG, Adventure",
+                zodiac="Leo",
+                location="Barcelona",
+                nick_name="carlosL",
+                bio="Explorer and team player",
+                language="Spanish",
+                steam_id="steam_carlos556",
+                photo="profile-pic-10.png"
+            ),
+
+            Profile(
+                user_id=10,
+                gender="Female",
+                age=31,
+                name="Laura Fernández",
+                discord="laura#7788",
+                preferences="Puzzle, Casual",
+                zodiac="Virgo",
+                location="Valencia",
+                nick_name="lauraF",
+                bio="Casual gamer, loves puzzles",
+                language="Spanish",
+                steam_id="steam_laura778",
+                photo="profile-pic-11.png"
+            ),
         ]
         db.session.add_all(profiles)
         db.session.commit()
@@ -43,7 +111,8 @@ with app.app_context():
         reviews = []
         for user_id in user_ids:
             for _ in range(2):
-                author_id = random.choice([uid for uid in user_ids if uid != user_id])
+                author_id = random.choice(
+                    [uid for uid in user_ids if uid != user_id])
                 reviews.append(Review(
                     user_id=user_id,
                     author_id=author_id,
@@ -82,7 +151,8 @@ with app.app_context():
             pair = tuple(sorted((u1, u2)))
             if pair not in match_set:
                 match_set.add(pair)
-                matches.append(Match(user1_id=u1, user2_id=u2, created_at=datetime.now(tz=timezone.utc)))
+                matches.append(Match(user1_id=u1, user2_id=u2,
+                               created_at=datetime.now(tz=timezone.utc)))
         db.session.add_all(matches)
         db.session.commit()
 
@@ -94,7 +164,8 @@ with app.app_context():
             pair = (r1, r2)
             if pair not in reject_set:
                 reject_set.add(pair)
-                rejects.append(Reject(rejector_id=r1, rejected_id=r2, created_at=datetime.now(tz=timezone.utc)))
+                rejects.append(Reject(rejector_id=r1, rejected_id=r2,
+                               created_at=datetime.now(tz=timezone.utc)))
         db.session.add_all(rejects)
         db.session.commit()
 

@@ -1,7 +1,5 @@
 import './ItsMatch.css';
 import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
-import { useEffect, useState } from 'react';
-import searchMatchServices from '../../services/searchMatchServices';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -10,7 +8,7 @@ export const ItsMatch = ({ profile, }) => {
 
     const navigate = useNavigate()
     const handleClick = () => {
-        navigate('/private/your-matches') //Falta hacerlo dinámico cuando el match sea real
+        navigate('/private/your-matches/') //Falta hacerlo dinámico cuando el match sea real (navigate(`/private/your-matches/${profile.id}`))
     }
     return (
         <>

@@ -60,41 +60,70 @@ export const SearchMate = () => {
 
     return () => clearTimeout(timeout)
 
-  }, [store.user, store.likesSent, store.dislikesSent]); //para que se actualice el user, los likes envíados y los dislikes enviados
+  }, [store.user, store.likesSent, store.dislikesSent, store.matchProfiles]); //para que se actualice el user, los likes envíados y los dislikes enviados y los matches
 
 
 
 
-  const handleLike = async () => { //Maneja el LIKE button para mandar la información a la API y para que cambie de tarjeta
-    const likedProfile = profiles[currentUser];
-    if (!store.user?.profile?.id || !likedProfile?.id) return;
+    const handleLike = async () => {
+  const likedProfile = profiles[currentUser];
+  if (!store.user?.profile?.id || !likedProfile?.id) return;
 
-    try {
-      // Enviar el like a la API usando el servicio
-      const response = await searchMatchServices.addLikeSent(store.user.profile.id, likedProfile.id);
+  try {
+    const response = await searchMatchServices.addLikeSent(
+      store.user.profile.id,
+      likedProfile.id
+    );
 
-      // Guardar el match (si existe)
-      dispatch({ type: "getMatchInfo", payload: response });
+    console.log("Like response --->: ", response);
 
+    // Guardar like localmente
+    dispatch({ type: "saveLike", payload: likedProfile });
 
-      // Guardar el perfil al que se le dio like en el store (aunque no haya match)
-      dispatch({ type: "saveLike", payload: likedProfile });
+    // Usar directamente el response como matchData
+    const matchData = response;
 
-      if (response.match) { // salta el componente de match si hay un match
-        setMatchProfile(response.match);
-        setShowMatchModal(true);
+    // Aquí decides si response indica match (quizá si tiene id, liked_id y liker_id)
+    if (matchData && matchData.id) {
+      const currentUserId = store.user.profile.id;
+      const matchedUserId =
+        matchData.liker_id === currentUserId
+          ? matchData.liked_id
+          : matchData.liker_id;
+
+      let matchedProfile = profiles.find((p) => p.id === matchedUserId);
+
+      if (!matchedProfile) {
+        try {
+          matchedProfile = await searchMatchServices.getOneProfile(matchedUserId);
+        } catch (error) {
+          console.error("Error fetching matched profile--->", error);
+        }
       }
 
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setCurrentUser((prev) => prev + 1);  // Avanzar al siguiente perfil
+      if (matchedProfile) {
+        setMatchProfile(matchedProfile);
+        setShowMatchModal(true);
+        console.log("Showing match modal--->:", matchedProfile);
+      }
+    } else {
+      console.log("No match for this response");
     }
-  };
+
+    // Actualiza el store con el match (si aplica)
+    dispatch({ type: "getMatchProfiles", payload: response });
+  } catch (error) {
+    console.error("Error en handleLike:", error);
+  } finally {
+    setCurrentUser((prev) => prev + 1);
+  }
+};
+
 
   const handleDislike = async () => { // Maneja el Dislike button
     const dislikedProfile = profiles[currentUser];
     if (!store.user?.profile?.id || !dislikedProfile?.id) return;
+    console.log("Dislike response:----->", dislikedProfile);
 
     try {
       // Envia el dislike a la API usando el servicio
@@ -109,7 +138,7 @@ export const SearchMate = () => {
       setCurrentUser((prevIndex) => prevIndex + 1);
     }
   };
-  
+
   const closeMatchModal = () => {
     setShowMatchModal(false);
     setMatchProfile(null);
@@ -122,7 +151,7 @@ export const SearchMate = () => {
       <h2>
         <div className="spinner align-self-center">
         </div> Loading new players. Thank you for your patience{" "}
-        {store.user ? store.user.profile != undefined ? store.user.profile?.nick_name : null : null}
+        {store.user?.profile?.nick_name || "player"}
       </h2>)
   }
 
@@ -130,59 +159,57 @@ export const SearchMate = () => {
   if (!loading && currentUser >= profiles.length) {
     return (
       <h2 className="text-center mt-5">
-        Sorry {store.user ? store.user.profile != undefined ? store.user.profile.nick_name : null : null}, there are no more players around. Try later!
+        Sorry {store.user?.profile?.nick_name || "player"}, there are no more players around. Try later!
       </h2>)
   }
 
 
-  return (
-    <>
-
-      <div className='d-flex justify-content-center '>
-        <h1 className='search-match-card-font-shadow '>
-          Search a mate --- {store.user?.profile?.nick_name || ""}
-        </h1>
-      </div>
-
-
-      {/* Modal para el MatchCard */}
-      {showMatchModal && matchProfile && (
+return (
+  <>
+    {showMatchModal && matchProfile ? (
+      // Solo el modal cuando está activo
       <>
-          <div className="d-flex justify-content-center align-items-center">
-            <div>
-              <h1 className='title-its-match-card-font-shadow mt-2 mb-3'>
-                It's a match
-              </h1>
-            </div>
-            <div>
-              <button
-                type="button"
-                className="btn-close ms-3 btn-close-modal"
-                onClick={closeMatchModal}
-              >
-              </button>
+        <div className="d-flex justify-content-center align-items-center">
+          <div>
+            <h1 className='title-its-match-card-font-shadow mt-2 mb-3'>
+              It's a match
+            </h1>
+          </div>
+          <div>
+            <button
+              type="button"
+              className="btn-close ms-3 btn-close-modal"
+              onClick={closeMatchModal}
+            />
+          </div>
+        </div>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body">
+              <ItsMatch profile={matchProfile} />
             </div>
           </div>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-body">
-                <ItsMatch/>
-              </div>
+        </div>
+      </>
+    ) : (
+      // El resto de la UI cuando NO hay modal
+      <>
+        <div className='d-flex justify-content-center '>
+          <h1 className='search-match-card-font-shadow '>
+            Search a mate --- {store.user?.profile?.nick_name || "player"}
+          </h1>
+        </div>
 
-            </div>
-          </div>
-        </> )}
+        {profiles.length > 0 && profiles[currentUser] && (
+          <SearchMatchCard
+            profile={profiles[currentUser]}
+            onLike={handleLike}
+            onDislike={handleDislike}
+          />
+        )}
+      </>
+    )}
+  </>
+);
 
-        {/* fin del modal */}
-
-      {profiles.length > 0 && profiles[currentUser] && ( //Para que cuando la tarjeta se cargue, ya tenga toda la info del user y lo sagan datos undefined
-        <SearchMatchCard
-          profile={profiles[currentUser]}
-          onLike={handleLike}
-          onDislike={handleDislike}
-        />
-      )}
-    </>
-
-  )
 };

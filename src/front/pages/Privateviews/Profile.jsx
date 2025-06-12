@@ -43,7 +43,7 @@ const Profile = () => {
     <div className="profile-container">
       <div className="left-panel">
         <div className="avatar-section">
-          <button className="gear-btn" onClick={() => setShowModal(true)}><i class="fa-solid fa-gear"></i></button>
+          <button className="gear-btn" onClick={() => setShowModal(true)}><i className="fa-solid fa-gear"></i></button>
           <img src={`/src/front/assets/img/profile-pics/${selectedPic}`} className="profile-avatar" />
         </div>
         <h2>{profile.nickname}</h2>
