@@ -1,38 +1,40 @@
 export const initialStore=()=>{
   return{
-    message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
+    user: JSON.parse(localStorage.getItem('user')) || null,
+    userMatchesInfo: null,
+    matchInfo: null,
+    matchReviewsReceived: null,
   }
 }
 
 export default function storeReducer(store, action = {}) {
   switch(action.type){
-    case 'set_hello':
+    case "getMatchInfo":
       return {
         ...store,
-        message: action.payload
-      };
-      
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+        matchInfo:action.payload
+      }
+    case "matchReviewsReceived":
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
-      };
-    default:
-      throw Error('Unknown action.');
+        matchReviewsReceived: action.payload
+      }
+    case "getAllMatchesInfo":
+      return {
+        ...store,
+        userMatchesInfo:action.payload
+      }
+    case 'logout':
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
+      return {
+        ...store,
+        user: null
+      }
+    case 'getUserInfo':
+      return{
+        ...store,
+        user: action.payload
+      }
   }    
 }
