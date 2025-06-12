@@ -32,7 +32,7 @@ searchMatchServices.getMatchProfiles = async () => {
         });
         if (!resp.ok) throw Error('Failed to fetch match profiles')
         const data = await resp.json()
-        console.log(data)
+        console.log(`comporbar que trae perfiles-->`, data)
         localStorage.setItem('profile',JSON.stringify(data.profile))
         return data
     } catch (error) {
