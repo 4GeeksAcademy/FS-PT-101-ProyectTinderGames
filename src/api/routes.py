@@ -287,7 +287,7 @@ def post_profile(user_id):
 @api.route('/profiles/<int:user_id>', methods=['PUT'])
 def put_profile(user_id):
     data = request.get_json()
-    if not data or 'language' not in data or 'bio' not in data or 'nick_name' not in data or 'location' not in data or 'zodiac' not in data or not 'gender' in data or not 'preferences' in data or not 'discord' in data or not 'age' in data or not 'name' in data or not 'steam_id' in data:
+    if not data or 'bio' not in data or 'nick_name' not in data or 'location' not in data or 'zodiac' not in data or not 'gender' in data or not 'preferences' in data or not 'discord' in data or not 'age' in data or not 'name' in data or not 'steam_id' in data:
         return jsonify({'error': 'Missing data'}), 400
     stmt = select(User).where(User.id == user_id)
     user = db.session.execute(stmt).scalar_one_or_none()
