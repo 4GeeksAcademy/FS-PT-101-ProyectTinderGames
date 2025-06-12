@@ -1,5 +1,6 @@
 """empty message
 
+<<<<<<< HEAD:migrations/versions/cc676b0cf318_.py
 <<<<<<<< HEAD:migrations/versions/d09830e90d31_.py
 Revision ID: d09830e90d31
 Revises: 
@@ -9,6 +10,11 @@ Revision ID: cc676b0cf318
 Revises: 
 Create Date: 2025-06-11 17:38:05.259934
 >>>>>>>> develop:migrations/versions/cc676b0cf318_.py
+=======
+Revision ID: 7557dc519d83
+Revises: 
+Create Date: 2025-06-12 11:36:32.772866
+>>>>>>> develop:migrations/versions/7557dc519d83_.py
 
 """
 from alembic import op
@@ -16,11 +22,15 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
+<<<<<<< HEAD:migrations/versions/cc676b0cf318_.py
 <<<<<<<< HEAD:migrations/versions/d09830e90d31_.py
 revision = 'd09830e90d31'
 ========
 revision = 'cc676b0cf318'
 >>>>>>>> develop:migrations/versions/cc676b0cf318_.py
+=======
+revision = '7557dc519d83'
+>>>>>>> develop:migrations/versions/7557dc519d83_.py
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -65,6 +75,7 @@ def upgrade():
     sa.Column('location', sa.String(length=50), nullable=True),
     sa.Column('nick_name', sa.String(length=21), nullable=True),
     sa.Column('bio', sa.String(length=500), nullable=True),
+    sa.Column('photo', sa.String(length=20), nullable=True),
     sa.Column('language', sa.String(length=50), nullable=True),
     sa.Column('steam_id', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),

@@ -21,6 +21,7 @@ searchMatchServices.getUserInfo = async () => {
   }
 };
 
+<<<<<<< HEAD
 //Trae la infomación de todos los perfiles
 searchMatchServices.getAllProfiles = async () => {
   try {
@@ -34,6 +35,27 @@ searchMatchServices.getAllProfiles = async () => {
     return error;
   }
 };
+=======
+//Trae la infomación de la lista de los ususarios para usarlo en el match
+searchMatchServices.getMatchProfiles = async () => {
+    try {
+        const resp = await fetch(url + '/api/profiles', {
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization' : 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        if (!resp.ok) throw Error('Failed to fetch match profiles')
+        const data = await resp.json()
+        console.log(`comporbar que trae perfiles-->`, data)
+        localStorage.setItem('profile',JSON.stringify(data.profile))
+        return data
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+>>>>>>> develop
 
 //Trae la información de un solo perfil
 searchMatchServices.getOneProfile = async (user_id) => {
