@@ -3,6 +3,7 @@ import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCar
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import searchMatchServices from "../../services/searchMatchServices";
 import { ItsMatch } from "../../components/ItsMatch/ItsMatch";
+import userServices from "../../services/userServices";
 
 
 export const SearchMate = () => {
@@ -25,6 +26,7 @@ export const SearchMate = () => {
     const getAllProfiles = async () => {
       setLoading(true)
       const data = await searchMatchServices.getAllProfiles()
+      // const data = await userServices.getUserInfo()
 
       let allProfiles = []
 
