@@ -1,38 +1,155 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../pages/Privateviews/Profile.css";
+import storeReducer from "../../store";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+import photo1 from "../../assets/img/profile-pics/profile-pic-1.png";
+import photo2 from "../../assets/img/profile-pics/profile-pic-2.png";
+import photo3 from "../../assets/img/profile-pics/profile-pic-3.png";
+import photo4 from "../../assets/img/profile-pics/profile-pic-4.png";
+import photo5 from "../../assets/img/profile-pics/profile-pic-5.png";
+import photo6 from "../../assets/img/profile-pics/profile-pic-6.png";
+import photo7 from "../../assets/img/profile-pics/profile-pic-7.png";
+import photo8 from "../../assets/img/profile-pics/profile-pic-8.png";
+import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 
-
-const zodiacSigns = [
-  "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-  "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
-];
-
-const genders = ["Male", "Female", "Undefined"];
 
 const Profile = () => {
+  const { store, dispatch } = useGlobalReducer();
+  const url = import.meta.env.VITE_BACKEND_URL;
   const [activeTab, setActiveTab] = useState("info");
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedPic, setSelectedPic] = useState("profile-pic-1.png");
+  const zodiacSigns = [
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+  ];
+
+  const genders = ["Male", "Female", "Undefined"];
 
   const [profile, setProfile] = useState({
-    name: "Alex Rodriguez",
-    nickname: "Jag",
-    age: 25,
-    gender: "Male",
-    location: "Bogotá, Colombia",
+    name: "",
+    nick_name: "J",
+    age: 0,
+    gender: "",
+    location: "",
     zodiac: "Leo",
-    discord: "jagpanther#1234",
-    steam: "STEAM_0:1:12345678",
-    languages: ["English", "Spanish"],
-    gamingPrefs: "Casual FPS and Co-op RPGs",
-    bio: "Lorem fistrum a peich amatomaa tiene musho peligro amatomaa. Te va a hasé pupitaa va usté muy cargadoo diodenoo diodeno no puedor ese pedazo de pecador ahorarr hasta luego Lucas caballo blanco caballo negroorl. Al ataquerl apetecan diodeno ahorarr pupita papaar papaar no puedor diodeno caballo blanco caballo negroorl jarl. Ahorarr quietooor condemor qué dise usteer. Condemor fistro llevame al sircoo torpedo ahorarr ahorarr la caidita te voy a borrar el cerito benemeritaar sexuarl. Pecador torpedo condemor pecador."
+    discord: "",
+    steam_id: "",
+    language: "Morroco",
+    preferences: "",
+    bio: "",
+    photo: ""
   });
 
+  useEffect(() => {
+    loader();
+  }, [])
+
+  const loader = () => {
+    fetch(url + `/api/profiles/${store.user.profile.id}`)
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error('Error al cargar los datos');
+        }
+        return resp.json();
+      })
+      .then((datos) => {
+        if (datos.length !== null) {
+          setProfile({
+            name: datos.name,
+            nick_name: datos.nick_name,
+            age: datos.age,
+            gender: datos.gender,
+            location: datos.location,
+            zodiac: datos.zodiac,
+            discord: datos.discord,
+            steam_id: datos.steam,
+            preferences: datos.preferences,
+            language: datos.language,
+            bio: datos.bio,
+            photo: datos.photo
+          });
+          console.log(datos)
+        }
+      })
+      .catch((err) => {
+        console.error('Error en el loader:', err);
+      });
+  };
+
   const handlePicChange = (pic) => {
-    setSelectedPic(pic);
+    switch (pic) {
+      case "profile-pic-1.png":
+        return "photo1";
+      case "profile-pic-2.png":
+        return "photo2";
+      case "profile-pic-3.png":
+        return "photo3";
+      case "profile-pic-4.png":
+        return "photo4";
+      case "profile-pic-5.png":
+        return "photo5";
+      case "profile-pic-6.png":
+        return "photo6";
+      case "profile-pic-7.png":
+        return "photo7";
+      case "profile-pic-8.png":
+        return "photo8";
+      case "profile-pic-9.png":
+        return "photo9";
+      default:
+        img = "photo1";
+    }
     setShowModal(false);
+  };
+
+  const selectPhoto = () => {
+    switch (profile.photo) {
+      case "photo1": return photo1;
+      case "photo2": return photo2;
+      case "photo3": return photo3;
+      case "photo4": return photo4;
+      case "photo5": return photo5;
+      case "photo6": return photo6;
+      case "photo7": return photo7;
+      case "photo8": return photo8;
+      case "photo9": return photo9;
+      default: return "defaultPhoto";
+    }
+  };
+
+  const updateProfile = async () => {
+    setIsEditing(!isEditing)
+    if (!store.user.profile) {
+      console.log("profile no existe")
+    } else {
+      try {
+        const resp = await fetch(`${url}/api/profiles/${store.user.id}`, {
+          method: 'PUT',                    // o 'PUT' si tu API lo requiere
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(profile)      // enviamos el estado completo
+        });
+
+        if (!resp.ok) {
+          console.log(profile)
+          throw new Error('Error al actualizar el perfil');
+        }
+
+        // Si tu API devuelve el perfil actualizado, puedes capturarlo:
+        const updated = await resp.json();
+
+        // Opcional: refresca tu loader o actualiza estado local
+        loader();
+
+      } catch (err) {
+        console.error('Error en updateProfile:', err);
+      }
+
+    }
   };
 
   const handleInputChange = (field, value) => {
@@ -44,9 +161,9 @@ const Profile = () => {
       <div className="left-panel">
         <div className="avatar-section">
           <button className="gear-btn" onClick={() => setShowModal(true)}><i class="fa-solid fa-gear"></i></button>
-          <img src={`/src/front/assets/img/profile-pics/${selectedPic}`} className="profile-avatar" />
+          <img src={selectPhoto()} className="profile-avatar" />
         </div>
-        <h2>{profile.nickname}</h2>
+        <h2>{profile.nick_name}</h2>
         <p className="location">{profile.location}</p>
         {/* tarjetita de medallas*/}
         <div className="medal-list">
@@ -132,11 +249,11 @@ const Profile = () => {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={profile.nickname}
-                    onChange={(e) => handleInputChange("nickname", e.target.value)}
+                    value={profile.nick_name}
+                    onChange={(e) => handleInputChange("nick_name", e.target.value)}
                   />
                 ) : (
-                  <p>{profile.nickname}</p>
+                  <p>{profile.nick_name}</p>
                 )}
               </div>
             </div>
@@ -204,21 +321,21 @@ const Profile = () => {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={profile.steam}
-                    onChange={(e) => handleInputChange("steam", e.target.value)}
+                    value={profile.steam_id}
+                    onChange={(e) => handleInputChange("steam_id", e.target.value)}
                   />
                 ) : (
-                  <p>{profile.steam}</p>
+                  <p>{profile.steam_id}</p>
                 )}
               </div>
               <div className="gaming-prefs-box col-md-6">
                 <label>Gaming Preferences</label>
                 {!isEditing ? (
-                  <p><strong>I'm looking for: </strong> {profile.gamingPrefs}</p>
+                  <p><strong>I'm looking for: </strong> {profile.preferences}</p>
                 ) : (
                   <textarea
-                    value={profile.gamingPrefs}
-                    onChange={(e) => handleInputChange("gamingPrefs", e.target.value)}
+                    value={profile.preferences}
+                    onChange={(e) => handleInputChange("preferences", e.target.value)}
                     className="gaming-prefs-input"
                     rows={3}
                   />
@@ -240,7 +357,7 @@ const Profile = () => {
 
             <div className="row mt-3">
               <div className="col text-left">
-                <button className="edit-btn" onClick={() => setIsEditing(!isEditing)}>
+                <button className="edit-btn" onClick={() => updateProfile()}>
                   {isEditing ? "Save" : "Edit"}
                 </button>
               </div>
@@ -271,7 +388,14 @@ const Profile = () => {
                     key={i}
                     src={`/src/front/assets/img/profile-pics/${picName}`}
                     className={selectedPic === picName ? "selected" : ""}
-                    onClick={() => handlePicChange(picName)}
+                    onClick={() => {
+                      setSelectedPic(picName);
+                      setProfile(prev => ({
+                        ...prev,
+                        photo: handlePicChange(selectedPic)  // aquí llamas a tu función
+                      }));
+                      setShowModal(false);
+                    }}
                   />
                 );
               })}
@@ -285,6 +409,6 @@ const Profile = () => {
       )}
     </div>
   );
-};
+}
 
 export default Profile;
