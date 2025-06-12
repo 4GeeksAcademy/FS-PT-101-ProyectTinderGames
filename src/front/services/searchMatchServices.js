@@ -21,11 +21,11 @@ searchMatchServices.getUserInfo = async () => {
   }
 };
 
-<<<<<<< HEAD
+
 //Trae la infomación de todos los perfiles
 searchMatchServices.getAllProfiles = async () => {
   try {
-    console.log("Fetching from URL:", url + "/api/profiles");
+    // console.log("Fetching from URL:", url + "/api/profiles");//para ver si funciona
     const resp = await fetch(url + "/api/profiles");
     if (!resp.ok) throw Error("Failed to get all profiles");
     const data = await resp.json();
@@ -35,27 +35,6 @@ searchMatchServices.getAllProfiles = async () => {
     return error;
   }
 };
-=======
-//Trae la infomación de la lista de los ususarios para usarlo en el match
-searchMatchServices.getMatchProfiles = async () => {
-    try {
-        const resp = await fetch(url + '/api/profiles', {
-            headers:{
-                'Content-Type':'application/json',
-                'Authorization' : 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-        if (!resp.ok) throw Error('Failed to fetch match profiles')
-        const data = await resp.json()
-        console.log(`comporbar que trae perfiles-->`, data)
-        localStorage.setItem('profile',JSON.stringify(data.profile))
-        return data
-    } catch (error) {
-        console.log(error)
-        return error
-    }
-}
->>>>>>> develop
 
 //Trae la información de un solo perfil
 searchMatchServices.getOneProfile = async (user_id) => {
@@ -88,6 +67,7 @@ searchMatchServices.getUserMatchesInfo = async (user_id) => {
   }
 };
 
+
 // Trae las estrellas de las reviews de un user
 searchMatchServices.getStarsByUser = async (userId) => {
   try {
@@ -96,7 +76,7 @@ searchMatchServices.getStarsByUser = async (userId) => {
     const data = await resp.json();
     const reviews = data.reviews_received;
 
-    console.log("Stars--->", reviews); // Para ver si funciona
+    // console.log("Stars--->", reviews); // Para ver si funciona
 
     // Calcula la media
     if (!Array.isArray(reviews) || reviews.length === 0) return 0;
@@ -110,6 +90,7 @@ searchMatchServices.getStarsByUser = async (userId) => {
     return 0; // si no hay estrellas en vez de error, retorna 0
   }
 };
+
 
 // Manda los likes dados por el usuario
 searchMatchServices.addLikeSent = async (liker_id, liked_id) => {
@@ -169,6 +150,7 @@ searchMatchServices.getLikesReceived = async (userId) => {
   }
 };
 
+
 // Trae los dislikes recibidos por el usuario logeado (creo que no hace falta)
 searchMatchServices.getDislikesReceived = async (userId) => {
   try {
@@ -186,3 +168,4 @@ searchMatchServices.getDislikesReceived = async (userId) => {
   }
 };
 export default searchMatchServices;
+
