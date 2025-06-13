@@ -64,10 +64,10 @@ export const NavbarHome = () => {
 
                       {/* Modal button */}
                       <button
-                        type="button" className="btn navbarHome-font nabarHome-font-shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        type="button" className="btn navbarHome-font navbar-home-btn pulsate-bck" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         START
                       </button>
-                      <div className="navbarHome-line navbarHome-bottom-line "></div>
+                      <div className="navbarHome-line "></div>
                     </div>
                   </li>
                 </ul>
