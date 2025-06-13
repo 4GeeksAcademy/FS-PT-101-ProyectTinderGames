@@ -13,12 +13,16 @@ export const Register = ({ onSwitch }) => {
         repeatPassword: "",
     })
 
-    const [errorPassword, setErrorPassword] = useState(""); // error si la contraseña no es la misma
-    const [errorEmail, setErrorEmail] = useState(""); // error si el email ya está registrado
+    const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
+    const [errorEmailRegistered, setErrorEmailRegistered] = useState(""); // estado para el error de email ya registrado
+
 
 
     const handleSubmit = e => {
         e.preventDefault()
+        setErrorPassword(""); // limpia error de contraseña
+        setErrorEmailRegistered(""); // limpia error del email
+
 
         if (formData.password !== formData.repeatPassword) { //comprueba que la contraseña sea igual
             setErrorPassword("Passwords do not match")
@@ -28,7 +32,9 @@ export const Register = ({ onSwitch }) => {
         userServices.register(formData).then(data => {
             localStorage.setItem('token', data.token)
             if (data.success) {
-                navigate('/private')
+                navigate('/private');
+            } else {
+                setErrorEmailRegistered("Email already registered")
             }
         })
     }
@@ -56,12 +62,13 @@ export const Register = ({ onSwitch }) => {
                         <div className="mx-4">
                             <div>
                                 <label htmlFor="basic-url" className="form-label mb-0 mt-2">Email</label>
-
                             </div>
+
                             <input type="email" name="email" placeholder="email" value={formData.email} onChange={handleChange} className='w-100 border-0 rounded-2 btn-register-card-border' />
-                           
+
+                            {errorEmailRegistered && <h5 className="text-danger mt-2 register-message-errors">{errorEmailRegistered}</h5>}
                             <div>
-                                <label htmlFor="basic-url" className="form-label mt-3 mb-0">Password</label>
+                                <label htmlFor="basic-url" className="form-label mt-1 mb-0">Password</label>
                             </div>
                             <div>
                                 <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 btn-register-card-border" />
