@@ -32,11 +32,20 @@
   right: 1px;
   color: cyan;
 }
+.textareastyle{
+  border: 2px solid #00ffff;
+  background: black;
+  color: white;
+}
+.textareastyle:focus{
+  background-color: black;
+  color: white;
+}
 
 .bio-box {
   margin: 20px 0;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(145deg, #0e0e1a, #1a1a2f);
   border: 3px solid #7f00ff;
   border-radius: 10px;
 }

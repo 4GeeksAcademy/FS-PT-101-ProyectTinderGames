@@ -29,8 +29,6 @@ export const MatchUserDetails = () => {
   const [newComment, setNewComment] = useState({ stars: 0, comment: "" });
   const [hoverRating, setHoverRating] = useState(0);
 
-
-  // Fetch match info once when `id` changes
   useEffect(() => {
     userServices
       .getUserInfoById(id)
@@ -39,7 +37,9 @@ export const MatchUserDetails = () => {
     reviewServices.getAllReviewsReceived(id).then(data => dispatch({ type: "matchReviewsReceived", payload: data }))
   }, [id, dispatch]);
 
-  // Build a profile object with default values and optional chaining
+  // El hook useMemo de React sirve para “memorizar” (cachear) el resultado de una función de cálculo y sólo volver a 
+  // ejecutarla cuando cambien unas dependencias que tú le indiques. Se utiliza para optimizar el rendimiento, evitando 
+  // cálculos innecesarios en cada renderizado.
   const profile = useMemo(() => {
     const p = store.matchInfo?.profile ?? {};
     return {
