@@ -312,9 +312,27 @@ def put_profile(user_id):
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
 
+# PUT PHOTO PROFILE
+@api.route('/profiles/photo/<int:user_id>', methods=['PUT'])
+def put_profilephoto(user_id):
+    data = request.get_json()
+    if not data or 'photo' not in data:
+        return jsonify({'error': 'Missing data'}), 400
+    stmt = select(User).where(User.id == user_id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({'error': f'can not find user with id: {user_id}'}), 400
+    if not user.profile:
+        return jsonify({'error': 'this profile do not  exist, please try to create it insted of modify one'}), 400
+
+    user.profile.photo = data.get('photo', user.profile.photo)
+
+    db.session.commit()
+    return jsonify(user.profile.serialize()), 200
+
+
+
 # GET ALL REWVIEWS
-
-
 @api.route('/reviews', methods=['GET'])
 def get_All_Reviews():
     stmt = select(Review)

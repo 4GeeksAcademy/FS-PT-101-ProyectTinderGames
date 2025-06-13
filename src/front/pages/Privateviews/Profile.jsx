@@ -1,8 +1,10 @@
-
+// Profile.jsx
 import React, { useEffect, useState } from "react";
 import "../../pages/Privateviews/Profile.css";
-import storeReducer from "../../store";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import userServices from "../../services/userServices.js";
+
+// Import avatars
 import photo1 from "../../assets/img/profile-pics/profile-pic-1.png";
 import photo2 from "../../assets/img/profile-pics/profile-pic-2.png";
 import photo3 from "../../assets/img/profile-pics/profile-pic-3.png";
@@ -13,402 +15,325 @@ import photo7 from "../../assets/img/profile-pics/profile-pic-7.png";
 import photo8 from "../../assets/img/profile-pics/profile-pic-8.png";
 import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 
-
 const Profile = () => {
   const { store, dispatch } = useGlobalReducer();
   const url = import.meta.env.VITE_BACKEND_URL;
+
+  // Tabs & edit state
   const [activeTab, setActiveTab] = useState("info");
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedPic, setSelectedPic] = useState("profile-pic-1.png");
-  const zodiacSigns = [
-    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
-  ];
 
-  const genders = ["Male", "Female", "Undefined"];
-
-  const [profile, setProfile] = useState({
+  // Profile state
+  const initialProfile = {
     name: "",
-    nick_name: "J",
+    nick_name: "",
     age: 0,
     gender: "",
     location: "",
     zodiac: "Leo",
     discord: "",
     steam_id: "",
-    language: "Morroco",
+    language: "",
     preferences: "",
     bio: "",
-    photo: ""
-  });
+    photo: "photo1",
+  };
+  const [profile, setProfile] = useState(initialProfile);
 
+  const zodiacSigns = [
+    "Aries", "Taurus", "Gemini", "Cancer",
+    "Leo", "Virgo", "Libra", "Scorpio",
+    "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+  ];
+  const genders = ["Male", "Female", "Undefined"];
+
+  // Mapping between filename and key
+  const picMap = {
+    "profile-pic-1.png": "photo1",
+    "profile-pic-2.png": "photo2",
+    "profile-pic-3.png": "photo3",
+    "profile-pic-4.png": "photo4",
+    "profile-pic-5.png": "photo5",
+    "profile-pic-6.png": "photo6",
+    "profile-pic-7.png": "photo7",
+    "profile-pic-8.png": "photo8",
+    "profile-pic-9.png": "photo9"
+  };
+
+  const photoAssets = {
+    photo1, photo2, photo3,
+    photo4, photo5, photo6,
+    photo7, photo8, photo9
+  };
+
+  // Load profile once
   useEffect(() => {
-    loader();
-  }, [])
+    loadProfile();
+  }, []);
 
-  const loader = () => {
-    fetch(url + `/api/profiles/${store.user.profile.id}`)
-      .then((resp) => {
-        if (!resp.ok) {
-          throw new Error('Error al cargar los datos');
-        }
-        return resp.json();
-      })
-      .then((datos) => {
-        if (datos.length !== null) {
-          setProfile({
-            name: datos.name,
-            nick_name: datos.nick_name,
-            age: datos.age,
-            gender: datos.gender,
-            location: datos.location,
-            zodiac: datos.zodiac,
-            discord: datos.discord,
-            steam_id: datos.steam,
-            preferences: datos.preferences,
-            language: datos.language,
-            bio: datos.bio,
-            photo: datos.photo
-          });
-          console.log(datos)
-        }
-      })
-      .catch((err) => {
-        console.error('Error en el loader:', err);
+  const loadProfile = async () => {
+    try {
+      const resp = await fetch(`${url}/api/profiles/${store.user.profile.id}`);
+      if (!resp.ok) throw new Error('Error al cargar los datos');
+      const datos = await resp.json();
+      setProfile({
+        name: datos.name,
+        nick_name: datos.nick_name,
+        age: datos.age,
+        gender: datos.gender,
+        location: datos.location,
+        zodiac: datos.zodiac,
+        discord: datos.discord,
+        steam_id: datos.steam,
+        language: datos.language,
+        preferences: datos.preferences,
+        bio: datos.bio,
+        photo: datos.photo || 'photo1'
       });
-  };
-
-  const handlePicChange = (pic) => {
-    switch (pic) {
-      case "profile-pic-1.png":
-        return "photo1";
-      case "profile-pic-2.png":
-        return "photo2";
-      case "profile-pic-3.png":
-        return "photo3";
-      case "profile-pic-4.png":
-        return "photo4";
-      case "profile-pic-5.png":
-        return "photo5";
-      case "profile-pic-6.png":
-        return "photo6";
-      case "profile-pic-7.png":
-        return "photo7";
-      case "profile-pic-8.png":
-        return "photo8";
-      case "profile-pic-9.png":
-        return "photo9";
-      default:
-        img = "photo1";
-    }
-    setShowModal(false);
-  };
-
-  const selectPhoto = () => {
-    switch (profile.photo) {
-      case "photo1": return photo1;
-      case "photo2": return photo2;
-      case "photo3": return photo3;
-      case "photo4": return photo4;
-      case "photo5": return photo5;
-      case "photo6": return photo6;
-      case "photo7": return photo7;
-      case "photo8": return photo8;
-      case "photo9": return photo9;
-      default: return "defaultPhoto";
+    } catch (error) {
+      console.error('Error en loadProfile:', error);
     }
   };
 
+  // Change avatar handler (async, updates state immediately)
+  const handlePicChange = async (fileName) => {
+    const newPhotoKey = picMap[fileName] || 'photo1';
+    try {
+      // Update backend
+      await userServices.changeUserPhoto(store.user.profile.id, { photo: newPhotoKey });
+      // Update local state immediately
+      setProfile(prev => ({ ...prev, photo: newPhotoKey }));
+      console.log(newPhotoKey)
+    } catch (err) {
+      console.error('Error al cambiar foto:', err);
+    } finally {
+      setShowModal(false);
+    }
+  };
+
+  // Select correct asset
+  const selectPhoto = () => photoAssets[profile.photo] || photo1;
+
+  // Toggle edit/save
   const updateProfile = async () => {
-    setIsEditing(!isEditing)
-    if (!store.user.profile) {
-      console.log("profile no existe")
-    } else {
+    if (isEditing) {
       try {
-        const resp = await fetch(`${url}/api/profiles/${store.user.id}`, {
-          method: 'PUT',                    // o 'PUT' si tu API lo requiere
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(profile)      // enviamos el estado completo
+        const resp = await fetch(`${url}/api/profiles/${store.user.profile.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(profile)
         });
-
-        if (!resp.ok) {
-          console.log(profile)
-          throw new Error('Error al actualizar el perfil');
-        }
-
-        // Si tu API devuelve el perfil actualizado, puedes capturarlo:
-        const updated = await resp.json();
-
-        // Opcional: refresca tu loader o actualiza estado local
-        loader();
-
+        if (!resp.ok) throw new Error('Error al actualizar el perfil');
+        await resp.json();
       } catch (err) {
         console.error('Error en updateProfile:', err);
       }
-
     }
+    setIsEditing(!isEditing);
   };
 
   const handleInputChange = (field, value) => {
     setProfile(prev => ({ ...prev, [field]: value }));
   };
 
+  // Render
   return (
     <div className="profile-container">
       <div className="left-panel">
         <div className="avatar-section">
-          <button className="gear-btn" onClick={() => setShowModal(true)}><i class="fa-solid fa-gear"></i></button>
-          <img src={selectPhoto()} className="profile-avatar" />
+          <button className="gear-btn" onClick={() => setShowModal(true)}>
+            <i className="fa-solid fa-gear"></i>
+          </button>
+          <img src={selectPhoto()} alt="Avatar" className="profile-avatar" />
         </div>
         <h2>{profile.nick_name}</h2>
         <p className="location">{profile.location}</p>
-        {/* tarjetita de medallas*/}
+
+        {/* Medals */}
         <div className="medal-list">
-          <div className="medal-game-card">
-            <img
-              src="/src/front/assets/img/medals/gold-medal.png"
-              alt="Gold Medal"
-              className="medal-icon"
-            />
-            <div className="game-img-wrapper">
+          {['gold', 'silver', 'bronze'].map((type, i) => (
+            <div key={i} className="medal-game-card">
               <img
-                src="https://picsum.photos/id/237/200/120"
-                alt="Game 1"
-                className="game-cover"
+                src={`/src/front/assets/img/medals/${type}-medal.png`}
+                alt={`${type} Medal`} className="medal-icon"
               />
+              <div className="game-img-wrapper">
+                <img
+                  src={`https://picsum.photos/id/${237 + i}/200/120`}
+                  alt={`Game ${i + 1}`} className="game-cover"
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="medal-game-card">
-            <img
-              src="/src/front/assets/img/medals/silver-medal.png"
-              alt="Silver Medal"
-              className="medal-icon"
-            />
-            <div className="game-img-wrapper">
-              <img
-                src="https://picsum.photos/id/238/200/120"
-                alt="Game 2"
-                className="game-cover"
-              />
-            </div>
-          </div>
-
-          <div className="medal-game-card">
-            <img
-              src="/src/front/assets/img/medals/bronze-medal.png"
-              alt="Bronze Medal"
-              className="medal-icon"
-            />
-            <div className="game-img-wrapper">
-              <img
-                src="https://picsum.photos/id/239/200/120"
-                alt="Game 3"
-                className="game-cover"
-              />
-            </div>
-          </div>
+          ))}
         </div>
-
-
       </div>
 
       <div className="right-panel">
-
-
         <div className="bio-box">
           <p>{profile.bio}</p>
         </div>
 
+        {/* Tabs */}
         <div className="tabs">
-          <button className={activeTab === "info" ? "active" : ""} onClick={() => setActiveTab("info")}>Info</button>
-          <button className={activeTab === "activity" ? "active" : ""} onClick={() => setActiveTab("activity")}>Activity</button>
-          <button className={activeTab === "comments" ? "active" : ""} onClick={() => setActiveTab("comments")}>Comments</button>
+          {['info', 'activity', 'comments'].map(tab => (
+            <button
+              key={tab}
+              className={activeTab === tab ? 'active' : ''}
+              onClick={() => setActiveTab(tab)}
+            >{tab.charAt(0).toUpperCase() + tab.slice(1)}</button>
+          ))}
         </div>
 
-        {activeTab === "info" && (
+        {activeTab === 'info' && (
           <div className="info-section container">
+            {/* Name & Nickname */}
             <div className="row">
-              <div className="col-md-6">
-                <label>Name</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={profile.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.name}</p>
-                )}
-              </div>
-              <div className="col-md-6">
-                <label>Nickname</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={profile.nick_name}
-                    onChange={(e) => handleInputChange("nick_name", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.nick_name}</p>
-                )}
-              </div>
+              {['name', 'nick_name'].map((field, i) => (
+                <div key={i} className="col-md-6">
+                  <label>{field === 'nick_name' ? 'Nickname' : 'Name'}</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={profile[field]}
+                      onChange={e => handleInputChange(field, e.target.value)}
+                    />
+                  ) : (<p>{profile[field]}</p>)}
+                </div>
+              ))}
             </div>
 
+            {/* Age, Gender, Zodiac */}
             <div className="row">
+              {/* Age */}
               <div className="col-md-4">
                 <label>Age</label>
                 {isEditing ? (
                   <input
                     type="number"
                     value={profile.age}
-                    onChange={(e) => handleInputChange("age", e.target.value)}
+                    onChange={e => handleInputChange('age', +e.target.value)}
                   />
-                ) : (
-                  <p>{profile.age}</p>
-                )}
+                ) : (<p>{profile.age}</p>)}
               </div>
+
+              {/* Gender */}
               <div className="col-md-4">
                 <label>Gender</label>
                 {isEditing ? (
                   <select
                     value={profile.gender}
-                    onChange={(e) => handleInputChange("gender", e.target.value)}
+                    onChange={e => handleInputChange('gender', e.target.value)}
                   >
-                    {genders.map((g, i) => (
-                      <option key={i} value={g}>{g}</option>
-                    ))}
+                    {genders.map((g, i) => (<option key={i}>{g}</option>))}
                   </select>
-                ) : (
-                  <p>{profile.gender}</p>
-                )}
+                ) : (<p>{profile.gender}</p>)}
               </div>
+
+              {/* Zodiac */}
               <div className="col-md-4">
                 <label>Zodiac</label>
                 {isEditing ? (
                   <select
                     value={profile.zodiac}
-                    onChange={(e) => handleInputChange("zodiac", e.target.value)}
+                    onChange={e => handleInputChange('zodiac', e.target.value)}
                   >
-                    {zodiacSigns.map((z, i) => (
-                      <option key={i} value={z}>{z}</option>
-                    ))}
+                    {zodiacSigns.map((z, i) => (<option key={i}>{z}</option>))}
                   </select>
-                ) : (
-                  <p>{profile.zodiac}</p>
-                )}
+                ) : (<p>{profile.zodiac}</p>)}
               </div>
             </div>
 
+            {/* Contact & Preferences */}
             <div className="row">
-              <div className="col-md-6">
-                <label>Discord</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={profile.discord}
-                    onChange={(e) => handleInputChange("discord", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.discord}</p>
-                )}
-              </div>
-              <div className="col-md-6">
-                <label>Steam friend id</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={profile.steam_id}
-                    onChange={(e) => handleInputChange("steam_id", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.steam_id}</p>
-                )}
-              </div>
+              {['discord', 'steam_id'].map((field, i) => (
+                <div key={i} className="col-md-6">
+                  <label>{field === 'steam_id' ? 'Steam Friend ID' : 'Discord'}</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={profile[field]}
+                      onChange={e => handleInputChange(field, e.target.value)}
+                    />
+                  ) : (<p>{profile[field]}</p>)}
+                </div>
+              ))}
+
+              {/* Preferences */}
               <div className="gaming-prefs-box col-md-6">
                 <label>Gaming Preferences</label>
-                {!isEditing ? (
-                  <p><strong>I'm looking for: </strong> {profile.preferences}</p>
-                ) : (
+                {isEditing ? (
                   <textarea
-                    value={profile.preferences}
-                    onChange={(e) => handleInputChange("preferences", e.target.value)}
-                    className="gaming-prefs-input"
                     rows={3}
+                    value={profile.preferences}
+                    onChange={e => handleInputChange('preferences', e.target.value)}
                   />
+                ) : (
+                  <p><strong>I'm looking for:</strong> {profile.preferences}</p>
                 )}
               </div>
+
+              {/* Location */}
               <div className="col-md-6">
                 <label>Location</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={profile.location}
-                    onChange={(e) => handleInputChange("steam", e.target.value)}
+                    onChange={e => handleInputChange('location', e.target.value)}
                   />
-                ) : (
-                  <p>{profile.location}</p>
-                )}
+                ) : (<p>{profile.location}</p>)}
               </div>
             </div>
 
+            {/* Save/Edit */}
             <div className="row mt-3">
               <div className="col text-left">
-                <button className="edit-btn" onClick={() => updateProfile()}>
-                  {isEditing ? "Save" : "Edit"}
+                <button className="edit-btn" onClick={updateProfile}>
+                  {isEditing ? 'Save' : 'Edit'}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-
-        {activeTab === "activity" && (
+        {activeTab === 'activity' && (
           <div className="coming-soon-box">
             <h3>Coming soon...</h3>
-            <p>This section is under construction. Stay tuned for updates!</p>
+            <p>This section is under construction. Stay tuned!</p>
           </div>
         )}
 
-        {activeTab === "comments" && <p className="tab-placeholder">Comments content goes here.</p>}
+        {activeTab === 'comments' && (
+          <p className="tab-placeholder">Comments content goes here.</p>
+        )}
       </div>
 
+      {/* Avatar Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="avatar-modal">
             <h3>Choose Your Avatar</h3>
             <div className="avatar-grid">
-              {[...Array(9)].map((_, i) => {
-                const picName = `profile-pic-${i + 1}.png`;
-                return (
-                  <img
-                    key={i}
-                    src={`/src/front/assets/img/profile-pics/${picName}`}
-                    className={selectedPic === picName ? "selected" : ""}
-                    onClick={() => {
-                      setSelectedPic(picName);
-                      setProfile(prev => ({
-                        ...prev,
-                        photo: handlePicChange(selectedPic)  // aquí llamas a tu función
-                      }));
-                      setShowModal(false);
-                    }}
-                  />
-                );
-              })}
+              {Object.keys(picMap).map((file, idx) => (
+                <img
+                  key={idx}
+                  src={`/src/front/assets/img/profile-pics/${file}`}
+                  className={file === Object.entries(picMap)
+                    .find(([, key]) => key === profile.photo)[0]
+                    ? 'selected' : ''
+                  }
+                  alt={file}
+                  onClick={() => handlePicChange(file)}
+                />
+              ))}
             </div>
-            <div className="modal-actions">
-              <button onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-              <button onClick={() => setShowModal(false)} className="confirm-btn">Confirm</button>
-            </div>
+            <button onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
           </div>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default Profile;
