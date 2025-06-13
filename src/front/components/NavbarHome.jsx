@@ -5,9 +5,12 @@ import { Register } from "./Register/Register";
 import { SignIn } from "./SignIn/SignIn";
 import { useEffect, useState } from "react";
 
-export const NavbarHome = () => {
 
+
+export const NavbarHome = () => {
+  
   const [showSignIn, setShowSignIn] = useState(true);
+
 
   // Para que siempre se muestre Sing-In el primero
   useEffect(() => {
@@ -50,11 +53,11 @@ export const NavbarHome = () => {
                 <div className="d-flex justify-content-around align-self-center">
 
                   <li className="nav-item">
-                    <a className="nav-link active navbar-home-font me-5" aria-current="page" href="#bestpractices">Best Practices</a>
-                  </li>
-                  <li className="nav-item">
                     <a className="nav-link navbar-home-font me-5" href="#howitworks">How It Works</a>
 
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link active navbar-home-font me-5" aria-current="page" href="#bestpractices">Best Practices</a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link navbar-home-font me-5" href="#aboutus">About Us</a>
@@ -65,7 +68,7 @@ export const NavbarHome = () => {
 
                     {/* Modal button */}
                     <button
-                      type="button" className="btn navbar-home-font navbar-home-btn pulsate-bck" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      type="button" className="btn navbar-home-font navbar-home-btn pulsate-bck" data-bs-toggle="modal" data-bs-target="#startModal">
                       START
                     </button>
                   </div>
@@ -78,7 +81,7 @@ export const NavbarHome = () => {
       </nav>
 
       {/* modal body */}
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+      <div className="modal fade" id="startModal" tabIndex="-1" aria-labelledby="startModalLabel" aria-hidden="true" data-bs-backdrop="false">
         <div className="modal-dialog ">
           <div className="modal-content modal-home ">
             <div className="modal-header border-0 mt-5">
