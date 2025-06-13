@@ -3,7 +3,7 @@ import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import { useEffect, useState } from 'react';
 import searchMatchServices from '../../services/searchMatchServices';
 
-export const SearchMatchCard = ({profile, onLike, onDislike }) => {
+export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
   const [animationClass, setAnimationClass] = useState('');
   const [avgStars, setAvgStars] = useState(0);
@@ -19,7 +19,7 @@ export const SearchMatchCard = ({profile, onLike, onDislike }) => {
         console.error(err);
       }
     };
-   getAvgStars();
+    getAvgStars();
   }, [profile]);
 
 
@@ -102,6 +102,15 @@ export const SearchMatchCard = ({profile, onLike, onDislike }) => {
                 </div>
                 <div className="col text-end">
                   <h5 className='search-match-card-purple me-2 search-match-text-sm'>{profile?.language || '-'}</h5>
+                </div>
+              </div>
+              {/* Preferences */}
+              <div className="row align-items-center">
+                <div className="col">
+                  <h5 className='ms-2 search-match-text-sm '>Preferences</h5>
+                </div>
+                <div className="col text-end">
+                  <h5 className='search-match-card-purple me-2 search-match-text-sm'>{profile?.preferences || '-'}</h5>
                 </div>
               </div>
 
