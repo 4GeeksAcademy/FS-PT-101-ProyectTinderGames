@@ -23,6 +23,10 @@ export const Register = ({ onSwitch }) => {
         setErrorPassword(""); // limpia error de contraseña
         setErrorEmailRegistered(""); // limpia error del email
 
+        if (formData.password.length < 8) { //para que salte error si la contraseña no tiene 8 caracteres
+        setErrorPassword("Password must have al least 8 characters");
+        return;
+    }
 
         if (formData.password !== formData.repeatPassword) { //comprueba que la contraseña sea igual
             setErrorPassword("Passwords do not match")
@@ -72,7 +76,6 @@ export const Register = ({ onSwitch }) => {
                             </div>
                             <div>
                                 <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 btn-register-card-border" />
-                                <div className="form-text register-password-subtitle mb-2" id="basic-addon4">*Password must have at least 8 characters.</div>
                             </div>
                             <div>
                                 <label htmlFor="basic-url" className="form-label mb-0">Repeat Password</label>
