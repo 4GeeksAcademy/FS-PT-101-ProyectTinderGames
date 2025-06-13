@@ -8,6 +8,7 @@ import "../../pages/Privateviews/Profile.css";                                //
 import useGlobalReducer from "../../hooks/useGlobalReducer";                  // Hook para acceder al store global y dispatch
 import userServices from "../../services/userServices.js";                   // Servicios relacionados con usuario (fetch, update)
 import reviewServices from "../../services/reviewServices.js";               // Servicios para gestión de reviews (comentarios)
+import gameServices from "../../services/gameServices.js"
 
 // Assets - Medallas de juego
 import goldMedal from "../../assets/img/medals/gold-medal.png";
@@ -27,6 +28,9 @@ import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 
 const Profile = () => {
   // Acceso al store global y dispatch para actualizar datos
+  const [availableGames, setAvailableGames] = useState([]);
+  const [game, setGame] = useState({ title: '', hours_played: '' });
+  const [loading, setLoading] = useState(true);
   const { store, dispatch } = useGlobalReducer();
   const url = import.meta.env.VITE_BACKEND_URL;   // URL base del backend
 
@@ -70,7 +74,31 @@ const Profile = () => {
     loadProfile();
     reviewServices.getAllReviewsReceived(store.user?.id)
       .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+    fetchGames();
   }, []);
+
+  const fetchGames = async () => {
+    try {
+      const pageSize = 40; // max permitido por petición
+      const pages = 25;    // para aproximarnos a ~1000 títulos
+      let allGames = [];
+
+      for (let page = 1; page <= pages; page++) {
+        const resp = await fetch(
+          `https://api.rawg.io/api/games?key=${import.meta.env.VITE_RAWG_KEY}&page_size=${pageSize}&page=${page}`
+        );
+        if (!resp.ok) throw new Error('Error cargando juegos');
+        const data = await resp.json();
+        allGames = allGames.concat(data.results.map((g) => g.name));
+      }
+      setAvailableGames(allGames);
+    } catch (err) {
+      console.error('RAWG fetch error:', err);
+    } finally {
+      setLoading(false);
+      userServices.getUserInfo().then(data => dispatch({ type: 'getUserInfo', payload: data.user }))
+    }
+  };
 
   // Cargar perfil desde backend
   const loadProfile = async () => {
@@ -158,10 +186,45 @@ const Profile = () => {
     setIsEditing(!isEditing);
   };
 
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setGame((prev) => ({
+      ...prev,
+      [id === 'gameName' ? 'title' : 'hours_played']: value,
+    }));
+  };
+
   // Manejar cambios en inputs
   const handleInputChange = (field, value) => {
     setProfile(prev => ({ ...prev, [field]: value }));
   };
+
+  const handleAdd = async () => {
+    try {
+      // 1) esperamos a que el juego se posteé en el backend
+      await gameServices.postNewGame(store.user.profile?.id, game);
+
+      // 2) recargamos el perfil UNA VEZ que ya está guardado
+      await loadProfile();
+
+      // 3) cerramos el modal
+      const modalEl = document.getElementById('commentModal');
+      const modal = window.bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
+
+      console.log('Game added and profile reloaded:', game);
+      setGame({ title: '', hours_played: '' });
+    } catch (err) {
+      console.error('Error añadiendo el juego o recargando perfil:', err);
+      // aquí podrías mostrar un toast o mensaje de error al usuario
+    }
+  };
+
+  const handleDeleteGame = async (game_id) => {
+    await gameServices.deleteGameById(game_id);
+    await loadProfile();
+  }
+
 
   return (
     <div className="profile-container">
@@ -206,7 +269,7 @@ const Profile = () => {
           )}
         </div>
         <div className="tabs">
-          {['info', 'activity', 'comments'].map(tab => (
+          {['info', 'Games', 'comments'].map(tab => (
             <button
               key={tab}
               className={activeTab === tab ? 'active' : ''}
@@ -324,10 +387,106 @@ const Profile = () => {
             </div>
           </div>
         )}
-        {activeTab === 'activity' && (
-          <div className="coming-soon-box">
-            <h3>Coming soon...</h3>
-            <p>Esta sección está en construcción. ¡Pronto novedades!</p>
+        {activeTab === 'Games' && (
+          <div className="container coming-soon-box">
+            <div className="row d-flex justify-content-around align-items-center">
+              <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
+              <button
+                type="button"
+                className="btn botonLeaveComment col-lg-4 col-md-12 col-sm-12"
+                data-bs-toggle="modal"
+                data-bs-target="#commentModal"
+              >
+                Add a new game
+              </button>
+
+              <div
+                className="modal fade"
+                id="commentModal"
+                tabIndex="-1"
+                aria-labelledby="commentModalLabel"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="commentModalLabel">
+                        Nuevo comentario
+                      </h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                      />
+                    </div>
+                    <div className="modal-body">
+                      <div className="mb-3">
+                        <label htmlFor="gameName" className="form-label">
+                          Selecciona un juego
+                        </label>
+                        <select
+                          id="gameName"
+                          className="form-select"
+                          value={game.title}
+                          onChange={handleChange}
+                        >
+                          <option value="">-- Elige un juego --</option>
+                          {availableGames.map((name) => (
+                            <option key={name} value={name}>
+                              {name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="hoursPlayed" className="form-label">
+                          Horas jugadas
+                        </label>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="hoursPlayed"
+                          value={game.hours_played}
+                          onChange={handleChange}
+                          placeholder="Ej. 42"
+                          min="0"
+                        />
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={handleAdd}
+                      >
+                        Añadir
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-5 gap-3 d-flez justify-content-center">
+              {store.user?.profile.games && store.user.profile.games.map((el, i) => (
+                <div key={i} className="row gamesbox d-flex align-content-center py-3">
+                  <div className="d-flex justify-content-around col-lg-10 col-md-12 col-sm-12 align-items-center">
+                    <p className="m-0">{el.game.title}</p>
+                    <p className="m-0">{el.game.hours_played} hours</p>
+                  </div>
+                  <div className="d-flex justify-content-around col-lg-2 col-md-12 col-sm-12 align-items-center">
+                    <span className="text-danger botonesAccionesJuegos" onClick={()=>handleDeleteGame(el.id)}>D</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {activeTab === 'comments' && (

@@ -54,7 +54,7 @@ export const MatchUserDetails = () => {
       languages: p.languages ?? "no data", // renamed to match API
       gamingPrefs: p.preferences ?? "no data",
       bio: p.bio ?? "no data",
-      photo:p.photo?? "no data"
+      photo: p.photo ?? "no data"
     };
   }, [store.matchInfo]);
   const allGames = store.matchInfo?.profile?.games ?? [];
@@ -101,19 +101,19 @@ export const MatchUserDetails = () => {
   };
 
   const selectPhoto = () => {
-  switch (profile.photo) {
-    case "photo1": return photo1;
-    case "photo2": return photo2;
-    case "photo3": return photo3;
-    case "photo4": return photo4;
-    case "photo5": return photo5;
-    case "photo6": return photo6;
-    case "photo7": return photo7;
-    case "photo8": return photo8;
-    case "photo9": return photo9;
-    default:       return "defaultPhoto";
-  }
-};
+    switch (profile.photo) {
+      case "photo1": return photo1;
+      case "photo2": return photo2;
+      case "photo3": return photo3;
+      case "photo4": return photo4;
+      case "photo5": return photo5;
+      case "photo6": return photo6;
+      case "photo7": return photo7;
+      case "photo8": return photo8;
+      case "photo9": return photo9;
+      default: return "defaultPhoto";
+    }
+  };
 
   const topThreeGames = allGames
     .slice()                                      // 1. Copia el array para no mutar el original
@@ -173,7 +173,7 @@ export const MatchUserDetails = () => {
 
         {/* Tabs */}
         <div className="tabs">
-          {['info', 'activity', 'comments'].map(tab => (
+          {['info', 'Games', 'comments'].map(tab => (
             <button
               key={tab}
               className={activeTab === tab ? 'active' : ''}
@@ -233,7 +233,23 @@ export const MatchUserDetails = () => {
         )}
 
         {/* Other Tabs */}
-        {activeTab === "activity" && <p className="tab-placeholder">Activity content goes here.</p>}
+        {activeTab === 'Games' && (
+          <div className="container coming-soon-box">
+            <div className="row d-flex justify-content-around align-items-center">
+              <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
+            </div>
+            <div className="row mt-5 gap-3 d-flez justify-content-center">
+              {store.matchInfo?.profile.games && store.matchInfo.profile.games.map((el, i) => (
+                <div key={i} className="row gamesbox d-flex align-content-center py-3">
+                  <div className="d-flex justify-content-around col-lg-10 col-md-12 col-sm-12 align-items-center">
+                    <p className="m-0">{el.game.title}</p>
+                    <p className="m-0">{el.game.hours_played} hours</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {activeTab === "comments" && <div className="info-section container">
           <div className="row justify-content-around">
             <h3 className="col-1 m-2 mb-4">Comments</h3>
