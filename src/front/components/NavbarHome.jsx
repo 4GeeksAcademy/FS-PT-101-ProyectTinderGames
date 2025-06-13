@@ -11,22 +11,22 @@ export const NavbarHome = () => {
 
   // Para que siempre se muestre Sing-In el primero
   useEffect(() => {
-  const modalElement = document.getElementById("exampleModal");
+    const modalElement = document.getElementById("exampleModal");
 
-  function handleShow() {
-    setShowSignIn(true)
-  }
-
-  if (modalElement) {
-    modalElement.addEventListener("show.bs.modal", handleShow);
-  }
-
-  return () => {
-    if (modalElement) {
-      modalElement.removeEventListener("show.bs.modal", handleShow);
+    function handleShow() {
+      setShowSignIn(true)
     }
-  };
-}, []);
+
+    if (modalElement) {
+      modalElement.addEventListener("show.bs.modal", handleShow);
+    }
+
+    return () => {
+      if (modalElement) {
+        modalElement.removeEventListener("show.bs.modal", handleShow);
+      }
+    };
+  }, []);
 
 
   return (
@@ -80,17 +80,21 @@ export const NavbarHome = () => {
 
       {/* modal body */}
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
-        <div className="modal-dialog modal-xl ">
-          <div className="modal-content modal-home">
-            <div className="modal-header mt-5">
-              <button type="button" className="btn-close btn-close-modal mt-0" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body d-flex justify-content-center align-items-center">
-              {showSignIn ? (
-                <SignIn onSwitch={() => setShowSignIn(false)} />
-              ) : (
-                <Register onSwitch={() => setShowSignIn(true)} />
-              )}
+        <div className="modal-dialog ">
+          <div className="modal-content modal-home ">
+            <div className="modal-header border-0 mt-5">
+              <div className="modal-body d-flex">
+                <div>
+                  {showSignIn ? (
+                    <SignIn onSwitch={() => setShowSignIn(false)} />
+                  ) : (
+                    <Register onSwitch={() => setShowSignIn(true)} />
+                  )}
+                </div>
+                <div>
+                  <button type="button" className="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
