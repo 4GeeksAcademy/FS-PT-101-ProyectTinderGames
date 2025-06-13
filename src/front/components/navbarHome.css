@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
 
-.navbarHome-font {
+.navbar-home-font {
   font-family: "Audiowide", sans-serif;
   color: #ffffff !important;
   text-shadow: 0 1.5px 0 #0088fe, 0 1.5px 1.5px #0088fe;
@@ -16,13 +16,17 @@
   animation: pulsate-bck 2s ease-in-out infinite both;
 }
 
-.logo-navbarHome {
+.logo-navbar-home {
   width: 60px;
   height: auto;
   object-fit: contain;
 }
 
-.navbarHome-start-container {
+.navbar-home-collapse{
+  flex-grow: 0 !important;
+}
+
+.navbar-home-start-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,45 +43,8 @@
   position: relative;
   z-index: 2;
 }
-.navbarHome-line {
-  width: 85%;
-  height: 2px;
-  position: relative;
-  background: linear-gradient(#131219, #131219) padding-box,
-    linear-gradient(var(--angle), #6bf1fa, #f538ff) border-box;
-  animation: 2s rotate linear infinite;
-}
 
-/* .navbarHome-top-line {
-  background: #00ddff;
-} */
-
-/* .navbarHome-bottom-line {
-  background: #a41ef1;
-} */
-
-/* .navbarHome-top-line:before,
-.navbarHome-bottom-line::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  border-style: solid;
-} */
-
-/* .navbarHome-top-line::before {
-  left: -7px;
-  border-width: 5px 0 5px 10px;
-  border-color: transparent transparent transparent #00ddff;
-} */
-
-/* .navbarHome-bottom-line::after {
-  right: -7px;
-  border-width: 5px 10px 5px 0;
-  border-color: transparent #a41ef1 transparent transparent;
-} */
-
-.navbarHome-toggler {
+.navbar-home-toggler {
   border-color: #a41ef1;
 }
 
