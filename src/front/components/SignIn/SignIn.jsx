@@ -12,13 +12,19 @@ export const SignIn = ({ onSwitch }) => {
         password: "",
     })
 
+    const [errorLogin, setErrorLogin] = useState(""); //estado para el error de email/contraseña no válido
+
     const handleSubmit = async e => {
         e.preventDefault()
+        setErrorLogin(""); //quita errores previos
+
         try {
             const data = await userServices.login(formData)
             localStorage.setItem('token', data.token)
             if (data.success) {
                 navigate('/private')
+            } else {
+                setErrorLogin("Incorrect email or password")
             }
         } catch (error) {
             console.error('Login failed', error)
@@ -55,6 +61,7 @@ export const SignIn = ({ onSwitch }) => {
                             <div>
                                 <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 border-1 btn-sign-in-card-border" />
                                 <div className="form-text sign-in-password-subtitle" id="basic-addon4">Forgot your password? It’s ok <Link to="/">click here</Link></div>
+                                {errorLogin && <h5 className="text-danger mt-2 sign-in-message-errors">{errorLogin}</h5>}
                             </div>
                             <input type="submit" value="Continue" className='w-100 rounded-2 mt-5 text-white bg-black btn-sign-in-card-border' />
                         </div>
