@@ -3,6 +3,13 @@ import React, { useEffect, useState } from "react";
 import "../../pages/Privateviews/Profile.css";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import userServices from "../../services/userServices.js";
+import reviewServices from "../../services/reviewServices.js"
+
+// Import Medals
+import goldMedal from "../../assets/img/medals/gold-medal.png";
+import silverMedal from "../../assets/img/medals/silver-medal.png";
+import bronzeMedal from "../../assets/img/medals/bronze-medal.png";
+
 
 // Import avatars
 import photo1 from "../../assets/img/profile-pics/profile-pic-1.png";
@@ -47,6 +54,26 @@ const Profile = () => {
     "Sagittarius", "Capricorn", "Aquarius", "Pisces"
   ];
   const genders = ["Male", "Female", "Undefined"];
+  const allGames = store.user?.profile?.games ?? [];
+  const topThreeGames = allGames
+    .slice()                                      // 1. Copia el array para no mutar el original
+    .sort((a, b) => (b.hours_played ?? 0) - (a.hours_played ?? 0))  // 2. Orden descendente por horas
+    .slice(0, 3);
+
+  const selectMedal = (gamehours) => {
+    const hours = parseInt(gamehours, 10);
+    if (isNaN(hours)) {
+      return bronzeMedal;
+    }
+    if (hours >= 2500) {
+      return goldMedal;
+    } else if (hours >= 500) {
+      return silverMedal;
+    } else {
+      return bronzeMedal;
+    }
+  };
+
 
   // Mapping between filename and key
   const picMap = {
@@ -70,6 +97,8 @@ const Profile = () => {
   // Load profile once
   useEffect(() => {
     loadProfile();
+    reviewServices.getAllReviewsReceived(store.user?.id).then(data => dispatch({ type: "matchReviewsReceived", payload: data }))
+
   }, []);
 
   const loadProfile = async () => {
@@ -152,26 +181,47 @@ const Profile = () => {
 
         {/* Medals */}
         <div className="medal-list">
-          {['gold', 'silver', 'bronze'].map((type, i) => (
-            <div key={i} className="medal-game-card">
-              <img
-                src={`/src/front/assets/img/medals/${type}-medal.png`}
-                alt={`${type} Medal`} className="medal-icon"
-              />
-              <div className="game-img-wrapper">
+          {topThreeGames.map((el, index) => {
+            const hours = el.game?.hours_played ?? 0;
+            const title = el.game?.title ?? `Game ${index + 1}`;
+
+            return (
+              <div key={el.game?.id ?? index} className="medal-game-card">
+                {/* Icono de la medalla según horas jugadas */}
                 <img
-                  src={`https://picsum.photos/id/${237 + i}/200/120`}
-                  alt={`Game ${i + 1}`} className="game-cover"
+                  src={selectMedal(hours)}
+                  alt={`${title} Medal`}
+                  className="medal-icon"
+                  role="button"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover focus"
+                  data-bs-container="body"
+                  data-bs-placement="bottom"
+                  data-bs-content={`${title} — ${hours} horas`}
                 />
+
+                {/* Carátula del juego */}
+                <div className="game-img-wrapper w-100">
+                  <h5 className="m-0 p-2">{el.game.title}</h5>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
       <div className="right-panel">
         <div className="bio-box">
-          <p>{profile.bio}</p>
+          {isEditing ? (
+            <textarea
+              className="form-control textareastyle"
+              rows={3}
+              value={profile.bio}
+              onChange={e => handleInputChange('bio', e.target.value)}
+            />
+          ) : (
+            <p>{profile.bio}</p>
+          )}
         </div>
 
         {/* Tabs */}
@@ -304,9 +354,27 @@ const Profile = () => {
           </div>
         )}
 
-        {activeTab === 'comments' && (
-          <p className="tab-placeholder">Comments content goes here.</p>
-        )}
+        {activeTab === "comments" && <div className="info-section container">
+          <div className="row justify-content-around">
+            <h3 className="col-1 m-2 mb-4">Comments</h3>
+            <div className="col-auto m-2 mb-4">
+            </div>
+          </div>
+          <div className="row">
+            {store.matchReviewsReceived.reviews_received.length > 0 ? (
+              store.matchReviewsReceived.reviews_received.map((el) => (
+                <div key={el.id} className="review-card">
+                  <div className="review-container">
+                    Author : {el.author_nickname} — {el.stars} ⭐️
+                    <p className="m-0 border-0 review-box"> <span className="fa-solid fa-comment mx-2"></span>{el.comment}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No comments yet.</p>
+            )}
+          </div>
+        </div>}
       </div>
 
       {/* Avatar Modal */}
