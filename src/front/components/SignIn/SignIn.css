@@ -19,7 +19,7 @@
     0 12px 12px rgba(0, 0, 0, 0.03);
 }
 .sign-in-password-subtitle {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: rgb(99, 99, 99);
 }
 .btn-sign-in-card-border {
@@ -31,3 +31,6 @@
      border-color:#7c0ebc !important;
 }
 
+.sign-in-message-errors{
+  font-size: 0.8rem;
+}
