@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Settings.css';
+import userServices from "../../services/userServices"
+import useGlobalReducer from "../../hooks/useGlobalReducer.jsx"
 
 
 const SettingsView = () => {
@@ -12,6 +14,7 @@ const SettingsView = () => {
     email:'',
     confirmedEmail: ''
   })
+  const {store, dispatch} = useGlobalReducer();
 
   const submitEmailChange = () => {
     console.log(email)

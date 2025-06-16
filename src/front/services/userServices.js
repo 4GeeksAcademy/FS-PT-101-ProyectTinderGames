@@ -96,15 +96,16 @@ userServices.changeUserEmail = async (user_id, newEmail) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(photo),
+      body: JSON.stringify({ email: newEmail }),
     });
+
     if (!resp.ok) throw Error("Something went wrong");
+
     const data = await resp.json();
     return data;
   } catch (error) {
     console.log(error);
     return error;
   }
-}
-
+};
 export default userServices;

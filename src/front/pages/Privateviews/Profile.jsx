@@ -267,11 +267,11 @@ const Profile = () => {
         <div className="medal-list">
           {topThreeGames.map((el, i) => (
             <div key={el.game?.id || i} className="medal-game-card">
-              <img
-                src={selectMedal(el.game?.hours_played)}
-                alt="Medal"
-                className="medal-icon"
-              />
+                <img
+                  src={selectMedal(el.game?.hours_played)}
+                  alt="Medal"
+                  className="medal-icon"
+                />
               <div className="game-img-wrapper">
                 <img
                 className="img-fluid gameImg"
