@@ -170,7 +170,7 @@ const Profile = () => {
       } else {
         try {
           const resp = await fetch(url + `/api/profiles/${store.user?.id}`, {
-            methods: 'POST',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(profile),
           });
