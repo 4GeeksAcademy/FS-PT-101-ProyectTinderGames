@@ -29,16 +29,18 @@ import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 const Profile = () => {
   // Acceso al store global y dispatch para actualizar datos
   const [availableGames, setAvailableGames] = useState([]);
-  const [game, setGame] = useState({ title: '', hours_played: '' });
+  const [game, setGame] = useState({ title: '', hours_played: '', image: '' });
   const [loading, setLoading] = useState(true);
   const { store, dispatch } = useGlobalReducer();
   const url = import.meta.env.VITE_BACKEND_URL;   // URL base del backend
+  const rawgApi = import.meta.env.VITE_RAWG_KEY;
 
   // Estados locales
   const [activeTab, setActiveTab] = useState("info");                    // Pestaña activa (info, activity, comments)
   const [isEditing, setIsEditing] = useState(false);                       // Modo edición on/off
   const [showModal, setShowModal] = useState(false);                       // Mostrar modal de avatar
   const [profile, setProfile] = useState({ photo: "photo1" });            // Estado local de perfil
+
 
   // Opciones para selects
   const zodiacSigns = [
@@ -48,11 +50,11 @@ const Profile = () => {
   ];
   const genders = ["Male", "Female", "Undefined"];
 
-  // Juegos del usuario y top 3 por horas jugadas
-  const allGames = store.user?.profile?.games ?? [];
+  const allGames = store.user?.profile?.games ? store.user.profile.games : [];
+
   const topThreeGames = allGames
     .slice() // Copia para no mutar original
-    .sort((a, b) => (b.hours_played ?? 0) - (a.hours_played ?? 0))
+    .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))
     .slice(0, 3);
 
   // Mapeo avatars: filename -> clave interna
@@ -85,7 +87,7 @@ const Profile = () => {
 
       for (let page = 1; page <= pages; page++) {
         const resp = await fetch(
-          `https://api.rawg.io/api/games?key=${import.meta.env.VITE_RAWG_KEY}&page_size=${pageSize}&page=${page}`
+          `https://api.rawg.io/api/games?key=${rawgApi}&page_size=${pageSize}&page=${page}`
         );
         if (!resp.ok) throw new Error('Error cargando juegos');
         const data = await resp.json();
@@ -199,26 +201,50 @@ const Profile = () => {
     setProfile(prev => ({ ...prev, [field]: value }));
   };
 
+
+  const selectGameImage = async (gameTitle) => {
+    try {
+      const response = await fetch(`https://api.rawg.io/api/games?key=${rawgApi}&search=${gameTitle}`);
+      const data = await response.json();
+
+      if (data.results.length === 0) {
+        console.warn("No se encontraron resultados para:", gameTitle);
+        return null;
+      }
+
+      const game = data.results[0];
+      console.log("Nombre:", game.name);
+      console.log("Portada:", game.background_image);
+      return game.background_image
+    } catch (error) {
+      console.error("Error al obtener la imagen del juego:", error);
+      return null;
+    }
+  };
   const handleAdd = async () => {
     try {
-      // 1) esperamos a que el juego se posteé en el backend
-      await gameServices.postNewGame(store.user.profile?.id, game);
+      const image = await selectGameImage(game.title);
+      console.log("La imagen es:", image);
 
-      // 2) recargamos el perfil UNA VEZ que ya está guardado
+      const newGame = {
+        ...game,
+        image
+      };
+
+      console.log("Enviando:", newGame);
+      await gameServices.postNewGame(store.user.profile?.id, newGame);
       await loadProfile();
 
-      // 3) cerramos el modal
+      // Cerrar modal y limpiar
       const modalEl = document.getElementById('commentModal');
       const modal = window.bootstrap.Modal.getInstance(modalEl);
       modal.hide();
-
-      console.log('Game added and profile reloaded:', game);
-      setGame({ title: '', hours_played: '' });
+      setGame({ title: '', hours_played: '', image: '' });
     } catch (err) {
       console.error('Error añadiendo el juego o recargando perfil:', err);
-      // aquí podrías mostrar un toast o mensaje de error al usuario
     }
   };
+
 
   const handleDeleteGame = async (game_id) => {
     await gameServices.deleteGameById(game_id);
@@ -246,8 +272,12 @@ const Profile = () => {
                 alt="Medal"
                 className="medal-icon"
               />
-              <div className="game-img-wrapper w-100">
-                <h5 className="m-0 p-2">{el.game?.title}</h5>
+              <div className="game-img-wrapper">
+                <img
+                className="img-fluid gameImg"
+                  src={el.game?.image}
+                  alt={`Portada de ${el.game?.title}`}
+                />
               </div>
             </div>
           ))}
@@ -482,7 +512,7 @@ const Profile = () => {
                     <p className="m-0">{el.game.hours_played} hours</p>
                   </div>
                   <div className="d-flex justify-content-around col-lg-2 col-md-12 col-sm-12 align-items-center">
-                    <span className="text-danger botonesAccionesJuegos" onClick={()=>handleDeleteGame(el.id)}>D</span>
+                    <span className="text-danger botonesAccionesJuegos" onClick={() => handleDeleteGame(el.id)}>D</span>
                   </div>
                 </div>
               ))}

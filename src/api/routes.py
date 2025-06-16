@@ -663,8 +663,6 @@ def get_all_games():
     return jsonify([game.serialize() for game in games]), 200
 
 # GET SINGLE GAMES
-
-
 @api.route('/games/<int:game_id>', methods=['GET'])
 def get_single_game(game_id):
     stmt = select(Game).where(Game.id == game_id)

@@ -384,6 +384,8 @@
 
 /* Marco de la img... */
 .game-img-wrapper {
+  width: 50%;
+  height: 30%;
   padding: 3px;
   border-radius: 12px;
   border: 2px solid cyan;
@@ -514,4 +516,8 @@
 .gamesbox {
   border: 2px solid rgb(203, 137, 239);
   border-radius: 20px;
+}
+
+.gameImg{
+  object-fit: contain;
 }
