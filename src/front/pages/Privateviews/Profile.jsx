@@ -39,8 +39,20 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("info");                    // Pestaña activa (info, activity, comments)
   const [isEditing, setIsEditing] = useState(false);                       // Modo edición on/off
   const [showModal, setShowModal] = useState(false);                       // Mostrar modal de avatar
-  const [profile, setProfile] = useState({ photo: "photo1" });            // Estado local de perfil
-
+  const [profile, setProfile] = useState({
+    name: " ",
+    nick_name: " ",
+    age: 0,
+    gender: " ",
+    location: " ",
+    zodiac: " ",
+    discord: " ",
+    steam_id: " ",
+    language: " ",
+    preferences: " ",
+    bio: " ",
+    photo: "photo1"
+  });
 
   // Opciones para selects
   const zodiacSigns = [
@@ -274,7 +286,7 @@ const Profile = () => {
               />
               <div className="game-img-wrapper">
                 <img
-                className="img-fluid gameImg"
+                  className="img-fluid gameImg"
                   src={el.game?.image}
                   alt={`Portada de ${el.game?.title}`}
                 />

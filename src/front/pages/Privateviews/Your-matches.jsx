@@ -29,7 +29,7 @@ export const YourMatches = () => {
           store.userMatchesInfo.map((el) => (
             <div
               key={el.id}
-              className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3"
+              className="col-lg-4 col-md-6 col-sm-12"
             >
               <MatchMiniCard
                 id={el.user_id}

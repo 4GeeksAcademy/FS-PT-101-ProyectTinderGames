@@ -194,6 +194,45 @@ def put_user(user_id):
     db.session.commit()
     return jsonify(user.serialize()), 200
 
+# PUT USER EMAIL
+
+
+@api.route('/users_email/<int:user_id>', methods=['PUT'])
+def put_user_email(user_id):
+    data = request.get_json()
+    if not data or 'email' not in data:
+        return jsonify({'error': 'Missing data'}), 400
+    stmt = select(User).where(User.id == user_id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({'error': f'can not find user with id: {user_id}'})
+    user.email = data.get('email', user.email)
+    db.session.commit()
+    return jsonify(user.serialize()), 200
+
+
+#PUT USER PASSWORD
+@api.route('/users_password/<int:user_id>', methods=['PUT'])
+def users_password(user_id):
+    data = request.get_json()
+
+    if not data or not data.get('password'):
+        return jsonify({'error': 'Password is required'}), 400
+
+    hashed_password = generate_password_hash(data['password'])
+
+    stmt = select(User).where(User.id == user_id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+
+    if user is None:
+        return jsonify({'error': f'Cannot find user with id: {user_id}'}), 404
+
+    user.password = hashed_password
+    db.session.commit()
+
+    return jsonify(user.serialize()), 200
+
+
 # GET ALL PROFILES
 
 
@@ -297,7 +336,8 @@ def put_profile(user_id):
         return jsonify({'error': 'this profile do not  exist, please try to create it insted of modify one'}), 400
 
     user.profile.gender = data.get('gender', user.profile.gender)
-    user.profile.preferences = data.get('preferences', user.profile.preferences)
+    user.profile.preferences = data.get(
+        'preferences', user.profile.preferences)
     user.profile.zodiac = data.get('zodiac', user.profile.zodiac)
     user.profile.discord = data.get('discord', user.profile.discord)
     user.profile.age = data.get('age', user.profile.age)
@@ -313,6 +353,8 @@ def put_profile(user_id):
     return jsonify(user.profile.serialize()), 200
 
 # PUT PHOTO PROFILE
+
+
 @api.route('/profiles/photo/<int:user_id>', methods=['PUT'])
 def put_profilephoto(user_id):
     data = request.get_json()
@@ -329,7 +371,6 @@ def put_profilephoto(user_id):
 
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
-
 
 
 # GET ALL REWVIEWS
@@ -663,6 +704,8 @@ def get_all_games():
     return jsonify([game.serialize() for game in games]), 200
 
 # GET SINGLE GAMES
+
+
 @api.route('/games/<int:game_id>', methods=['GET'])
 def get_single_game(game_id):
     stmt = select(Game).where(Game.id == game_id)
