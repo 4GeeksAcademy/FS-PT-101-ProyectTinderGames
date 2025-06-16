@@ -108,4 +108,24 @@ userServices.changeUserEmail = async (user_id, newEmail) => {
     return error;
   }
 };
+
+userServices.changeUserPassword = async (user_id, newPassword) => {
+  try {
+    const resp = await fetch(url + `/api/users_password/${user_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password: newPassword }),
+    });
+
+    if (!resp.ok) throw Error("Something went wrong");
+
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
 export default userServices;
