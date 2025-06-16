@@ -1,6 +1,6 @@
 from app import app, db
 from datetime import datetime, timezone
-# from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash
 from api.models import User, Profile, Review, Game, Match, Reject, Like
 
 with app.app_context():
@@ -11,13 +11,13 @@ with app.app_context():
     # def hash(pwd): return generate_password_hash(pwd) password=hash
 
     #Creación de users
-    user1 = User(email="juan.perez@example.com", password="password123")
-    user2 = User(email="ana.gomez@example.com", password="mypassword")
-    user3 = User(email="carlos.ruiz@example.com", password="securepass")
-    user4 = User(email="maria.lopez@example.com", password="pass456")
-    user5 = User(email="luis.fernandez@example.com", password="pass789")
-    user6 = User(email="laura.diaz@example.com", password="mypassword2")
-    user7 = User(email="jorge.martinez@example.com", password="secretpass")
+    user1 = User(email="juan.perez@example.com", password=generate_password_hash("password123"))
+    user2 = User(email="ana.gomez@example.com", password=generate_password_hash("mypassword"))
+    user3 = User(email="carlos.ruiz@example.com", password=generate_password_hash("securepass"))
+    user4 = User(email="maria.lopez@example.com", password=generate_password_hash("pass456"))
+    user5 = User(email="luis.fernandez@example.com", password=generate_password_hash("pass789"))
+    user6 = User(email="laura.diaz@example.com", password=generate_password_hash("mypassword2"))
+    user7 = User(email="jorge.martinez@example.com", password=generate_password_hash("secretpass"))
     db.session.add_all([user1, user2, user3, user4, user5, user6, user7])
     db.session.commit()
 
