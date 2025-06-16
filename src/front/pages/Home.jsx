@@ -77,7 +77,7 @@ export const Home = () => {
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
 											</div>
-											<div className="card-back p-2">Sing up on our app</div>
+											<div className="card-back p-2">Find your player match</div>
 										</div>
 									</div>
 									<div className="card col-lg-6">
@@ -85,7 +85,7 @@ export const Home = () => {
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
 											</div>
-											<div className="card-back p-2">Fill in your user details</div>
+											<div className="card-back p-2">Swipe left or right</div>
 										</div>
 									</div>
 								</div>

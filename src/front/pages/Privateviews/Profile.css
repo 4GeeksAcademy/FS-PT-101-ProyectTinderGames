@@ -32,12 +32,12 @@
   right: 1px;
   color: cyan;
 }
-.textareastyle{
+.textareastyle {
   border: 2px solid #00ffff;
   background: black;
   color: white;
 }
-.textareastyle:focus{
+.textareastyle:focus {
   background-color: black;
   color: white;
 }
@@ -452,7 +452,7 @@
   transform: translateY(0);
 }
 
-.review-container{
+.review-container {
   border: 2px solid rgb(238, 112, 247);
   border-radius: 20px;
   padding: 1rem;
@@ -460,18 +460,22 @@
 }
 
 .review-box {
-  text-decoration:underline;
+  text-decoration: underline;
 }
 /*------------Coming soon Activity tab ---------------- */
 .coming-soon-box {
   margin-top: 20px;
   padding: 30px;
-  background: linear-gradient(135deg, rgba(0,255,255,0.05), rgba(127,0,255,0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 255, 0.05),
+    rgba(127, 0, 255, 0.1)
+  );
   border: 3px solid cyan;
   border-radius: 12px;
   text-align: center;
   color: white;
-  box-shadow: 0 0 20px rgba(0,255,255,0.1);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -484,5 +488,30 @@
 
 .coming-soon-box p {
   font-size: 1rem;
-  color: #ccc;
+  color: #ffffff;
+}
+.botonesAccionesJuegos {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out,
+    transform 150ms ease-out, box-shadow 200ms ease-in-out;
+  cursor: pointer;
+}
+
+.botonesAccionesJuegos:hover {
+  border-color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.gamesbox {
+  border: 2px solid rgb(203, 137, 239);
+  border-radius: 20px;
 }
