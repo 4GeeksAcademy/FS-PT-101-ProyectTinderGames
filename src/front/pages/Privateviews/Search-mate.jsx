@@ -15,6 +15,7 @@ export const SearchMate = () => {
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [matchProfile, setMatchProfile] = useState(null);
 
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowLoadingMessage(true);
@@ -45,11 +46,7 @@ export const SearchMate = () => {
         if (store.user && store.user.profile) {
           const likedIds = store.likesSent?.map((p) => p.id) || [];
           const dislikedIds = store.dislikesSent?.map((p) => p.id) || [];
-
-
-          console.log("Usuario actual ID:", store.user?.profile?.id);
-          console.log("IDs con like:", likedIds);
-          console.log("IDs con dislike:", dislikedIds);
+          
 
           allProfiles = allProfiles.filter(
             (profile) =>
@@ -122,7 +119,15 @@ export const SearchMate = () => {
       console.error("Error en handleLike:", error);
     } finally {
       setCurrentUser((prev) => prev + 1);
+      const remainingProfiles = store.searchMatchProfiles.filter(
+        (_, index) => index !== currentUser
+      );
+      dispatch({ type: "getSearchMatchProfiles", payload: remainingProfiles });
+      setCurrentUser(0);
+
     }
+
+
   };
 
   const handleDislike = async () => {
@@ -139,7 +144,13 @@ export const SearchMate = () => {
       console.error("Error sending dislike:", error);
     } finally {
       setCurrentUser((prev) => prev + 1);
+      const remainingProfiles = store.searchMatchProfiles.filter(
+        (_, index) => index !== currentUser
+      );
+      dispatch({ type: "getSearchMatchProfiles", payload: remainingProfiles });
+      setCurrentUser(0);
     }
+
   };
 
   const closeMatchModal = () => {
