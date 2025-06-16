@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:migrations/versions/b04704051f4c_.py
-Revision ID: b04704051f4c
+Revision ID: 9e50b3a9a01d
 Revises: 
-Create Date: 2025-06-12 18:11:51.668275
-========
-Revision ID: 6b5aea8480a9
-Revises: 
-Create Date: 2025-06-16 10:48:20.220725
->>>>>>>> develop:migrations/versions/6b5aea8480a9_.py
+Create Date: 2025-06-16 20:40:38.119881
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:migrations/versions/b04704051f4c_.py
-revision = 'b04704051f4c'
-========
-revision = '6b5aea8480a9'
->>>>>>>> develop:migrations/versions/6b5aea8480a9_.py
+revision = '9e50b3a9a01d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -99,7 +89,6 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('profile_id', sa.Integer(), nullable=False),
     sa.Column('game', sa.JSON(), nullable=False),
-    sa.Column('image', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['profile_id'], ['profiles.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

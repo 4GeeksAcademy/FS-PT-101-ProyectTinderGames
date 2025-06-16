@@ -73,7 +73,7 @@ const Profile = () => {
 
   // Carga inicial de perfil y reviews recibidos
   useEffect(() => {
-    loadProfile();
+    !profile.nick_name && loadProfile();
     reviewServices.getAllReviewsReceived(store.user?.id)
       .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
     fetchGames();
@@ -274,7 +274,7 @@ const Profile = () => {
               />
               <div className="game-img-wrapper">
                 <img
-                className="img-fluid gameImg"
+                  className="img-fluid gameImg"
                   src={el.game?.image}
                   alt={`Portada de ${el.game?.title}`}
                 />
@@ -526,7 +526,7 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived.reviews_received.length > 0 ? (
+              {store.matchReviewsReceived.reviews_received.length > 0 ?  (
                 store.matchReviewsReceived.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
