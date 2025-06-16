@@ -73,6 +73,7 @@ export const MatchUserDetails = () => {
     }
   };
 
+
   const handleSaveComment = async (e) => {
     e.preventDefault();
 
@@ -117,7 +118,7 @@ export const MatchUserDetails = () => {
 
   const topThreeGames = allGames
     .slice()                                      // 1. Copia el array para no mutar el original
-    .sort((a, b) => (b.hours_played ?? 0) - (a.hours_played ?? 0))  // 2. Orden descendente por horas
+    .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))  // 2. Orden descendente por horas
     .slice(0, 3);
 
   return (
