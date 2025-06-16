@@ -89,4 +89,22 @@ userServices.changeUserPhoto = async (user_id, photo) => {
   }
 };
 
+userServices.changeUserEmail = async (user_id, newEmail) => {
+  try {
+    const resp = await fetch(url + `/api/users_email/${user_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(photo),
+    });
+    if (!resp.ok) throw Error("Something went wrong");
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 export default userServices;

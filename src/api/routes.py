@@ -149,8 +149,6 @@ def get_single_user(user_id):
     return jsonify(user.serialize()), 200
 
 # DELETE USER
-
-
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -162,8 +160,6 @@ def delete_user(user_id):
     return jsonify({'message': f'user {user_id} deleted'}), 200
 
 # POST USER
-
-
 @api.route('/users', methods=['POST'])
 def post_user():
     data = request.get_json()
@@ -178,8 +174,6 @@ def post_user():
     return jsonify(new_user.serialize()), 200
 
 # PUT USER
-
-
 @api.route('/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
     data = request.get_json()
@@ -191,6 +185,20 @@ def put_user(user_id):
         return jsonify({'error': f'can not find user with id: {user_id}'})
     user.email = data.get('email', user.email)
     user.password = data.get('password', user.password)
+    db.session.commit()
+    return jsonify(user.serialize()), 200
+
+# PUT USER EMAIL
+@api.route('/users_email/<int:user_id>', methods=['PUT'])
+def put_user_email(user_id):
+    data = request.get_json()
+    if not data or 'email' not in data:
+        return jsonify({'error': 'Missing data'}), 400
+    stmt = select(User).where(User.id == user_id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({'error': f'can not find user with id: {user_id}'})
+    user.email = data.get('email', user.email)
     db.session.commit()
     return jsonify(user.serialize()), 200
 

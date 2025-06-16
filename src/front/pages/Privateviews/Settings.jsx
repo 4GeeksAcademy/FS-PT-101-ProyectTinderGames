@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
 import './Settings.css';
 
+
 const SettingsView = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [showBreakModal, setShowBreakModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [email, setEmail] = useState({
+    email:'',
+    confirmedEmail: ''
+  })
+
+  const submitEmailChange = () => {
+    console.log(email)
+    if (email.email !== email.confirmedEmail){
+      return alert('email must be the same')
+    }
+    userServices.changeUserEmail(store.user?.id, email.email)
+    setEmail(()=>({
+      email:"",
+      confirmedEmail:""
+    }))
+    return alert('email changed')
+  }
+
+  const handleChange = e => {
+        setEmail({
+            ...email,
+            [e.target.name]: e.target.value
+        })
+    }
 
   return (
     <div className="settings-container">
@@ -32,11 +57,11 @@ const SettingsView = () => {
         <div className="modal-overlay">
           <div className="modal-box">
             <h3>Change Email</h3>
-            <input type="email" placeholder="New Email" />
-            <input type="email" placeholder="Confirm New Email" />
+            <input type="email" placeholder="New Email" name="email" value={email.email} onChange={handleChange}/>
+            <input type="email" placeholder="Confirm New Email" name="confirmedEmail"value={email.confirmedEmail} onChange={handleChange}/>
             <div className="modal-actions">
               <button onClick={() => setShowEmailModal(false)}>Cancel</button>
-              <button className="confirm-btn">Update</button>
+              <button className="confirm-btn" onClick={()=> submitEmailChange()}>Update</button>
             </div>
           </div>
         </div>
