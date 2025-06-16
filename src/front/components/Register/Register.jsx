@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import { useState } from 'react';
 import userServices from '../../services/userServices';
+import { Terms } from '../Terms/Terms';
 
 export const Register = ({ onSwitch }) => {
 
@@ -15,22 +16,31 @@ export const Register = ({ onSwitch }) => {
 
     const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
     const [errorEmailRegistered, setErrorEmailRegistered] = useState(""); // estado para el error de email ya registrado
-
-
+    const [showTerms, setShowTerms] = useState(false); // estado que muestra el modal de T&C
+    const [isTermsAccepted, setIsTermsAccepted] = useState(false); // estado para verificar si se acaptó o no los T&C
 
     const handleSubmit = e => {
         e.preventDefault()
         setErrorPassword(""); // limpia error de contraseña
         setErrorEmailRegistered(""); // limpia error del email
 
+
         if (formData.password.length < 8) { //para que salte error si la contraseña no tiene 8 caracteres
-        setErrorPassword("Password must have al least 8 characters");
-        return;
-    }
+            setErrorPassword("Password must have al least 8 characters");
+            return;
+        }
 
         if (formData.password !== formData.repeatPassword) { //comprueba que la contraseña sea igual
             setErrorPassword("Passwords do not match")
             return
+        }
+
+        // Muestra los T&C si aún no han sido aceptados
+        if (!isTermsAccepted) {
+            setShowTerms(true);
+            const modal = new bootstrap.Modal(document.getElementById('TermsAndConditionsModal'));
+            modal.show();
+            return;
         }
 
         userServices.register(formData).then(data => {
@@ -50,9 +60,20 @@ export const Register = ({ onSwitch }) => {
         })
     }
 
+    const handleTermsAccepted = () => {
+        setIsTermsAccepted(true) 
+        // Intenta registrar nuevamente luego de aceptar los T&C
+        // handleSubmit(new Event('submit', { cancelable: true }));
+        navigate('/private')
+    };
+
     return (
 
         <div className='d-flex justify-content-center'>
+
+            {/* MODAL TÉRMINOS */}
+            <Terms onAccept={() => setIsTermsAccepted(true)} />
+
             <div className='card register-card mt-5'>
                 <div className="card-body">
                     <h2 className="card-title text-center">Create an account</h2>
@@ -91,6 +112,9 @@ export const Register = ({ onSwitch }) => {
                     </form>
                 </div>
             </div>
+
+            {/* Solo renderiza Terms si showTerms es true */}
+            {showTerms && <Terms onAccept={handleTermsAccepted} />}
         </div>
     )
 }
