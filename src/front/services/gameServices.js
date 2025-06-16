@@ -12,6 +12,7 @@ const gameServices = {
           game: {
             title: form.title,
             hours_played: form.hours_played,
+            image: form.image
           },
         }),
       });
