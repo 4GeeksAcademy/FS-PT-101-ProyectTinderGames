@@ -171,7 +171,7 @@ export const Home = () => {
 							<div className='col-10'>
 								<div className="row d-flex gap-4 justify-content-around">
 									{/* Columna del contenido (orígenes + quiénes somos) */}
-									<div class="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
+									<div className="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
 										<div class="card-body">
 											<h3 className="neon-heading mb-3">The origins</h3>
 											<p className="flex-grow-1">
@@ -179,7 +179,7 @@ export const Home = () => {
 											</p>
 										</div>
 									</div>
-									<div class="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
+									<div className="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
 										<div class="card-body">
 											<h3 className="neon-heading mb-3">Who are we?</h3>
 											<p className="flex-grow-1">
