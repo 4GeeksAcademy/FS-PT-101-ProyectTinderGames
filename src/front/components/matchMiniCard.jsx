@@ -48,24 +48,30 @@ export const MatchMiniCard = ({ id, nickname, gender, games, age, location }) =>
         onClick={() => navigate(`matchDetails/${id}`)}
       >
         <div className="card-body d-flex flex-column p-3 pb-0">
-          <div className="d-flex align-items-center mb-2">
-            <h5 className="card-title text-truncate mb-0 display-6">{nickname}</h5>
+          <div className="row d-flex align-items-center mb-2">
+            <h5 className="col-12 card-title text-truncate mb-0 display-6">{nickname}</h5>
           </div>
-          <div className='d-flex justify-content-around'>
-            <div className='d-flex my-1 align-items-center'>
+          <div className='row d-flex justify-content-around'>
+            <div className='col-lg-6 col-md-12 d-flex my-1 align-items-center'>
               <span className='fa-solid fa-location-dot me-2'></span>
               <p className='m-0'>{location}</p>
             </div>
-            <div className='d-flex my-1 align-items-center'>
+            <div className='col-lg-6 col-md-12 d-flex my-1 align-items-center'>
               <span className="fa-solid fa-user me-2"></span>
               <p className='m-0'>{gender} • {age}</p>
             </div>
           </div>
           <div className="flex-grow-1 overflow-auto align-content-center medalsBox rounded">
             {topThreeGames && topThreeGames.length > 0 ? (
-              <div className="d-flex flex-row flex-nowrap justify-content-around">
+              <div className="col-lg-4 col-md-6 col-lg-12 d-flex flex-row flex-nowrap justify-content-around">
                 {topThreeGames.map((el, index) => (
-                  <div key={el.game.id || index}>
+                  <div key={el.game.id || index} className="d-flex flex-column justify-content-center align-items-center">
+                    <img
+                      src={el.game.image}
+                      className="img-fluid imagenminicard"
+                      style={{ width: '5rem', height: 'auto', cursor: 'pointer' }}
+                      alt={el.game.title}
+                    />
                     <img
                       src={selectMedal(el.game.hours_played)}
                       className="img-fluid"

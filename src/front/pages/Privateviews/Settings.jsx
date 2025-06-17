@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './Settings.css';
+import userServices from "../../services/userServices"
+import useGlobalReducer from "../../hooks/useGlobalReducer.jsx"
+
 
 const SettingsView = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -7,6 +10,54 @@ const SettingsView = () => {
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [showBreakModal, setShowBreakModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [email, setEmail] = useState({
+    email:'',
+    confirmedEmail: ''
+  })
+  const [password, setPassword] = useState({
+    password:'',
+    confirmedPassword:''
+  })
+  const {store, dispatch} = useGlobalReducer();
+
+  const submitEmailChange = () => {
+    console.log(email)
+    if (email.email !== email.confirmedEmail){
+      return alert('email must be the same')
+    }
+    userServices.changeUserEmail(store.user?.id, email.email)
+    setShowEmailModal(false)
+    setEmail(()=>({
+      email:"",
+      confirmedEmail:""
+    }))
+    return alert('email changed')
+  }
+
+  const submitPasswordChange = () => {
+    console.log(password)
+    if (password.password !== password.confirmedPassword){
+      return alert('password must be the same')
+    }
+    userServices.changeUserPassword(store.user?.id, password.password)
+    setShowPasswordModal(false)
+    setPassword(()=>({
+      password:"",
+      confirmedPassword:""
+    }))
+    return alert('password changed')
+  }
+
+  const handleChange = e => {
+        setEmail({
+            ...email,
+            [e.target.name]: e.target.value
+        })
+        setPassword({
+          ...password,
+          [e.target.name]:e.target.value
+        })
+    }
 
   return (
     <div className="settings-container">
@@ -32,11 +83,11 @@ const SettingsView = () => {
         <div className="modal-overlay">
           <div className="modal-box">
             <h3>Change Email</h3>
-            <input type="email" placeholder="New Email" />
-            <input type="email" placeholder="Confirm New Email" />
+            <input type="email" placeholder="New Email" name="email" value={email.email} onChange={handleChange}/>
+            <input type="email" placeholder="Confirm New Email" name="confirmedEmail"value={email.confirmedEmail} onChange={handleChange}/>
             <div className="modal-actions">
               <button onClick={() => setShowEmailModal(false)}>Cancel</button>
-              <button className="confirm-btn">Update</button>
+              <button className="confirm-btn" onClick={()=> submitEmailChange()}>Update</button>
             </div>
           </div>
         </div>
@@ -46,11 +97,11 @@ const SettingsView = () => {
         <div className="modal-overlay">
           <div className="modal-box">
             <h3>Change Password</h3>
-            <input type="password" placeholder="New Password" />
-            <input type="password" placeholder="Confirm New Password" />
+            <input type="password" placeholder="New Password" name="password" value={password.password} onChange={handleChange}/>
+            <input type="password" placeholder="Confirm New Password" name="confirmedPassword" value={password.confirmedPassword} onChange={handleChange}/>
             <div className="modal-actions">
               <button onClick={() => setShowPasswordModal(false)}>Cancel</button>
-              <button className="confirm-btn">Update</button>
+              <button className="confirm-btn" onClick={()=>submitPasswordChange()}>Update</button>
             </div>
           </div>
         </div>

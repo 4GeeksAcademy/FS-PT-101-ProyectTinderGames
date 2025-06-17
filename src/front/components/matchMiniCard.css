@@ -14,3 +14,15 @@
     #ef9af1
   );
 }
+
+.imagenminicard {
+  border: 2px solid transparent;
+  border-radius: 12px;
+
+  /* Borde multicolor: efecto neón con borde doble */
+  box-shadow: 
+    0 0 8px #8a00ff,     /* morado suave */
+    0 0 10px #00c0ff;     /* azul más brillante */
+
+  display: inline-block;
+}
