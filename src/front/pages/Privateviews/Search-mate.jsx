@@ -112,9 +112,6 @@ export const SearchMate = () => {
         }
       }
 
-      // Nota: aquí no deberías despachar getSearchMatchProfiles con response, 
-      // porque response es un objeto y no el array completo de perfiles.
-
     } catch (error) {
       console.error("Error en handleLike:", error);
     } finally {
@@ -203,7 +200,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center">
             <h1 className="search-match-card-font-shadow ">
-              Search a mate --- {store.user?.profile?.nick_name || "player"} and {store.user.id}
+              Search a mate
             </h1>
           </div>
 
