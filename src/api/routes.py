@@ -610,7 +610,7 @@ def get_rejects_received(user_id):
     # Serializamos cada review usando el método de instancia
     serialized = [reject.serialize() for reject in rejects]
 
-    return jsonify({"rejects_recieved": serialized}), 200
+    return jsonify({"rejects_received": serialized}), 200
 
 # DELETE REJECT
 
