@@ -93,9 +93,9 @@ export const NavbarHome = () => {
                     <Register onSwitch={() => setShowSignIn(true)} />
                   )}
                 </div>
-                <div>
+                {/* <div>
                   <button type="button" className="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

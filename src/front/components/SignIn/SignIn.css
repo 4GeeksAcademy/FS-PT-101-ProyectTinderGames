@@ -13,14 +13,14 @@
 }
 
 .sign-in-card-subtitle {
-  font-size: 0.7rem;
+   font-size: 15px;
   text-shadow: 0 2px 1px rgba(0, 0, 0, 0.1), 0 4px 2px rgba(0, 0, 0, 0.1),
     0 6px 4px rgba(0, 0, 0, 0.05), 0 8px 8px rgba(0, 0, 0, 0.04),
     0 12px 12px rgba(0, 0, 0, 0.03);
 }
 .sign-in-password-subtitle {
-  font-size: 0.7rem;
-  color: rgb(99, 99, 99);
+  font-size: 0.8rem;
+  color: rgb(0, 0, 0);
 }
 .btn-sign-in-card-border {
   border: 2px solid !important;
@@ -33,4 +33,18 @@
 
 .sign-in-message-errors{
   font-size: 0.8rem;
+}
+
+.btn-close-modal {
+  background-color: #a41ef165;
+
+} 
+
+/* Pantalla móvil  */
+@media (max-width: 600px) {
+ .sign-in-card{
+  width: 20rem;
+  padding-right: 0px;
+  padding-left: 0px;
+ }
 }

@@ -61,7 +61,7 @@ export const Register = ({ onSwitch }) => {
     }
 
     const handleTermsAccepted = () => {
-        setIsTermsAccepted(true) 
+        setIsTermsAccepted(true)
         // Intenta registrar nuevamente luego de aceptar los T&C
         // handleSubmit(new Event('submit', { cancelable: true }));
         navigate('/private')
@@ -76,8 +76,11 @@ export const Register = ({ onSwitch }) => {
 
             <div className='card register-card mt-5'>
                 <div className="card-body">
+                    <div className="d-flex mb-1">
+                        <button type="button" className="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                     <h2 className="card-title text-center">Create an account</h2>
-                    <h6 className="card-subtitle mb-2 register-card-subtitle text-end me-4 pe-2 mb-3">If you already have an account
+                    <h6 className="card-subtitle mb-2 register-card-subtitle text-end me-4 pe-2 mb-3">Already have an account?
                         <button type="button" onClick={onSwitch} className="btn btn-link register-card-subtitle ps-1">Sign In</button>
 
 
@@ -93,13 +96,13 @@ export const Register = ({ onSwitch }) => {
 
                             {errorEmailRegistered && <h5 className="text-danger mt-2 register-message-errors">{errorEmailRegistered}</h5>}
                             <div>
-                                <label htmlFor="basic-url" className="form-label mt-1 mb-0">Password</label>
+                                <label htmlFor="basic-url" className="form-label mt-2 mb-0">Password</label>
                             </div>
                             <div>
                                 <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 btn-register-card-border" />
                             </div>
                             <div>
-                                <label htmlFor="basic-url" className="form-label mb-0">Repeat Password</label>
+                                <label htmlFor="basic-url" className="form-label mb-0 mt-2">Repeat Password</label>
                             </div>
                             <div>
                                 <input type="password" name="repeatPassword" placeholder="password" value={formData.repeatPassword} onChange={handleChange} className="w-100 rounded-2 btn-register-card-border" />
