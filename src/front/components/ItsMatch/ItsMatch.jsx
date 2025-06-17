@@ -11,18 +11,31 @@ export const ItsMatch = ({ profile, }) => {
     const handleClick = () => {
         navigate('/private/your-matches/') //Falta hacerlo dinámico cuando el match sea real (navigate(`/private/your-matches/${profile.id}`))
     }
+
+
+    
     return (
         <>
             <div className='d-flex justify-content-center'>
+
                 <div className="col">
+
                     <div onClick={handleClick} className="card its-match-card pulsate-bck">
-                        <div className="card-body d-flex flex-column flex-md-row align-items-center">
+                        <div className="d-flex align-items-start">
+
+                            <div className="card-body d-flex flex-column flex-md-row align-items-center">
+           
+                            </div>
                             <div className='rounded-circle mb-3 mb-md-0'>
-                                <img src={profilePic4} alt="App Logo" className='its-match-profile-pic rounded-circle'></img>
+                                <img src={profilePic4} alt="App Logo" className='its-match-profile-pic border border-4 my-2'></img>
                             </div>
-                            <div className="text-center text-md-start ms-md-4">
-                                <h1 className="card-title">{profile?.nick_name || 'undefined'}</h1>
+                            <div className="d-flex align-items-start">
+                            <div className="text-center text-md-start ms-md-4 mt-2 me-3">
+                                <h1>{profile?.nick_name || 'undefined'}</h1>
                             </div>
+
+             
+                                </div>
                         </div>
                     </div>
                 </div>

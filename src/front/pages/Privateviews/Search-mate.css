@@ -1,3 +1,7 @@
-.search-mate-font{
-    color: #00f0ff
+.search-mate-font {
+  color: #00f0ff;
+}
+
+.search-mate-btn-close-modal {
+  background-color: #00f0ff !important;
 }
