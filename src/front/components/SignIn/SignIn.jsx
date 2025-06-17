@@ -13,6 +13,7 @@ export const SignIn = ({ onSwitch }) => {
     })
 
     const [errorLogin, setErrorLogin] = useState(""); //estado para el error de email/contraseña no válido
+    const [showPassword, setShowPassword] = useState(false); // estado pra enseñar/esconder contraseña
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -62,7 +63,24 @@ export const SignIn = ({ onSwitch }) => {
                                 <label htmlFor="basic-url" className="form-label mt-3 mb-0">Password</label>
                             </div>
                             <div>
-                                <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 border-1 btn-sign-in-card-border" />
+                                <div className="d-flex btn-register-card-border rounded-2">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="w-100 border-0 "
+                                    />
+                                    <span
+                                        className="input-group-text border-0 bg-white"
+                                        
+                                        onClick={() => setShowPassword(prev => !prev)}
+                                    >
+                                        <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                    </span>
+                                </div>
+
                                 <div className="form-text sign-in-password-subtitle" id="basic-addon4">Forgot your password? It’s ok <Link to="/">click here</Link></div>
                                 {errorLogin && <h5 className="text-danger mt-2 sign-in-message-errors">{errorLogin}</h5>}
                             </div>

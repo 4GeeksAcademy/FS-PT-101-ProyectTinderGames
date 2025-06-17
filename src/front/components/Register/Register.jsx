@@ -18,6 +18,7 @@ export const Register = ({ onSwitch }) => {
     const [errorEmailRegistered, setErrorEmailRegistered] = useState(""); // estado para el error de email ya registrado
     const [showTerms, setShowTerms] = useState(false); // estado que muestra el modal de T&C
     const [isTermsAccepted, setIsTermsAccepted] = useState(false); // estado para verificar si se acaptó o no los T&C
+    const [showPassword, setShowPassword] = useState(false); // estado para ver/ocultar la contraseña
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -98,8 +99,22 @@ export const Register = ({ onSwitch }) => {
                             <div>
                                 <label htmlFor="basic-url" className="form-label mt-2 mb-0">Password</label>
                             </div>
-                            <div>
-                                <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 btn-register-card-border" />
+                            <div className="d-flex btn-register-card-border rounded-2">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-100 border-0 "
+                                />
+                                <span
+                                    className="input-group-text border-0 bg-white"
+
+                                    onClick={() => setShowPassword(prev => !prev)}
+                                >
+                                    <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                </span>
                             </div>
                             <div>
                                 <label htmlFor="basic-url" className="form-label mb-0 mt-2">Repeat Password</label>
