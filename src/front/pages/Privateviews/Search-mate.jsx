@@ -203,7 +203,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center">
             <h1 className="search-match-card-font-shadow ">
-              Search a mate --- {store.user?.profile?.nick_name || "player"}
+              Search a mate --- {store.user?.profile?.nick_name || "player"} and {store.user.id}
             </h1>
           </div>
 
