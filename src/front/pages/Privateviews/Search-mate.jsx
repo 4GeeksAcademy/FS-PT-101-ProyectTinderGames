@@ -184,7 +184,7 @@ export const SearchMate = () => {
             <div>
               <button
                 type="button"
-                className="btn-close ms-3 btn-close-modal"
+                className="btn-close ms-3 search-mate-btn-close-modal"
                 onClick={closeMatchModal}
               />
             </div>
