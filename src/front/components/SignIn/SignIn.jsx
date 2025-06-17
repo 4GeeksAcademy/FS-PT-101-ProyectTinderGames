@@ -13,6 +13,7 @@ export const SignIn = ({ onSwitch }) => {
     })
 
     const [errorLogin, setErrorLogin] = useState(""); //estado para el error de email/contraseña no válido
+    const [showPassword, setShowPassword] = useState(false); // estado pra enseñar/esconder contraseña
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -43,6 +44,9 @@ export const SignIn = ({ onSwitch }) => {
         <div className='d-flex justify-content-center'>
             <div className='card sign-in-card mt-5'>
                 <div className="card-body">
+                    <div className="d-flex">
+                        <button type="button" className="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                     <h2 className="card-title text-center">Sign In</h2>
                     <h6 className="card-subtitle mb-2 sign-in-card-subtitle text-end me-4 pe-2 mb-3">Need an account
                         <button type="button" onClick={onSwitch} className="btn btn-link sign-in-card-subtitle ps-1">Register</button>
@@ -59,7 +63,24 @@ export const SignIn = ({ onSwitch }) => {
                                 <label htmlFor="basic-url" className="form-label mt-3 mb-0">Password</label>
                             </div>
                             <div>
-                                <input type="password" name="password" placeholder="password" value={formData.password} onChange={handleChange} className="w-100 rounded-2 border-1 btn-sign-in-card-border" />
+                                <div className="d-flex btn-register-card-border rounded-2">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="w-100 border-0 "
+                                    />
+                                    <span
+                                        className="input-group-text border-0 bg-white"
+                                        
+                                        onClick={() => setShowPassword(prev => !prev)}
+                                    >
+                                        <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                    </span>
+                                </div>
+
                                 <div className="form-text sign-in-password-subtitle" id="basic-addon4">Forgot your password? It’s ok <Link to="/">click here</Link></div>
                                 {errorLogin && <h5 className="text-danger mt-2 sign-in-message-errors">{errorLogin}</h5>}
                             </div>
