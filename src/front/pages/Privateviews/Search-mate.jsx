@@ -1,3 +1,4 @@
+import "../../pages/Privateviews/Search-mate.css"; 
 import { useEffect, useState } from "react";
 import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCard";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
@@ -158,7 +159,7 @@ export const SearchMate = () => {
   if (loading && showLoadingMessage) {
     return (
       <h2>
-        <div className="spinner align-self-center"></div> Loading new players. Thank you for your patience{" "}
+        <div className="spinner align-self-center search-mate-font"></div> Loading new players. Thank you for your patience{" "}
         {store.user?.profile?.nick_name || "player"}
       </h2>
     );
@@ -166,7 +167,7 @@ export const SearchMate = () => {
 
   if (!loading && currentUser >= (store.searchMatchProfiles?.length || 0)) {
     return (
-      <h2 className="text-center mt-5">
+      <h2 className="text-center mt-5 search-mate-font">
         Sorry {store.user?.profile?.nick_name || "player"}, there are no more players around. Try later!
       </h2>
     );
@@ -176,7 +177,7 @@ export const SearchMate = () => {
     <>
       {showMatchModal && matchProfile ? (
         <>
-          <div className="d-flex justify-content-center align-items-center">
+          <div className="d-flex justify-content-center align-items-center search-mate-font ">
             <div>
               <h1 className="title-its-match-card-font-shadow mt-2 mb-3">It's a match</h1>
             </div>
@@ -199,7 +200,7 @@ export const SearchMate = () => {
       ) : (
         <>
           <div className="d-flex justify-content-center">
-            <h1 className="search-match-card-font-shadow ">
+            <h1 className="search-mate-font">
               Search a mate
             </h1>
           </div>
