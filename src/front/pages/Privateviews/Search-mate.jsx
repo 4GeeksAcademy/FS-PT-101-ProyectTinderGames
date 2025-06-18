@@ -35,7 +35,7 @@ export const SearchMate = () => {
       try {
         const data = await searchMatchServices.getFilteredProfiles(store.user.profile.id);
 
-        console.log("Data desde la API:", data);
+        console.log("Perfiles filtrados por likes/dislikes-->", data);
 
         let allProfiles = [];
 
@@ -75,8 +75,7 @@ export const SearchMate = () => {
         likedProfile.id
       );
 
-      dispatch({ type: "saveLike", payload: likedProfile });
-
+      // 1. Guardar el like en local (modal)
       if (response && response.id) {
         const currentUserId = store.user.profile.id;
         const matchedUserId =
@@ -99,23 +98,48 @@ export const SearchMate = () => {
         if (matchedProfile) {
           setMatchProfile(matchedProfile);
           setShowMatchModal(true);
+
+          // Esperar un poco antes de modificar el store (para que el modal se vea)
+          setTimeout(() => {
+            dispatch({ type: "saveLike", payload: likedProfile });
+
+            // Remover perfil del store
+            const remainingProfiles = store.searchMatchProfiles.filter(
+              (_, index) => index !== currentUser
+            );
+            dispatch({
+              type: "getSearchMatchProfilesFiltered",
+              payload: remainingProfiles
+            });
+
+            setCurrentUser(0);
+          }, 500); // 500ms o menos si querés más instantáneo
+        } else {
+          // Si no hubo match, seguir flujo normal
+          dispatch({ type: "saveLike", payload: likedProfile });
+          advanceToNextProfile();
         }
+      } else {
+        // Si no hubo match, seguir flujo normal
+        dispatch({ type: "saveLike", payload: likedProfile });
+        advanceToNextProfile();
       }
 
     } catch (error) {
       console.error("Error en handleLike:", error);
-    } finally {
-      setCurrentUser((prev) => prev + 1);
-      const remainingProfiles = store.searchMatchProfiles.filter(
-        (_, index) => index !== currentUser
-      );
-      dispatch({ type: "getSearchMatchProfilesFiltered", payload: remainingProfiles });
-      setCurrentUser(0);
-
     }
-
-
   };
+
+  // Factorizar avance para no repetir lógica
+  const advanceToNextProfile = () => {
+    setCurrentUser((prev) => prev + 1);
+    const remainingProfiles = store.searchMatchProfiles.filter(
+      (_, index) => index !== currentUser
+    );
+    dispatch({ type: "getSearchMatchProfilesFiltered", payload: remainingProfiles });
+    setCurrentUser(0);
+  };
+
 
   const handleDislike = async () => {
     const dislikedProfile = store.searchMatchProfiles[currentUser];
@@ -154,13 +178,14 @@ export const SearchMate = () => {
     );
   }
 
-  if (!loading && currentUser >= (store.searchMatchProfiles?.length || 0)) {
+  if (!loading && !showMatchModal && currentUser >= (store.searchMatchProfiles?.length || 0)) {
     return (
       <h2 className="text-center mt-5 search-mate-font">
         Sorry {store.user?.profile?.nick_name || "player"}, there are no more players around. Try later!
       </h2>
     );
   }
+
 
   return (
     <>
