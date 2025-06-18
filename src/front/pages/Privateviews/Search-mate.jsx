@@ -99,6 +99,9 @@ export const SearchMate = () => {
           setMatchProfile(matchedProfile);
           setShowMatchModal(true);
 
+          // Aquí actualizas el estado global con la info del match
+          dispatch({ type: "getItsMatchInfo", payload: matchedProfile })
+
           // Esperar un poco antes de modificar el store (para que el modal se vea)
           setTimeout(() => {
             dispatch({ type: "saveLike", payload: likedProfile });
