@@ -9,7 +9,7 @@ export const FindGames = () => {
   const { store, dispatch } = useGlobalReducer();
 
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "¡Hola! Soy la IA de FindGames. ¿En qué puedo ayudarte?" },
+    { sender: "bot", text: "¡Hi! I'm the PlayerLink AI. ¿How may I help?" },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +75,7 @@ export const FindGames = () => {
         <div className="col-12 col-md-8 col-lg-6 d-flex flex-column" style={{ height: "75vh" }}>
           {/* ---------- Header ---------- */}
           <div className="border rounded-top text-center py-2 bg-gradient-header">
-            <h1 className="m-0 text-white fs-5">FindGames Chat</h1>
+            <h1 className="m-0 text-white fs-5">PlayerLink's IA Chat</h1>
           </div>
 
           {/* ---------- Mensajes (scrollable) ---------- */}
@@ -133,7 +133,7 @@ export const FindGames = () => {
               <input
                 type="text"
                 className="form-control bg-white text-dark"
-                placeholder="Escribe tu mensaje..."
+                placeholder="Your query here..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 disabled={isLoading}
@@ -143,7 +143,7 @@ export const FindGames = () => {
                 type="submit"
                 disabled={isLoading || !inputValue.trim()}
               >
-                {isLoading ? "⌛" : "Enviar"}
+                {isLoading ? "⌛" : "Send"}
               </button>
             </div>
           </form>
