@@ -38,6 +38,7 @@ const Profile = () => {
   // Estados locales
   const [activeTab, setActiveTab] = useState("info");                    // Pestaña activa (info, activity, comments)
   const [isEditing, setIsEditing] = useState(false);                       // Modo edición on/off
+  const [changer, setChanger] = useState(false);
   const [showModal, setShowModal] = useState(false);                       // Mostrar modal de avatar
   const [profile, setProfile] = useState({
     name: " ",
@@ -91,6 +92,12 @@ const Profile = () => {
     fetchGames();
   }, []);
 
+  useEffect(() => {
+    loadProfile();
+    console.log("El usuario ha cambiado")
+  }, [changer]);
+
+
   const fetchGames = async () => {
     try {
       const pageSize = 40; // max permitido por petición
@@ -116,22 +123,27 @@ const Profile = () => {
 
   // Cargar perfil desde backend
   const loadProfile = async () => {
-    userServices.getUserInfo().then(data => dispatch({ type: 'getUserInfo', payload: data.user }))
-    if (!store.user.profile) return;
     try {
+      const data = await userServices.getUserInfo();
+      dispatch({ type: 'getUserInfo', payload: data.user });
+
+      const profile = data.user.profile;
+
+      if (!profile) return;
+
       setProfile({
-        name: store.user.profile.name,
-        nick_name: store.user.profile.nick_name,
-        age: store.user.profile.age,
-        gender: store.user.profile.gender,
-        location: store.user.profile.location,
-        zodiac: store.user.profile.zodiac,
-        discord: store.user.profile.discord,
-        steam_id: store.user.profile.steam,
-        language: store.user.profile.language,
-        preferences: store.user.profile.preferences,
-        bio: store.user.profile.bio,
-        photo: store.user.profile.photo || 'photo1',
+        name: profile.name,
+        nick_name: profile.nick_name,
+        age: profile.age,
+        gender: profile.gender,
+        location: profile.location,
+        zodiac: profile.zodiac,
+        discord: profile.discord,
+        steam_id: profile.steam,
+        language: profile.language,
+        preferences: profile.preferences,
+        bio: profile.bio,
+        photo: profile.photo || 'photo1',
       });
     } catch (error) {
       console.error('Error en loadProfile:', error);
@@ -177,7 +189,7 @@ const Profile = () => {
         } catch (err) {
           console.error('Error en updateProfile:', err);
         }
-        loadProfile();
+
       } else {
         try {
           const resp = await fetch(url + `/api/profiles/${store.user?.id}`, {
@@ -190,7 +202,7 @@ const Profile = () => {
         } catch (err) {
           console.error('Error en updateProfile:', err);
         }
-        loadProfile();
+
       }
     }
 
@@ -535,7 +547,7 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived.reviews_received.length > 0 ?  (
+              {store.matchReviewsReceived.reviews_received.length > 0 ? (
                 store.matchReviewsReceived.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
