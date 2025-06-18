@@ -1,4 +1,4 @@
-import "../../pages/Privateviews/Search-mate.css"; 
+import "../../pages/Privateviews/Search-mate.css";
 import { useEffect, useState } from "react";
 import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCard";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
@@ -18,11 +18,12 @@ export const SearchMate = () => {
 
 
   useEffect(() => {
+    if (!store.user || !store.user.profile?.id) return;
+
     const timeout = setTimeout(() => {
       setShowLoadingMessage(true);
     }, 3000);
 
-    // Si ya tenemos perfiles en store, no hacemos fetch
     if (store.searchMatchProfiles && store.searchMatchProfiles.length > 0) {
       setLoading(false);
       clearTimeout(timeout);
@@ -32,9 +33,9 @@ export const SearchMate = () => {
     const getProfiles = async () => {
       setLoading(true);
       try {
-        const data = await searchMatchServices.getAllProfiles();
+        const data = await searchMatchServices.getFilteredProfiles(store.user.profile.id);
 
-        console.log("Data recibida de la API:--->", data);
+        console.log("Data desde la API:", data);
 
         let allProfiles = [];
 
@@ -42,19 +43,6 @@ export const SearchMate = () => {
           allProfiles = data;
         } else if (data.profiles && Array.isArray(data.profiles)) {
           allProfiles = data.profiles;
-        }
-
-        if (store.user && store.user.profile) {
-          const likedIds = store.likesSent?.map((p) => p.id) || [];
-          const dislikedIds = store.dislikesSent?.map((p) => p.id) || [];
-          
-
-          allProfiles = allProfiles.filter(
-            (profile) =>
-              profile.id !== store.user.profile.id &&
-              !likedIds.includes(profile.id) &&
-              !dislikedIds.includes(profile.id)
-          );
         }
 
         dispatch({ type: "getSearchMatchProfiles", payload: allProfiles });
@@ -69,7 +57,8 @@ export const SearchMate = () => {
     getProfiles();
 
     return () => clearTimeout(timeout);
-  }, [store.user, store.likesSent, store.dislikesSent, dispatch]);
+  }, [store.user, dispatch]);
+
 
   // Resetear currentUser si cambia la lista de perfiles
   useEffect(() => {
@@ -120,7 +109,7 @@ export const SearchMate = () => {
       const remainingProfiles = store.searchMatchProfiles.filter(
         (_, index) => index !== currentUser
       );
-      dispatch({ type: "getSearchMatchProfiles", payload: remainingProfiles });
+      dispatch({ type: "getSearchMatchProfilesFiltered", payload: remainingProfiles });
       setCurrentUser(0);
 
     }
@@ -201,7 +190,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center">
             <h1 className="search-mate-font">
-              Search a mate
+              Search a mate {store?.user.profile.nick_name} {store?.user.id}
             </h1>
           </div>
 

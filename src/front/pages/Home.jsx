@@ -172,7 +172,7 @@ export const Home = () => {
 								<div className="row d-flex gap-4 justify-content-around">
 									{/* Columna del contenido (orígenes + quiénes somos) */}
 									<div className="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
-										<div class="card-body">
+										<div className="card-body">
 											<h3 className="neon-heading mb-3">The origins</h3>
 											<p className="flex-grow-1">
 												Playerlink started as an academic project and, with dedication and passion, became what it is today: a web that links players around the world.
@@ -180,7 +180,7 @@ export const Home = () => {
 										</div>
 									</div>
 									<div className="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
-										<div class="card-body">
+										<div className="card-body">
 											<h3 className="neon-heading mb-3">Who are we?</h3>
 											<p className="flex-grow-1">
 												We are a aquad of gaming enthusiast who know the real fun starts when we play together <br />
