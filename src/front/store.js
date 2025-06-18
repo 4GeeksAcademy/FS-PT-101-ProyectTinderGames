@@ -51,7 +51,7 @@ export default function storeReducer(store, action = {}) {
     }
 
     case "getSearchMatchProfiles":
-      console.log("Reducer - getSearchMatchProfiles payload:", action.payload);
+      // console.log("Reducer - getSearchMatchProfiles payload:", action.payload);
       localStorage.setItem(
         "searchMatchProfiles",
         JSON.stringify(action.payload)
