@@ -65,73 +65,58 @@ export const SearchMate = () => {
     setCurrentUser(0);
   }, [store.searchMatchProfiles]);
 
+  //Maneja los likes
+
   const handleLike = async () => {
-    const likedProfile = store.searchMatchProfiles[currentUser];
-    if (!store.user?.profile?.id || !likedProfile?.id) return;
+  const likedProfile = store.searchMatchProfiles[currentUser];
+  if (!store.user?.profile?.id || !likedProfile?.id) return;
 
-    try {
-      const response = await searchMatchServices.addLikeSent(
-        store.user.profile.id,
-        likedProfile.id
-      );
+  try {
+    const response = await searchMatchServices.addLikeSent(
+      store.user.profile.id,
+      likedProfile.id
+    );
 
-      // 1. Guardar el like en local (modal)
-      if (response && response.id) {
-        const currentUserId = store.user.profile.id;
-        const matchedUserId =
-          response.liker_id === currentUserId
-            ? response.liked_id
-            : response.liker_id;
+    console.log("Respuesta addLikeSent:", response);
 
-        let matchedProfile = store.searchMatchProfiles.find(
-          (p) => p.id === matchedUserId
+    const matchesData = await searchMatchServices.getUserMatchesInfo(store.user.profile.id);
+    console.log("matchesData:", matchesData);
+
+    // Extraemos el array de matches
+    const matchesArray = matchesData.matches || [];
+
+    // Buscamos si hay match por user_id (igual al likedProfile.id)
+    const matchedProfile = matchesArray.find((m) => m.user_id === likedProfile.id);
+
+    if (matchedProfile) {
+      setMatchProfile(matchedProfile);
+      setShowMatchModal(true);
+      dispatch({ type: "getItsMatchInfo", payload: matchedProfile });
+
+      setTimeout(() => {
+        dispatch({ type: "saveLike", payload: likedProfile });
+
+        const remainingProfiles = store.searchMatchProfiles.filter(
+          (_, index) => index !== currentUser
         );
 
-        if (!matchedProfile) {
-          try {
-            matchedProfile = await searchMatchServices.getOneProfile(matchedUserId);
-          } catch (error) {
-            console.error("Error fetching matched profile--->", error);
-          }
-        }
+        dispatch({
+          type: "getSearchMatchProfilesFiltered",
+          payload: remainingProfiles,
+        });
 
-        if (matchedProfile) {
-          setMatchProfile(matchedProfile);
-          setShowMatchModal(true);
-
-          // Aquí actualizas el estado global con la info del match
-          dispatch({ type: "getItsMatchInfo", payload: matchedProfile })
-
-          // Esperar un poco antes de modificar el store (para que el modal se vea)
-          setTimeout(() => {
-            dispatch({ type: "saveLike", payload: likedProfile });
-
-            // Remover perfil del store
-            const remainingProfiles = store.searchMatchProfiles.filter(
-              (_, index) => index !== currentUser
-            );
-            dispatch({
-              type: "getSearchMatchProfilesFiltered",
-              payload: remainingProfiles
-            });
-
-            setCurrentUser(0);
-          }, 500); // 500ms o menos si querés más instantáneo
-        } else {
-          // Si no hubo match, seguir flujo normal
-          dispatch({ type: "saveLike", payload: likedProfile });
-          advanceToNextProfile();
-        }
-      } else {
-        // Si no hubo match, seguir flujo normal
-        dispatch({ type: "saveLike", payload: likedProfile });
-        advanceToNextProfile();
-      }
-
-    } catch (error) {
-      console.error("Error en handleLike:", error);
+        setCurrentUser(0);
+      }, 500);
+    } else {
+      dispatch({ type: "saveLike", payload: likedProfile });
+      advanceToNextProfile();
     }
-  };
+  } catch (error) {
+    console.error("Error en handleLike:", error);
+  }
+};
+
+
 
   // Factorizar avance para no repetir lógica
   const advanceToNextProfile = () => {
@@ -170,6 +155,7 @@ export const SearchMate = () => {
   const closeMatchModal = () => {
     setShowMatchModal(false);
     setMatchProfile(null);
+    dispatch({ type: "getItsMatchInfo", payload: null });
   };
 
   if (loading && showLoadingMessage) {
