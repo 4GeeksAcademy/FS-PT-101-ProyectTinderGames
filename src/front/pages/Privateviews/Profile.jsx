@@ -41,7 +41,7 @@ const Profile = () => {
   const [showModal, setShowModal] = useState(false);                       // Mostrar modal de avatar
   const [profile, setProfile] = useState({
     name: " ",
-    nick_name: " ",
+    nick_name: "",
     age: 0,
     gender: " ",
     location: " ",
@@ -85,7 +85,7 @@ const Profile = () => {
 
   // Carga inicial de perfil y reviews recibidos
   useEffect(() => {
-    !profile.nick_name && loadProfile();
+    loadProfile();
     reviewServices.getAllReviewsReceived(store.user?.id)
       .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
     fetchGames();
@@ -119,22 +119,19 @@ const Profile = () => {
     userServices.getUserInfo().then(data => dispatch({ type: 'getUserInfo', payload: data.user }))
     if (!store.user.profile) return;
     try {
-      const resp = await fetch(`${url}/api/profiles/${store.user.profile?.id}`);
-      if (!resp.ok) throw new Error('Error al cargar datos');
-      const datos = await resp.json();
       setProfile({
-        name: datos.name,
-        nick_name: datos.nick_name,
-        age: datos.age,
-        gender: datos.gender,
-        location: datos.location,
-        zodiac: datos.zodiac,
-        discord: datos.discord,
-        steam_id: datos.steam,
-        language: datos.language,
-        preferences: datos.preferences,
-        bio: datos.bio,
-        photo: datos.photo || 'photo1',
+        name: store.user.profile.name,
+        nick_name: store.user.profile.nick_name,
+        age: store.user.profile.age,
+        gender: store.user.profile.gender,
+        location: store.user.profile.location,
+        zodiac: store.user.profile.zodiac,
+        discord: store.user.profile.discord,
+        steam_id: store.user.profile.steam,
+        language: store.user.profile.language,
+        preferences: store.user.profile.preferences,
+        bio: store.user.profile.bio,
+        photo: store.user.profile.photo || 'photo1',
       });
     } catch (error) {
       console.error('Error en loadProfile:', error);
