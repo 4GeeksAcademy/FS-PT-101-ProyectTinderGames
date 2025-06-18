@@ -38,10 +38,11 @@ const Profile = () => {
   // Estados locales
   const [activeTab, setActiveTab] = useState("info");                    // Pestaña activa (info, activity, comments)
   const [isEditing, setIsEditing] = useState(false);                       // Modo edición on/off
+  const [changer, setChanger] = useState(false);
   const [showModal, setShowModal] = useState(false);                       // Mostrar modal de avatar
   const [profile, setProfile] = useState({
     name: " ",
-    nick_name: " ",
+    nick_name: "",
     age: 0,
     gender: " ",
     location: " ",
@@ -85,11 +86,17 @@ const Profile = () => {
 
   // Carga inicial de perfil y reviews recibidos
   useEffect(() => {
-    !profile.nick_name && loadProfile();
+    loadProfile();
     reviewServices.getAllReviewsReceived(store.user?.id)
       .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
     fetchGames();
   }, []);
+
+  useEffect(() => {
+    loadProfile();
+    console.log("El usuario ha cambiado")
+  }, [changer]);
+
 
   const fetchGames = async () => {
     try {
@@ -116,25 +123,27 @@ const Profile = () => {
 
   // Cargar perfil desde backend
   const loadProfile = async () => {
-    userServices.getUserInfo().then(data => dispatch({ type: 'getUserInfo', payload: data.user }))
-    if (!store.user.profile) return;
     try {
-      const resp = await fetch(`${url}/api/profiles/${store.user.profile?.id}`);
-      if (!resp.ok) throw new Error('Error al cargar datos');
-      const datos = await resp.json();
+      const data = await userServices.getUserInfo();
+      dispatch({ type: 'getUserInfo', payload: data.user });
+
+      const profile = data.user.profile;
+
+      if (!profile) return;
+
       setProfile({
-        name: datos.name,
-        nick_name: datos.nick_name,
-        age: datos.age,
-        gender: datos.gender,
-        location: datos.location,
-        zodiac: datos.zodiac,
-        discord: datos.discord,
-        steam_id: datos.steam,
-        language: datos.language,
-        preferences: datos.preferences,
-        bio: datos.bio,
-        photo: datos.photo || 'photo1',
+        name: profile.name,
+        nick_name: profile.nick_name,
+        age: profile.age,
+        gender: profile.gender,
+        location: profile.location,
+        zodiac: profile.zodiac,
+        discord: profile.discord,
+        steam_id: profile.steam,
+        language: profile.language,
+        preferences: profile.preferences,
+        bio: profile.bio,
+        photo: profile.photo || 'photo1',
       });
     } catch (error) {
       console.error('Error en loadProfile:', error);
@@ -180,7 +189,7 @@ const Profile = () => {
         } catch (err) {
           console.error('Error en updateProfile:', err);
         }
-        loadProfile();
+
       } else {
         try {
           const resp = await fetch(url + `/api/profiles/${store.user?.id}`, {
@@ -193,7 +202,7 @@ const Profile = () => {
         } catch (err) {
           console.error('Error en updateProfile:', err);
         }
-        loadProfile();
+
       }
     }
 
@@ -538,7 +547,7 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived.reviews_received.length > 0 ?  (
+              {store.matchReviewsReceived.reviews_received.length > 0 ? (
                 store.matchReviewsReceived.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
