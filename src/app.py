@@ -25,20 +25,16 @@ app.url_map.strict_slashes = False
 
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-jwt = JWTManager(app) 
+jwt = JWTManager(app)
 
-app.config['MAIL_SERVER']= 'smtp.gmail.com'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USERNAME")
-app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASSWORD")
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = ('PlayerLink', 'PlayerLink@player.link')
+app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USER")
+app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASS")
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv("EMAIL_USER")
 
 mail.init_app(app)  # Inicializa mail con la aplicación
-
-
-
-
 
 
 # database condiguration
@@ -79,6 +75,8 @@ def sitemap():
     return send_from_directory(static_file_dir, 'index.html')
 
 # any other endpoint will try to serve it like a static file
+
+
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):
     if not os.path.isfile(os.path.join(static_file_dir, path)):

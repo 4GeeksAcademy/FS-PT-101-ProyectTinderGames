@@ -6,11 +6,16 @@ import carrusel2 from '../assets/img/carrusel/carrusel-2.png';
 import carrusel3 from '../assets/img/carrusel/carrusel-3.png';
 import carrusel4 from '../assets/img/carrusel/carrusel-4.png';
 import logotarjeta from '../assets/img/logos/logo-tarjetas-about-us.png';
-import React, { useEffect } from "react"
+import React, { useEffect, useContext, useState } from "react"
 
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Home = () => {
+	const [email, setEmail] = useState('')
+	const { store, dispatch, actions } = useGlobalReducer();
+	const handleClick = () => {
+		actions.sendResetEmail(email);
+	};
 	return (
 		<>
 			<NavbarHome />
@@ -97,6 +102,15 @@ export const Home = () => {
 							</div>
 						</div>
 					</div>
+					<p>recuperar contraseña</p>
+					<input
+						type="text"
+						value={email}
+						onChange={e => setEmail(e.target.value)}
+					/>
+					<button onClick={handleClick}>
+						reset
+					</button>
 				</section>
 				{/* Best Practices */}
 				<section className="bestpractices-section text-white border-bottom border-white" id='bestpractices'>

@@ -19,11 +19,20 @@ export const initialStore = () => {
     starsByUser: null,
     searchMatchProfiles: safeJSONParse("searchMatchProfiles", []),
     matchReviewsReceived: null,
+    token: localStorage.getItem("token") || null,
   };
 };
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
+    case "setUserAndToken":
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...store,
+        user: action.payload.user,
+        token: action.payload.token,
+      };
     case "saveLike":
       const updatedLikes = [...store.likesSent, action.payload];
       localStorage.setItem("likesSent", JSON.stringify(updatedLikes));
@@ -43,7 +52,10 @@ export default function storeReducer(store, action = {}) {
 
     case "getSearchMatchProfiles":
       console.log("Reducer - getSearchMatchProfiles payload:", action.payload);
-      localStorage.setItem("searchMatchProfiles", JSON.stringify(action.payload)); // Guarda en localStorage
+      localStorage.setItem(
+        "searchMatchProfiles",
+        JSON.stringify(action.payload)
+      ); // Guarda en localStorage
       return {
         ...store,
         searchMatchProfiles: action.payload,
