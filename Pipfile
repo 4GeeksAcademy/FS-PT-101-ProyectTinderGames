@@ -23,6 +23,8 @@ flask = "*"
 flask-jwt-extended = "*"
 werkzeug = "*"
 openai = "*"
+flask-mail = "*"
+itsdangerous = "*"
 
 [requires]
 python_version = "3.13"
