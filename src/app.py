@@ -10,6 +10,8 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_mail import Mail, Message
+from api.mail.mail_config import mail
 from flask_jwt_extended import JWTManager
 
 # from models import Person
@@ -24,6 +26,19 @@ app.url_map.strict_slashes = False
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app) 
+
+app.config['MAIL_SERVER']= 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASSWORD")
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_DEFAULT_SENDER'] = ('PlayerLink', 'PlayerLink@player.link')
+
+mail.init_app(app)  # Inicializa mail con la aplicación
+
+
+
+
 
 
 # database condiguration
