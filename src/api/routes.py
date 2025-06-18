@@ -7,6 +7,9 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Profile, Review, Match, Reject, Game, Like
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer
+from your_app import app,mail   # Asegúrate de importar app y mail correctamente
 from sqlalchemy import select, or_
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -16,6 +19,7 @@ from api.mail.mailer import send_email
 
 # Carga variables de entorno desde .env
 load_dotenv()
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 # Obtén la clave de OpenAI
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

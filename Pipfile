@@ -24,6 +24,10 @@ flask-jwt-extended = "*"
 werkzeug = "*"
 openai = "*"
 flask-mail = "*"
+<<<<<<< HEAD
+=======
+itsdangerous = "*"
+>>>>>>> 6d4b6455873895d80cfbba7bbb0b3487099f0563
 
 [requires]
 python_version = "3.13"
