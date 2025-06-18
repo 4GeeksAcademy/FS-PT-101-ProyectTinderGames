@@ -24,6 +24,15 @@ export const initialStore = () => {
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
+    case "getSearchMatchProfilesFiltered":
+      localStorage.setItem(
+        "searchMatchProfiles",
+        JSON.stringify(action.payload)
+      );
+      return {
+        ...store,
+        searchMatchProfiles: action.payload,
+      };
     case "saveLike":
       const updatedLikes = [...store.likesSent, action.payload];
       localStorage.setItem("likesSent", JSON.stringify(updatedLikes));
@@ -43,7 +52,10 @@ export default function storeReducer(store, action = {}) {
 
     case "getSearchMatchProfiles":
       console.log("Reducer - getSearchMatchProfiles payload:", action.payload);
-      localStorage.setItem("searchMatchProfiles", JSON.stringify(action.payload)); // Guarda en localStorage
+      localStorage.setItem(
+        "searchMatchProfiles",
+        JSON.stringify(action.payload)
+      ); // Guarda en localStorage
       return {
         ...store,
         searchMatchProfiles: action.payload,

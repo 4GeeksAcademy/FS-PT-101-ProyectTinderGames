@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+from sqlalchemy import not_, or_
 import os
 import openai
 from flask import Flask, request, jsonify, url_for, Blueprint
@@ -211,7 +212,7 @@ def put_user_email(user_id):
     return jsonify(user.serialize()), 200
 
 
-#PUT USER PASSWORD
+# PUT USER PASSWORD
 @api.route('/users_password/<int:user_id>', methods=['PUT'])
 def users_password(user_id):
     data = request.get_json()
@@ -351,6 +352,37 @@ def put_profile(user_id):
 
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
+
+# GET profiles exluyendo a los que ya se dio like o dislike /////////////////////////////////////////////
+@api.route('/profiles/profiles_to_explore/<int:user_id>', methods=['GET'])
+def profiles_to_explore(user_id):
+    # Verificar que el usuario existe
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': f'User with id {user_id} not found'}), 404
+
+    # Obtener los IDs de usuarios a los que ya le dio like
+    liked_user_ids = [like.liked_id for like in user.likes_given]
+
+    # Obtener los IDs de usuarios a los que ya le dio reject
+    rejected_user_ids = [reject.rejected_id for reject in user.rejects_given]
+
+    # IDs a excluir
+    exclude_ids = set(liked_user_ids + rejected_user_ids + [user_id])
+
+    # Buscar usuarios que no estén en exclude_ids y que tengan perfil
+    profiles = (
+        db.session.query(Profile)
+        .join(User)
+        .filter(~User.id.in_(exclude_ids))
+        .all()
+    )
+
+    # Serializar perfiles
+    result = [profile.serialize() for profile in profiles]
+
+    return jsonify(result), 200
+#////////////////////////////////////////////////////////////////////////////////////////
 
 # PUT PHOTO PROFILE
 

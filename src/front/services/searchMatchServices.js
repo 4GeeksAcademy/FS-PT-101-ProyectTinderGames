@@ -21,7 +21,6 @@ searchMatchServices.getUserInfo = async () => {
   }
 };
 
-
 //Trae la infomación de todos los perfiles
 searchMatchServices.getAllProfiles = async () => {
   try {
@@ -67,7 +66,6 @@ searchMatchServices.getUserMatchesInfo = async (user_id) => {
   }
 };
 
-
 // Trae las estrellas de las reviews de un user
 searchMatchServices.getStarsByUser = async (userId) => {
   try {
@@ -90,7 +88,6 @@ searchMatchServices.getStarsByUser = async (userId) => {
     return 0; // si no hay estrellas en vez de error, retorna 0
   }
 };
-
 
 // Manda los likes dados por el usuario
 searchMatchServices.addLikeSent = async (liker_id, liked_id) => {
@@ -150,7 +147,6 @@ searchMatchServices.getLikesReceived = async (userId) => {
   }
 };
 
-
 // Trae los dislikes recibidos por el usuario logeado (creo que no hace falta)
 searchMatchServices.getDislikesReceived = async (userId) => {
   try {
@@ -167,5 +163,23 @@ searchMatchServices.getDislikesReceived = async (userId) => {
     return error;
   }
 };
-export default searchMatchServices;
 
+// Trae perfiles filtrados (excluye a los que ya se dio like o dislike)
+searchMatchServices.getFilteredProfiles = async (userId) => {
+  try {
+    const resp = await fetch(`${url}/api/profiles/profiles_to_explore/${userId}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    if (!resp.ok) throw new Error(`Failed to get profiles to explore: ${resp.status}`);
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    console.error("Error in getFilteredProfiles:", error);
+    throw error;
+  }
+};
+
+
+export default searchMatchServices;
