@@ -12,6 +12,8 @@ from sqlalchemy import select, or_
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
+from flask_mail import Message
+from api.mail.mailer import send_email
 
 # Carga variables de entorno desde .env
 load_dotenv()
@@ -116,6 +118,65 @@ def login():
     except Exception as e:
         print(e)
         return jsonify({'Error': 'algo paso'}), 400
+
+
+@api.route('/mailer/<address>', methods=['POST'])
+def handle_mail(address):
+   return send_email(address)
+
+@api.route('/token', methods=['GET'])
+@jwt_required()
+def check_jwt():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if user:
+        return jsonify({'success': True, 'user': user.serialize()}), 200
+    return jsonify({'success': False, 'msg': 'Bad token'}), 401
+
+# funcion para verificar que el correo esta en la base de datos y enviar el correo de recuperacion de estarlo
+@api.route("/check_mail", methods=['POST'])
+def check_mail():
+    try:
+        data = request.json
+        # buscamos el correo en la base de datos y almacenamos el resultado en la variable user
+        user = User.query.filter_by(email=data['email']).first()
+        # si no se encuentra, se devuelve que el correo no se ha encontrado
+        if not user:
+            return jsonify({'success': False, 'msg': 'email not found'}), 404
+        # creamos el token que se va a enviar y necesario para la recuperacion de la contraseña
+        token = create_access_token(identity=user.id)
+        if not token:
+            return jsonify({'success': False, 'msg': 'token not found'}), 404
+        
+        result = send_email(data['email'], token)
+        print(result)
+        return jsonify({'success': True, 'token': token, 'email': result}), 200
+    except Exception as e:
+        print('error: ' + str(e))
+        return jsonify({'success': False, 'msg': 'something went wrong'})
+    
+
+#ruta para actualizar el password. Se consume desde la vista para hacer el reset en el front
+@api.route('/password_update', methods=['PUT'])
+@jwt_required()
+def password_update():
+    try:
+        data = request.json
+        #extraemos el id del token que creamos en la linea 133
+        id = get_jwt_identity()
+        #buscamos usuario por id
+        user = User.query.get(id)
+        #actualizamos password del usuario
+        hashed_password = generate_password_hash(data['password'])
+        user.password = hashed_password
+        #alacenamos los cambios
+        db.session.commit()
+        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente, intente iniciar sesion'}), 200
+    except Exception as e:
+        db.session.rollback()
+        print (f"Error al enviar el correo: {str(e)}")
+        return jsonify({'success': False, 'msg': f"Error al enviar el correo: {str(e)}"})
+
 
 
 # PRIVATE ENDPOINT
@@ -354,6 +415,8 @@ def put_profile(user_id):
     return jsonify(user.profile.serialize()), 200
 
 # GET profiles exluyendo a los que ya se dio like o dislike /////////////////////////////////////////////
+
+
 @api.route('/profiles/profiles_to_explore/<int:user_id>', methods=['GET'])
 def profiles_to_explore(user_id):
     # Verificar que el usuario existe
@@ -382,7 +445,7 @@ def profiles_to_explore(user_id):
     result = [profile.serialize() for profile in profiles]
 
     return jsonify(result), 200
-#////////////////////////////////////////////////////////////////////////////////////////
+# ////////////////////////////////////////////////////////////////////////////////////////
 
 # PUT PHOTO PROFILE
 
