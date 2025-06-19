@@ -26,6 +26,29 @@ import photo7 from "../../assets/img/profile-pics/profile-pic-7.png";
 import photo8 from "../../assets/img/profile-pics/profile-pic-8.png";
 import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 
+//Preferences and Languages Modals
+
+import { GamingPreferencesModal } from "../../components/ProfileModals/GamingPreferencesModal.jsx";
+import { LanguageModal } from "../../components/ProfileModals/LanguageModal.jsx";
+
+
+
+// tuve que hacer dos const para la puntuación??  PUNTUACIÓN DE LAS MODALES
+const formatPreferences = (prefs) => {
+  if (!prefs || prefs.length === 0) return '';
+  if (prefs.length === 1) return prefs[0] + '.';
+  return prefs.slice(0, -1).join(', ') + ' and ' + prefs[prefs.length - 1] + '.';
+};
+const parsePreferences = (str) => {
+  if (!str) return [];
+  return str
+    .replace(/\.$/, '')                // quitar punto final
+    .split(/, | and /)                 // dividir por ", " y " and "
+    .map(p => p.trim())               // quitar espacios
+    .filter(Boolean);                 // quitar vacíos
+};
+
+
 const Profile = () => {
   // Acceso al store global y dispatch para actualizar datos
   const [availableGames, setAvailableGames] = useState([]);
@@ -49,11 +72,21 @@ const Profile = () => {
     zodiac: " ",
     discord: " ",
     steam_id: " ",
-    language: " ",
+    languages: " ",
     preferences: " ",
     bio: " ",
     photo: "photo1"
   });
+  // Estados de Modales languages y Gaming preferences
+  const [showGamingPreferencesModal, setShowGamingPreferencesModal] = useState(false);
+  const [selectedGamingPreferences, setSelectedGamingPreferences] = useState(
+    parsePreferences(profile.preferences)
+  );
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [selectedLanguages, setSelectedLanguages] = useState(
+    parsePreferences(profile.languages) // reutilizo parse para la puntuación.
+  );
+
 
   // Opciones para selects
   const zodiacSigns = [
@@ -140,7 +173,7 @@ const Profile = () => {
         zodiac: profile.zodiac,
         discord: profile.discord,
         steam_id: profile.steam,
-        language: profile.language,
+        languages: profile.languages,
         preferences: profile.preferences,
         bio: profile.bio,
         photo: profile.photo || 'photo1',
@@ -404,18 +437,46 @@ const Profile = () => {
                   )}
                 </div>
               ))}
+              {/* MODAL DE PREFERENCES----------------------- */}
               <div className="gaming-prefs-box col-md-6">
                 <label>Gaming Preferences</label>
                 {isEditing ? (
-                  <textarea
-                    rows={3}
-                    value={profile.preferences}
-                    onChange={e => handleInputChange('preferences', e.target.value)}
-                  />
+                  <>
+                    <div className="section-container">
+                      <button
+                        onClick={() => setShowGamingPreferencesModal(true)}
+                        className="section-button"
+                      >
+                        Select Preferences
+                      </button>
+                      <p> {selectedGamingPreferences.length > 0
+                        ? formatPreferences(selectedGamingPreferences)
+                        : "No preferences selected yet."}</p>
+                    </div>
+
+                    {showGamingPreferencesModal && (
+                      <GamingPreferencesModal
+                        selected={selectedGamingPreferences}
+                        setSelected={setSelectedGamingPreferences}
+                        onSave={() => {
+                          // Guarda las preferencias como string...
+                          handleInputChange('preferences', formatPreferences(selectedGamingPreferences));
+                          setShowGamingPreferencesModal(false);
+                        }}
+                        onCancel={() => setShowGamingPreferencesModal(false)}
+                      />
+                    )}
+                  </>
                 ) : (
-                  <p><strong>I'm looking for:</strong> {profile.preferences}</p>
+                  <p>
+                    {profile.preferences && profile.preferences.trim().length > 0
+                      ? profile.preferences
+                      : "No preferences selected yet."}
+
+                  </p>
                 )}
               </div>
+
               <div className="col-md-6">
                 <label>Location</label>
                 {isEditing ? (
@@ -428,6 +489,49 @@ const Profile = () => {
                   <p>{profile.location}</p>
                 )}
               </div>
+              <div className="col-md-12">
+                <div className="form-group">
+                  <label className="" >Languages</label>
+                  {isEditing ? (
+                    <>
+                      <div className="section-container">
+                        <button
+                          onClick={() => setShowLanguageModal(true)}
+                          className="section-button"
+                        >
+                          Select Languages
+                        </button>
+                        <p style={{ minHeight: "38px" }}>
+                          {selectedLanguages.length > 0
+                            ? formatPreferences(selectedLanguages)
+                            : "No languages selected."}
+                        </p>
+                      </div>
+
+                      {showLanguageModal && (
+                        <LanguageModal
+                          selected={selectedLanguages}
+                          setSelected={setSelectedLanguages}
+                          onSave={() => {
+                            handleInputChange(
+                              "languages",
+                              formatPreferences(selectedLanguages)
+                            );
+                            setShowLanguageModal(false);
+                          }}
+                          onCancel={() => setShowLanguageModal(false)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <p style={{ minHeight: "38px" }}> {/* no me gusta usar style así, pero no quería interferir */}
+                      {profile.languages ? profile.languages : "No languages selected."}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+
             </div>
             <div className="row mt-3">
               <div className="col text-left">
