@@ -49,6 +49,12 @@ export const Sidebar = ({ activePath }) => {
             <span className="sidebar-text">{link.label}</span>
           </NavLink>
         ))}
+        <button className="sidebar-button logout">
+          <span className="sidebar-icon">
+            <i><i class="fa-solid fa-right-from-bracket"></i></i>
+          </span>
+          <span className="sidebar-text">Log out</span>
+        </button>
       </div>
     </>
   );

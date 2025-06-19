@@ -51,6 +51,34 @@
   box-shadow: 0 0 10px cyan, 0 0 10px #cc00ff;
 }
 
+/* Estilo para el botón de "Log out" */
+.sidebar-button.logout {
+  background-color: red; 
+  margin-top: auto; 
+  justify-content: flex-start; 
+}
+
+.sidebar-button.logout:hover {
+  background-color: darkred; 
+}
+
+.sidebar-button.logout .sidebar-text {
+  color: white; 
+  margin-left: 30px; /* Espacio entre el ícono y el texto */
+}
+
+.sidebar-button.logout .sidebar-icon {
+  font-size: 18px; /* Tamaño del ícono */
+  margin-right: 10px; /* Espacio entre el ícono y el texto */
+  margin-left: 40px;
+}
+
+.sidebar-button.logout i {
+  font-size: 50px; 
+  color: white;
+}
+
+
 /* Ajuste a resoluciones pequeñas */
 @media (max-width: 768px) {
   .sidebar {
