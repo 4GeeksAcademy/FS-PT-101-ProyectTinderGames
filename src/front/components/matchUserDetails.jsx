@@ -112,7 +112,7 @@ export const MatchUserDetails = () => {
       case "photo7": return photo7;
       case "photo8": return photo8;
       case "photo9": return photo9;
-      default: return "defaultPhoto";
+      default: return "photo1";
     }
   };
 

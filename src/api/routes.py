@@ -340,7 +340,6 @@ def get_single_profile(profile_id):
 
 # DELETE PROFILE BY USER ID
 
-
 @api.route('/profiles/user/<int:user_id>', methods=['DELETE'])
 def delete_profile_by_user_id(user_id):
     stmt = select(Profile).where(Profile.user_id == user_id)
