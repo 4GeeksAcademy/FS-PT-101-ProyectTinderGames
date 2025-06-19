@@ -527,7 +527,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="row mt-5 gap-3 d-flez justify-content-center">
-              {store.user?.profile.games ? store.user.profile.games.map((el, i) => (
+              {store.user.profile?.games ? store.user.profile.games.map((el, i) => (
                 <div key={i} className="row gamesbox d-flex align-content-center py-3">
                   <div className="d-flex justify-content-around col-lg-10 col-md-12 col-sm-12 align-items-center">
                     <p className="m-0">{el.game.title}</p>
