@@ -25,6 +25,7 @@ import { YourMatches } from "./pages/Privateviews/Your-matches";
 import { FindGames } from "./pages/Privateviews/Find-games";
 import  Settings  from "./pages/Privateviews/Settings";
 import { MatchUserDetails } from "./components/matchUserDetails";
+import {Reset} from "./pages/Reset.jsx"
 
 
 export const router = createBrowserRouter(
@@ -62,6 +63,7 @@ export const router = createBrowserRouter(
       <Route path="/cardscomponents" element={<Cardscomponents />} /> {/* aqui se ven lso componentes de SearhcMatchCard y ItsMatch */}
 
       <Route path="/privateside" element={<PrivateLayout />} />  {/* esta ruta la tengo para ver solo la sidebar cuando la esté manejando. */}
+      <Route path="/reset" element={<Reset/>} />
 
     </Route >
   )

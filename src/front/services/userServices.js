@@ -60,7 +60,7 @@ userServices.getUserInfo = async () => {
 
 userServices.getUserInfoById = async (user_id) => {
   try {
-    const resp = await fetch(url + `/api/users/${user_id}`, {});
+    const resp = await fetch(url + `/api/users/${user_id}`);
     if (!resp.ok) throw Error("Something went wrong");
     const data = await resp.json();
     console.log(data);

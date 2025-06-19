@@ -23,7 +23,7 @@ export const SignIn = ({ onSwitch }) => {
             const data = await userServices.login(formData)
             localStorage.setItem('token', data.token)
             if (data.success) {
-                navigate('/private')
+                navigate('/private/profile')
             } else {
                 setErrorLogin("Incorrect email or password")
             }

@@ -32,16 +32,19 @@ export const MatchUserDetails = () => {
   useEffect(() => {
     userServices
       .getUserInfoById(id)
-      .then(data => dispatch({ type: "getMatchInfo", payload: data }))
+      .then(data => dispatch({ type: "getItsMatchInfo", payload: data }))
       .catch(err => console.error("Failed to load user info:", err));
-    reviewServices.getAllReviewsReceived(id).then(data => dispatch({ type: "matchReviewsReceived", payload: data }))
-  }, [id, dispatch]);
+
+    reviewServices
+      .getAllReviewsReceived(id)
+      .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+  }, []);
 
   // El hook useMemo de React sirve para “memorizar” (cachear) el resultado de una función de cálculo y sólo volver a 
   // ejecutarla cuando cambien unas dependencias que tú le indiques. Se utiliza para optimizar el rendimiento, evitando 
   // cálculos innecesarios en cada renderizado.
   const profile = useMemo(() => {
-    const p = store.matchInfo?.profile ?? {};
+    const p = store.itsMatchInfo?.profile ?? {};
     return {
       name: p.name ?? "no data",
       nickname: p.nick_name ?? "no data",
@@ -56,8 +59,8 @@ export const MatchUserDetails = () => {
       bio: p.bio ?? "no data",
       photo: p.photo ?? "no data"
     };
-  }, [store.matchInfo]);
-  const allGames = store.matchInfo?.profile?.games ?? [];
+  }, [store.itsMatchInfo]);
+  const allGames = store.itsMatchInfo?.profile?.games ?? [];
 
   const selectMedal = (gamehours) => {
     const hours = parseInt(gamehours, 10);
@@ -81,7 +84,7 @@ export const MatchUserDetails = () => {
       // 1. Envía la nueva review: userId, recipientId, { stars, comment }
       await reviewServices.postNewReview(
         store.user.id,
-        store.matchInfo.id,
+        store.itsMatchInfo.id,
         newComment
       );
 
@@ -239,15 +242,22 @@ export const MatchUserDetails = () => {
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
             </div>
-            <div className="row mt-5 gap-3 d-flez justify-content-center">
-              {store.matchInfo?.profile.games && store.matchInfo.profile.games.map((el, i) => (
-                <div key={i} className="row gamesbox d-flex align-content-center py-3">
-                  <div className="d-flex justify-content-around col-lg-10 col-md-12 col-sm-12 align-items-center">
-                    <p className="m-0">{el.game.title}</p>
-                    <p className="m-0">{el.game.hours_played} hours</p>
+
+            <div className="row mt-5 gap-3 justify-content-center">
+              {store.itsMatchInfo?.profile?.games?.length > 0 ? (
+                store.itsMatchInfo.profile.games.map((el, i) => (
+                  <div key={i} className="col-12 gamesbox d-flex align-items-center py-3">
+                    <div className="row w-100 m-0">
+                      <div className="col-lg-10 col-md-12 d-flex justify-content-around align-items-center">
+                        <p className="m-0">{el.game.title}</p>
+                        <p className="m-0">{el.game.hours_played} hours</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-center">No games available.</p>
+              )}
             </div>
           </div>
         )}
@@ -346,12 +356,15 @@ export const MatchUserDetails = () => {
             </div>
           </div>
           <div className="row">
-            {store.matchReviewsReceived.reviews_received.length > 0 ? (
+            {store.matchReviewsReceived?.reviews_received?.length > 0 ? (
               store.matchReviewsReceived.reviews_received.map((el) => (
                 <div key={el.id} className="review-card">
                   <div className="review-container">
-                    Author : {el.author_nickname} — {el.stars} ⭐️
-                    <p className="m-0 border-0 review-box"> <span className="fa-solid fa-comment mx-2"></span>{el.comment}</p>
+                    <strong>Author:</strong> {el.author_nickname} — {el.stars} ⭐️
+                    <p className="m-0 border-0 review-box">
+                      <span className="fa-solid fa-comment mx-2"></span>
+                      {el.comment}
+                    </p>
                   </div>
                 </div>
               ))

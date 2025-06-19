@@ -68,7 +68,6 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "getItsMatchInfo":
-      localStorage.setItem("itsMatchInfo", JSON.stringify(action.payload));
       return {
         ...store,
         itsMatchInfo: action.payload,
