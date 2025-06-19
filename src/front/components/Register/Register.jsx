@@ -47,7 +47,7 @@ export const Register = ({ onSwitch }) => {
         userServices.register(formData).then(data => {
             localStorage.setItem('token', data.token)
             if (data.success) {
-                navigate('/private');
+                navigate('/private/profile');
             } else {
                 setErrorEmailRegistered("Email already registered")
             }
