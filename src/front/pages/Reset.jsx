@@ -71,7 +71,7 @@ export const Reset = () => {
 
 		<>
 		
-			<div className="margin-reset">
+			<div>
 				<div className='d-flex justify-content-center'>
 					<div className='card reset-card mt-5'>
 						<div className="card-body">
