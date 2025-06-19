@@ -13,7 +13,7 @@ export const initialStore = () => {
   return {
     user: safeJSONParse("user", null),
     userMatchesInfo: null,
-    matchInfo: null,
+    itsMatchInfo: safeJSONParse("itsMatchInfo", null),
     likesSent: safeJSONParse("likesSent", []),
     dislikesSent: safeJSONParse("dislikesSent", []),
     starsByUser: null,
@@ -51,7 +51,7 @@ export default function storeReducer(store, action = {}) {
     }
 
     case "getSearchMatchProfiles":
-      console.log("Reducer - getSearchMatchProfiles payload:", action.payload);
+      // console.log("Reducer - getSearchMatchProfiles payload:", action.payload);
       localStorage.setItem(
         "searchMatchProfiles",
         JSON.stringify(action.payload)
@@ -67,11 +67,12 @@ export default function storeReducer(store, action = {}) {
         starsByUser: action.payload,
       };
 
-    case "getMatchInfo":
+    case "getItsMatchInfo":
       return {
         ...store,
-        matchInfo: action.payload,
+        itsMatchInfo: action.payload,
       };
+
     case "getAllMatchesInfo":
       return {
         ...store,

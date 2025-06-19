@@ -1,20 +1,8 @@
 """empty message
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:migrations/versions/0a0397ebc5cb_.py
-Revision ID: 0a0397ebc5cb
+Revision ID: e7e80a0e413d
 Revises: 
-Create Date: 2025-06-18 10:04:38.794849
-========
-Revision ID: 845a4073a93d
-Revises: 
-Create Date: 2025-06-18 10:21:18.810258
->>>>>>>> develop:migrations/versions/845a4073a93d_.py
-=======
-Revision ID: 845a4073a93d
-Revises: 
-Create Date: 2025-06-18 10:21:18.810258
->>>>>>> develop
+Create Date: 2025-06-18 11:38:53.893547
 
 """
 from alembic import op
@@ -22,15 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<< HEAD
-<<<<<<<< HEAD:migrations/versions/0a0397ebc5cb_.py
-revision = '0a0397ebc5cb'
-========
-revision = '845a4073a93d'
->>>>>>>> develop:migrations/versions/845a4073a93d_.py
-=======
-revision = '845a4073a93d'
->>>>>>> develop
+revision = 'e7e80a0e413d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -80,10 +60,6 @@ def upgrade():
     sa.Column('steam_id', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('bio'),
-    sa.UniqueConstraint('discord'),
-    sa.UniqueConstraint('nick_name'),
-    sa.UniqueConstraint('steam_id'),
     sa.UniqueConstraint('user_id')
     )
     op.create_table('rejects',

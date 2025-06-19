@@ -8,7 +8,9 @@
   border: 3px solid #008cff;
   border-radius: 20px;
 }
-
+.its-match-card-font{
+  color:#00f0ff ;
+}
 .its-match-profile-pic {
   width: 170px;
   height: 190px;
