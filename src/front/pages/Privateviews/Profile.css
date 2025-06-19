@@ -522,3 +522,25 @@
 .gameImg{
   object-fit: contain;
 }
+/* Botones de las modales */
+.section-button {
+  padding: 2px 8px;
+  font-weight: bold;
+  border: 2px solid #00ffff;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #0f0f2b, #111d3d);
+  color: #00ffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px #00ffff66, 0 0 20px #ff00ff33;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.section-button:hover {
+  background-color: transparent;
+  color: white;
+  box-shadow: 0 0 14px #00ffffcc, 0 0 24px #ff00ff88;
+  transform: scale(1.05);
+}
