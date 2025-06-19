@@ -3,6 +3,7 @@ import './SignIn.css';
 import { useState } from 'react';
 import userServices from '../../services/userServices';
 
+
 export const SignIn = ({ onSwitch }) => {
 
     const navigate = useNavigate()
@@ -40,6 +41,7 @@ export const SignIn = ({ onSwitch }) => {
     }
 
     return (
+        <>
 
         <div className='d-flex justify-content-center'>
             <div className='card sign-in-card mt-5'>
@@ -71,17 +73,28 @@ export const SignIn = ({ onSwitch }) => {
                                         value={formData.password}
                                         onChange={handleChange}
                                         className="w-100 border-0 "
-                                    />
+                                        />
                                     <span
                                         className="input-group-text border-0 bg-white"
                                         
                                         onClick={() => setShowPassword(prev => !prev)}
-                                    >
+                                        >
                                         <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                                     </span>
                                 </div>
 
-                                <div className="form-text sign-in-password-subtitle" id="basic-addon4">Forgot your password? It’s ok <Link to="/">click here</Link></div>
+                                <div className="form-text sign-in-password-subtitle" id="basic-addon4">
+                                    Forgot your password? It’s ok{" "}
+                                    <a
+                                        href="#"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#forgotPasswordModal"
+                                        data-bs-dismiss="modal"
+                                        >
+                                        click here
+                                    </a>
+                                </div>
+
                                 {errorLogin && <h5 className="text-danger mt-2 sign-in-message-errors">{errorLogin}</h5>}
                             </div>
                             <input type="submit" value="Continue" className='w-100 rounded-2 mt-5 text-white bg-black btn-sign-in-card-border' />
@@ -89,6 +102,22 @@ export const SignIn = ({ onSwitch }) => {
                     </form>
                 </div>
             </div>
-        </div>
+    
+
+    {/* modal del reset */}
+    
+    </div>
+
+
+
+ <div>
+
+
+
+ </div>
+
+
+
+                                        </>
     )
 }
