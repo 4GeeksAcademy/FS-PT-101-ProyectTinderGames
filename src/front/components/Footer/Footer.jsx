@@ -25,22 +25,17 @@ export const Footer = () => (
 
 			</div>
 
-			<div className="footer-social-media-icons mt-2 mt-md-3 order-0 order-md-1 d-flex ">
-				{/* <img src={TikTok} alt="TikTok" className="social-media-icon me-2 img-fluid" /> */}
+			<div className="footer-social-media-icons mt-2 mt-md-3 order-0 order-md-1 d-flex justify-content-center">
 				<a href="https://www.tiktok.com/@playerlinkapp" target="_blank" rel="noopener noreferrer">
 					<i className="fa-brands fa-tiktok social-media-icon"></i>
 				</a>
-				{/* <img src={Instagram} alt="Instagram" className="social-media-icon me-2 img-fluid" /> */}
 				<a href="https://www.tiktok.com/@playerlinkapp" target="_blank" rel="noopener noreferrer">
 					<i className="fa-brands fa-instagram social-media-icon"></i>
 				</a>
-				{/* <img src={Discord} alt="Discord" className="social-media-icon me-2 img-fluid" /> */}
 				<i className="fa-brands fa-discord social-media-icon"></i>
-				{/* <img src={Facebook} alt="Facebook" className="social-media-icon me-2 img-fluid" /> */}
 				<a href="https://www.facebook.com/profile.php?id=61577751683748" target="_blank" rel="noopener noreferrer">
 					<i className="fa-brands fa-facebook-f social-media-icon"></i>
 				</a>
-				{/* <img src={Twitter} alt="Twitter" className="social-media-icon img-fluid" /> */}
 				<a href="https://x.com/playerlinkapp" target="_blank" rel="noopener noreferrer">
 					<i className="fa-brands fa-x-twitter social-media-icon"></i>
 				</a>

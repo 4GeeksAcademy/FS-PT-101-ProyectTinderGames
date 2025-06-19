@@ -22,8 +22,14 @@
     margin-bottom: 0.5rem;
 	margin-left: 0.5rem;
 	font-size: 2rem;
+
   }
   .footer-text-size h5 {
     font-size: 1rem;
   }
+
+  .footer-social-media-icons div {
+    align-items: center;
+  }
+  
 }
