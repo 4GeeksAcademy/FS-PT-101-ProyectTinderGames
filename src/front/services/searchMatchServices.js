@@ -98,7 +98,7 @@ searchMatchServices.addLikeSent = async (liker_id, liked_id) => {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify({ liker_id, liked_id }),
+      // body: JSON.stringify({ liker_id, liked_id }),
     });
     if (!resp.ok) throw new Error("Failed to send a like");
     return await resp.json();

@@ -1,12 +1,39 @@
 import './SearchMatchCard.css';
-import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
+// import profilePic4 from "../../assets/img/profile-pics/profile-pic-4.png";
 import { useEffect, useState } from 'react';
 import searchMatchServices from '../../services/searchMatchServices';
+import photo1 from "../../assets/img/profile-pics/profile-pic-1.png";
+import photo2 from "../../assets/img/profile-pics/profile-pic-2.png";
+import photo3 from "../../assets/img/profile-pics/profile-pic-3.png";
+import photo4 from "../../assets/img/profile-pics/profile-pic-4.png";
+import photo5 from "../../assets/img/profile-pics/profile-pic-5.png";
+import photo6 from "../../assets/img/profile-pics/profile-pic-6.png";
+import photo7 from "../../assets/img/profile-pics/profile-pic-7.png";
+import photo8 from "../../assets/img/profile-pics/profile-pic-8.png";
+import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 
 export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
   const [animationClass, setAnimationClass] = useState('');
   const [avgStars, setAvgStars] = useState(0);
+
+  const selectPhoto = () => {
+        switch (profile.photo) {
+            
+            case "photo1": return photo1;
+            case "photo2": return photo2;
+            case "photo3": return photo3;
+            case "photo4": return photo4;
+            case "photo5": return photo5;
+            case "photo6": return photo6;
+            case "photo7": return photo7;
+            case "photo8": return photo8;
+            case "photo9": return photo9;
+            default: return "defaultPhoto";
+        }
+        
+    };
+console.log('Profile photo string___> del searchcard:', profile.photo);
 
   useEffect(() => {
     if (!profile?.id) return;
@@ -52,7 +79,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                 <div className='d-flex justify-content-center rounded-circle'>
 
 
-                  <img src={profilePic4} alt="App Logo" className='search-match-profile-pic border border-3'></img>
+                  <img src={selectPhoto()}  alt="App Logo" className='search-match-profile-pic border border-3'></img>
                 </div>
               </div>
 
