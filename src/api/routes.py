@@ -126,6 +126,7 @@ def login():
 def handle_mail(address):
    return send_email(address)
 
+
 @api.route('/token', methods=['GET'])
 @jwt_required()
 def check_jwt():
@@ -136,6 +137,8 @@ def check_jwt():
     return jsonify({'success': False, 'msg': 'Bad token'}), 401
 
 # funcion para verificar que el correo esta en la base de datos y enviar el correo de recuperacion de estarlo
+
+
 @api.route("/check_mail", methods=['POST'])
 def check_mail():
     try:
@@ -146,28 +149,36 @@ def check_mail():
         if not user:
             return jsonify({'success': False, 'msg': 'email not found'}), 404
         # creamos el token que se va a enviar y necesario para la recuperacion de la contraseña
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=str(user.id))
         if not token:
             return jsonify({'success': False, 'msg': 'token not found'}), 404
-        
+
         result = send_email(data['email'], token)
         print(result)
         return jsonify({'success': True, 'token': token, 'email': result}), 200
     except Exception as e:
         print('error: ' + str(e))
         return jsonify({'success': False, 'msg': 'something went wrong'})
-    
 
-#ruta para actualizar el password. Se consume desde la vista para hacer el reset en el front
+
+# ruta para actualizar el password. Se consume desde la vista para hacer el reset en el front
 @api.route('/password_update', methods=['PUT'])
 @jwt_required()
 def password_update():
     try:
-        data = request.json
-        #extraemos el id del token que creamos en la linea 133
+        data = request.get_json(force=True)
+        print('Datos recibidos: ', data)
+        if not data or 'password' not in data or not data['password']:
+            return jsonify({'success': False, 'msg': 'Falta el campo password'}), 422
+        # extraemos el id del token que creamos en la linea 133
         id = get_jwt_identity()
-        #buscamos usuario por id
+        if not id:
+            return jsonify({'success': False, 'msg': 'Falta el id'}), 422
+        # buscamos usuario por id
         user = User.query.get(id)
+        if not user:
+            return jsonify({'success': False, 'msg': 'Falta el user'}), 422
+
         #actualizamos password del usuario
         hashed_password = generate_password_hash(data['password'])
         user.password = hashed_password

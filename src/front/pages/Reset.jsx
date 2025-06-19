@@ -34,11 +34,11 @@ export const Reset = () => {
 
 	const handleClick = async () => {
 		//pasamos a la actions.updatePassword el password y el token
+		console.log({"password": password, "token": token})
 		const resp = await emailServices.updatePassword(password, token)
 		if (resp.success) {
 			setSuccess(true)
 			setTimeout(navigate('/'), 1000)
-
 		}
 		else {
 			setSuccess(false)

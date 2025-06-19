@@ -4,6 +4,9 @@ export const emailServices = {};
 
 emailServices.updatePassword = async (password, token) => {
   //recibimos password nuevo  y el token (lo necesitamos ya que es una ruta protegida la que vamos a consumir y porque del token sacaremos la identidad del usuario)
+  console.log("🔐 updatePassword called with:");
+  console.log("👉 password:", password);
+  console.log("👉 token:", token);
   try {
     const resp = await fetch(url + "/api/password_update", {
       method: "PUT",
