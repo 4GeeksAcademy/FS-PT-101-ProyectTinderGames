@@ -1,14 +1,17 @@
 
 import logoApp from "../assets/img/logos/logo-app.png";
 import './navbarHome.css'
+import '../components/ResetPassword/ResetPassword.css'
 import { Register } from "./Register/Register";
 import { SignIn } from "./SignIn/SignIn";
+import { ResetPassword } from "../components/ResetPassword/ResetPassword"
 import { useEffect, useState } from "react";
 
 
 
+
 export const NavbarHome = () => {
-  
+
   const [showSignIn, setShowSignIn] = useState(true);
 
 
@@ -30,6 +33,7 @@ export const NavbarHome = () => {
       }
     };
   }, []);
+
 
 
   return (
@@ -80,7 +84,7 @@ export const NavbarHome = () => {
 
       </nav>
 
-      {/* modal body */}
+      {/* modal START body */}
       <div className="modal fade" id="startModal" tabIndex="-1" aria-labelledby="startModalLabel" aria-hidden="true" data-bs-backdrop="false">
         <div className="modal-dialog ">
           <div className="modal-content modal-home ">
@@ -96,6 +100,23 @@ export const NavbarHome = () => {
                 {/* <div>
                   <button type="button" className="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* modal RESET password body */}
+      <div>
+
+        <div className="modal fade" id="forgotPasswordModal" tabIndex="-1" aria-labelledby="forgotPasswordModal" aria-hidden="true" data-bs-backdrop="false">
+          <div className="modal-dialog ">
+            <div className="modal-content modal-home ">
+              <div className="modal-header border-0 mt-5">
+                <div className="modal-body d-flex">
+
+                  <ResetPassword />
+                </div>
               </div>
             </div>
           </div>
