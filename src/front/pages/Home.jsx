@@ -9,10 +9,10 @@ import logotarjeta from '../assets/img/logos/logo-tarjetas-about-us.png';
 import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import {emailServices} from "../services/emailServices.js"
+import { emailServices } from "../services/emailServices.js"
 
 export const Home = () => {
-	const {store, dispatch} = useGlobalReducer();
+	const { store, dispatch } = useGlobalReducer();
 	const navigate = useNavigate();
 	const [email, setEmail] = useState('')
 	const handleClick = () => {
@@ -57,7 +57,7 @@ export const Home = () => {
 						</div>
 					</div>
 				</div>
-				<p>recuperar contraseña</p>
+				{/* <p>recuperar contraseña</p>
 				<input
 					type="text"
 					value={email}
@@ -65,7 +65,7 @@ export const Home = () => {
 				/>
 				<button onClick={handleClick}>
 					reset
-				</button>
+				</button> */}
 				<section className="howitworks-section text-white border-bottom border-top border-white" id='howitworks'>
 					<div className="container">
 						<div className="row d-flex align-items-center justify-content-around">
