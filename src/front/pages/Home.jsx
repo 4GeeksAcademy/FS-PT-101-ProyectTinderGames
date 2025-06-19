@@ -6,11 +6,19 @@ import carrusel2 from '../assets/img/carrusel/carrusel-2.png';
 import carrusel3 from '../assets/img/carrusel/carrusel-3.png';
 import carrusel4 from '../assets/img/carrusel/carrusel-4.png';
 import logotarjeta from '../assets/img/logos/logo-tarjetas-about-us.png';
-import React, { useEffect } from "react"
-
+import React, { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import {emailServices} from "../services/emailServices.js"
 
 export const Home = () => {
+	const {store, dispatch} = useGlobalReducer();
+	const navigate = useNavigate();
+	const [email, setEmail] = useState('')
+	const handleClick = () => {
+		console.log(email)
+		emailServices.sendResetEmail(email)
+	}
 	return (
 		<>
 			<NavbarHome />
@@ -49,6 +57,15 @@ export const Home = () => {
 						</div>
 					</div>
 				</div>
+				<p>recuperar contraseña</p>
+				<input
+					type="text"
+					value={email}
+					onChange={e => setEmail(e.target.value)}
+				/>
+				<button onClick={handleClick}>
+					reset
+				</button>
 				<section className="howitworks-section text-white border-bottom border-top border-white" id='howitworks'>
 					<div className="container">
 						<div className="row d-flex align-items-center justify-content-around">
@@ -172,7 +189,7 @@ export const Home = () => {
 								<div className="row d-flex gap-4 justify-content-around">
 									{/* Columna del contenido (orígenes + quiénes somos) */}
 									<div className="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
-										<div class="card-body">
+										<div className="card-body">
 											<h3 className="neon-heading mb-3">The origins</h3>
 											<p className="flex-grow-1">
 												Playerlink started as an academic project and, with dedication and passion, became what it is today: a web that links players around the world.
@@ -180,7 +197,7 @@ export const Home = () => {
 										</div>
 									</div>
 									<div className="col-lg-4 col-md-6 p-4 d-flex flex-column text-center tarjeta text-white">
-										<div class="card-body">
+										<div className="card-body">
 											<h3 className="neon-heading mb-3">Who are we?</h3>
 											<p className="flex-grow-1">
 												We are a aquad of gaming enthusiast who know the real fun starts when we play together <br />

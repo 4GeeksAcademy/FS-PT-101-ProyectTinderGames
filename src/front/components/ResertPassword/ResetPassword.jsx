@@ -7,7 +7,6 @@ export const ResetPassword = () => {
         <>
             {/* // New password first step */}
             <div>
-
                 <div className='d-flex justify-content-center'>
                     <div className='card reset-card mt-5'>
                         <div className="card-body">

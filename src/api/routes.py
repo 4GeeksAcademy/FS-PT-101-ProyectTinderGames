@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+from sqlalchemy import not_, or_
 import os
 import openai
 from flask import Flask, request, jsonify, url_for, Blueprint
@@ -11,6 +12,10 @@ from sqlalchemy import select, or_
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
+from flask_mail import Message
+from api.mail.mailer import send_email
+from flask_mail import Message
+from api.mail.mailer import send_email
 
 # Carga variables de entorno desde .env
 load_dotenv()
@@ -65,36 +70,49 @@ def chat():
         return jsonify({"error": str(e)}), 500
 
 
-# REGISTER
 @api.route('/register', methods=['POST'])
 def register():
     try:
         data = request.get_json()
-        if not data or 'email' not in data or 'password' not in data:
-            raise Exception('missing data')
-        stmt = select(User).where(User.email == data['email'])
-        existing_user = db.session.execute(stmt).scalar_one_or_none()
-        if existing_user:
-            return jsonify({'error': 'email taken'}), 418
+        email = data.get('email')
+        password = data.get('password')
 
-        # hash
-        hashed_password = generate_password_hash(data['password'])
+        if not email or not password:
+            return jsonify({'error': 'Missing email or password'}), 400
 
-        new_user = User(
-            email=data['email'],
-            password=hashed_password
+        if db.session.execute(select(User).where(User.email == email)).scalar_one_or_none():
+            return jsonify({'error': 'Email already in use'}), 409
+
+        hashed_password = generate_password_hash(password)
+        new_user = User(email=email, password=hashed_password)
+
+        new_user.profile = Profile(
+            gender='',
+            age=0,
+            discord='',
+            name='',
+            preferences='',
+            zodiac='',
+            location='',
+            nick_name='',
+            bio='',
+            language='',
+            steam_id='',
+            photo='photo1'  # Imagen por defecto
         )
+
         db.session.add(new_user)
         db.session.commit()
+
         token = create_access_token(identity=str(new_user.id))
-        return jsonify({'success': 'true', 'token': token}), 200
+        return jsonify({'success': True, 'token': token}), 200
+
     except Exception as e:
-        print(e)
-        return jsonify({'Error': 'algo paso'}), 400
+        print("Registration error:", e)
+        return jsonify({'error': 'Internal error during registration'}), 500
+
 
 # LOGIN
-
-
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -115,6 +133,75 @@ def login():
     except Exception as e:
         print(e)
         return jsonify({'Error': 'algo paso'}), 400
+
+
+@api.route('/mailer/<address>', methods=['POST'])
+def handle_mail(address):
+    return send_email(address)
+
+
+@api.route('/token', methods=['GET'])
+@jwt_required()
+def check_jwt():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if user:
+        return jsonify({'success': True, 'user': user.serialize()}), 200
+    return jsonify({'success': False, 'msg': 'Bad token'}), 401
+
+# funcion para verificar que el correo esta en la base de datos y enviar el correo de recuperacion de estarlo
+
+
+@api.route("/check_mail", methods=['POST'])
+def check_mail():
+    try:
+        data = request.json
+        # buscamos el correo en la base de datos y almacenamos el resultado en la variable user
+        user = User.query.filter_by(email=data['email']).first()
+        # si no se encuentra, se devuelve que el correo no se ha encontrado
+        if not user:
+            return jsonify({'success': False, 'msg': 'email not found'}), 404
+        # creamos el token que se va a enviar y necesario para la recuperacion de la contraseña
+        token = create_access_token(identity=str(user.id))
+        if not token:
+            return jsonify({'success': False, 'msg': 'token not found'}), 404
+
+        result = send_email(data['email'], token)
+        print(result)
+        return jsonify({'success': True, 'token': token, 'email': result}), 200
+    except Exception as e:
+        print('error: ' + str(e))
+        return jsonify({'success': False, 'msg': 'something went wrong'})
+
+
+# ruta para actualizar el password. Se consume desde la vista para hacer el reset en el front
+@api.route('/password_update', methods=['PUT'])
+@jwt_required()
+def password_update():
+    try:
+        data = request.get_json(force=True)
+        print('Datos recibidos: ', data)
+        if not data or 'password' not in data or not data['password']:
+            return jsonify({'success': False, 'msg': 'Falta el campo password'}), 422
+        # extraemos el id del token que creamos en la linea 133
+        id = get_jwt_identity()
+        if not id:
+            return jsonify({'success': False, 'msg': 'Falta el id'}), 422
+        # buscamos usuario por id
+        user = User.query.get(id)
+        if not user:
+            return jsonify({'success': False, 'msg': 'Falta el user'}), 422
+
+        # actualizamos password del usuario
+        hashed_password = generate_password_hash(data['password'])
+        user.password = hashed_password
+        # alacenamos los cambios
+        db.session.commit()
+        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente, intente iniciar sesion'}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error al enviar el correo: {str(e)}")
+        return jsonify({'success': False, 'msg': f"Error al enviar el correo: {str(e)}"})
 
 
 # PRIVATE ENDPOINT
@@ -211,7 +298,7 @@ def put_user_email(user_id):
     return jsonify(user.serialize()), 200
 
 
-#PUT USER PASSWORD
+# PUT USER PASSWORD
 @api.route('/users_password/<int:user_id>', methods=['PUT'])
 def users_password(user_id):
     data = request.get_json()
@@ -351,6 +438,39 @@ def put_profile(user_id):
 
     db.session.commit()
     return jsonify(user.profile.serialize()), 200
+
+# GET profiles exluyendo a los que ya se dio like o dislike /////////////////////////////////////////////
+
+
+@api.route('/profiles/profiles_to_explore/<int:user_id>', methods=['GET'])
+def profiles_to_explore(user_id):
+    # Verificar que el usuario existe
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': f'User with id {user_id} not found'}), 404
+
+    # Obtener los IDs de usuarios a los que ya le dio like
+    liked_user_ids = [like.liked_id for like in user.likes_given]
+
+    # Obtener los IDs de usuarios a los que ya le dio reject
+    rejected_user_ids = [reject.rejected_id for reject in user.rejects_given]
+
+    # IDs a excluir
+    exclude_ids = set(liked_user_ids + rejected_user_ids + [user_id])
+
+    # Buscar usuarios que no estén en exclude_ids y que tengan perfil
+    profiles = (
+        db.session.query(Profile)
+        .join(User)
+        .filter(~User.id.in_(exclude_ids))
+        .all()
+    )
+
+    # Serializar perfiles
+    result = [profile.serialize() for profile in profiles]
+
+    return jsonify(result), 200
+# ////////////////////////////////////////////////////////////////////////////////////////
 
 # PUT PHOTO PROFILE
 

@@ -146,6 +146,7 @@ const Profile = () => {
         allGames = allGames.concat(data.results.map((g) => g.name));
       }
       setAvailableGames(allGames);
+      console.log(allGames)
     } catch (err) {
       console.error('RAWG fetch error:', err);
     } finally {
@@ -543,7 +544,7 @@ const Profile = () => {
           </div>
         )}
         {activeTab === 'Games' && (
-          <div className="container coming-soon-box">
+          <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
               <button
@@ -630,7 +631,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="row mt-5 gap-3 d-flez justify-content-center">
-              {store.user?.profile.games && store.user.profile.games.map((el, i) => (
+              {store.user.profile?.games ? store.user.profile.games.map((el, i) => (
                 <div key={i} className="row gamesbox d-flex align-content-center py-3">
                   <div className="d-flex justify-content-around col-lg-10 col-md-12 col-sm-12 align-items-center">
                     <p className="m-0">{el.game.title}</p>
@@ -640,7 +641,7 @@ const Profile = () => {
                     <span className="text-danger botonesAccionesJuegos" onClick={() => handleDeleteGame(el.id)}>D</span>
                   </div>
                 </div>
-              ))}
+              )): <p>No games yet</p>}
             </div>
           </div>
         )}
@@ -651,7 +652,7 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived.reviews_received.length > 0 ? (
+              {store.matchReviewsReceived.reviews_received.length > 0 || !store.matchReviewsReceived? (
                 store.matchReviewsReceived.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
