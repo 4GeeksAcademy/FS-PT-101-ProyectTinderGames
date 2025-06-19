@@ -70,36 +70,49 @@ def chat():
         return jsonify({"error": str(e)}), 500
 
 
-# REGISTER
 @api.route('/register', methods=['POST'])
 def register():
     try:
         data = request.get_json()
-        if not data or 'email' not in data or 'password' not in data:
-            raise Exception('missing data')
-        stmt = select(User).where(User.email == data['email'])
-        existing_user = db.session.execute(stmt).scalar_one_or_none()
-        if existing_user:
-            return jsonify({'error': 'email taken'}), 418
+        email = data.get('email')
+        password = data.get('password')
 
-        # hash
-        hashed_password = generate_password_hash(data['password'])
+        if not email or not password:
+            return jsonify({'error': 'Missing email or password'}), 400
 
-        new_user = User(
-            email=data['email'],
-            password=hashed_password
+        if db.session.execute(select(User).where(User.email == email)).scalar_one_or_none():
+            return jsonify({'error': 'Email already in use'}), 409
+
+        hashed_password = generate_password_hash(password)
+        new_user = User(email=email, password=hashed_password)
+
+        new_user.profile = Profile(
+            gender='',
+            age=0,
+            discord='',
+            name='',
+            preferences='',
+            zodiac='',
+            location='',
+            nick_name='',
+            bio='',
+            language='',
+            steam_id='',
+            photo='photo1'  # Imagen por defecto
         )
+
         db.session.add(new_user)
         db.session.commit()
+
         token = create_access_token(identity=str(new_user.id))
-        return jsonify({'success': 'true', 'token': token}), 200
+        return jsonify({'success': True, 'token': token}), 200
+
     except Exception as e:
-        print(e)
-        return jsonify({'Error': 'algo paso'}), 400
+        print("Registration error:", e)
+        return jsonify({'error': 'Internal error during registration'}), 500
+
 
 # LOGIN
-
-
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -124,7 +137,7 @@ def login():
 
 @api.route('/mailer/<address>', methods=['POST'])
 def handle_mail(address):
-   return send_email(address)
+    return send_email(address)
 
 
 @api.route('/token', methods=['GET'])
@@ -179,17 +192,16 @@ def password_update():
         if not user:
             return jsonify({'success': False, 'msg': 'Falta el user'}), 422
 
-        #actualizamos password del usuario
+        # actualizamos password del usuario
         hashed_password = generate_password_hash(data['password'])
         user.password = hashed_password
-        #alacenamos los cambios
+        # alacenamos los cambios
         db.session.commit()
         return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente, intente iniciar sesion'}), 200
     except Exception as e:
         db.session.rollback()
-        print (f"Error al enviar el correo: {str(e)}")
+        print(f"Error al enviar el correo: {str(e)}")
         return jsonify({'success': False, 'msg': f"Error al enviar el correo: {str(e)}"})
-
 
 
 # PRIVATE ENDPOINT
@@ -213,6 +225,8 @@ def get_users():
     return jsonify([user.serialize() for user in users]), 200
 
 # GET SINGLE USER
+
+
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_single_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -222,6 +236,8 @@ def get_single_user(user_id):
     return jsonify(user.serialize()), 200
 
 # DELETE USER
+
+
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -335,6 +351,7 @@ def get_single_profile(profile_id):
     return jsonify(profile.serialize()), 200
 
 # DELETE PROFILE BY USER ID
+
 
 @api.route('/profiles/user/<int:user_id>', methods=['DELETE'])
 def delete_profile_by_user_id(user_id):
