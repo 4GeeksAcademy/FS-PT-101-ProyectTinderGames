@@ -213,8 +213,6 @@ def get_users():
     return jsonify([user.serialize() for user in users]), 200
 
 # GET SINGLE USER
-
-
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_single_user(user_id):
     stmt = select(User).where(User.id == user_id)
@@ -224,8 +222,6 @@ def get_single_user(user_id):
     return jsonify(user.serialize()), 200
 
 # DELETE USER
-
-
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     stmt = select(User).where(User.id == user_id)
