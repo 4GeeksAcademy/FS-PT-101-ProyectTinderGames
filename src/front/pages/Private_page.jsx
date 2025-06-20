@@ -11,7 +11,11 @@ export const Private_page = () => {
     const {store, dispatch} = useGlobalReducer();
 
     useEffect (()=>{
-        userServices.getUserInfo().then(data=> dispatch({type:'getUserInfo', payload: data.user}))
+        if (!store.user){
+            navigate('/')
+        }else{
+            nagivate('/private/profile')
+        }
     },[])
 
     const handleLogout = () => {

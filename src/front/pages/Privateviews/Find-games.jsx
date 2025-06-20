@@ -3,11 +3,12 @@ import axios from "axios";
 import "../../findGames.css";
 import logo from "../../assets/img/icons/icon-IA.png";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { useNavigate } from "react-router-dom";
 
 export const FindGames = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { store, dispatch } = useGlobalReducer();
-
+  const navigate = useNavigate()
   const [messages, setMessages] = useState([
     { sender: "bot", text: "¡Hi! I'm the PlayerLink AI. ¿How may I help?" },
   ]);
@@ -15,6 +16,11 @@ export const FindGames = () => {
   const [isLoading, setIsLoading] = useState(false);
   const chatScrollRef = useRef(null);
 
+  useEffect(()=>{
+    if (!store.user){
+      navigate('/')
+    }
+  })
   // Cada vez que cambian mensajes o isLoading, hacemos scroll al final
   useEffect(() => {
     const ref = chatScrollRef.current;
