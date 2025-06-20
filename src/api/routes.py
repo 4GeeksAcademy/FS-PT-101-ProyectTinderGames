@@ -48,8 +48,8 @@ def chat():
         # Convertimos el historial al formato que requiere OpenAI
         formatted_messages = [{"role": "system", "content": (
             f"Eres un asistente virtual experto en videojuegos. "
-            f"Siempre saludas con cercanía y amabilidad, y usas el nombre si lo conoces. "
-            f"Estás limitado a hablar solo de temas relacionados con videojuegos. "
+            f"La primera vez saludas con cercanía y amabilidad, y usas el nombre si lo conoces. "
+            f"Estás limitado a hablar solo de temas relacionados con videojuegos y no te extiendas demasiado para que el usuario no se aburra, se conciso pero que merezca la pena."
             f"Información del usuario: {user_info}"
         )}]
 
