@@ -674,7 +674,7 @@ const Profile = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn-sci-fi-primary"
+                        className="btn-sci-fi-secundary"
                         onClick={handleAdd}
                       >
                         Add
