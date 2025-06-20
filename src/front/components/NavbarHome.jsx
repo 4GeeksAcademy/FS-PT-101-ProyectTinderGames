@@ -14,7 +14,6 @@ export const NavbarHome = () => {
 
   const [showSignIn, setShowSignIn] = useState(true);
 
-
   // Para que siempre se muestre Sing-In el primero
   useEffect(() => {
     const modalElement = document.getElementById("exampleModal");
@@ -33,7 +32,6 @@ export const NavbarHome = () => {
       }
     };
   }, []);
-
 
 
   return (
@@ -108,13 +106,11 @@ export const NavbarHome = () => {
 
       {/* modal RESET password body */}
       <div>
-
         <div className="modal fade" id="forgotPasswordModal" tabIndex="-1" aria-labelledby="forgotPasswordModal" aria-hidden="true" data-bs-backdrop="false">
           <div className="modal-dialog ">
             <div className="modal-content modal-home ">
               <div className="modal-header border-0 mt-5">
                 <div className="modal-body d-flex">
-
                   <ResetPassword />
                 </div>
               </div>
@@ -123,11 +119,5 @@ export const NavbarHome = () => {
         </div>
       </div>
     </>
-
   )
-
-
-
-
-
 }
