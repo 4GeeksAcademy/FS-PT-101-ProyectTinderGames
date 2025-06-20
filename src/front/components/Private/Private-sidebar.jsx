@@ -60,7 +60,7 @@ export const Sidebar = ({ activePath }) => {
         ))}
         <button onClick={handleLogout} className="sidebar-button logout">
           <span className="sidebar-icon">
-            <i><i class="fa-solid fa-right-from-bracket"></i></i>
+            <i><i className="fa-solid fa-right-from-bracket"></i></i>
           </span>
           <span className="sidebar-text">Log out</span>
         </button>
