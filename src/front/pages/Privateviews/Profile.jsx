@@ -2,7 +2,8 @@
 // Componente de perfil de usuario con edición, selección de avatar, medallas de juego y sección de comentarios
 
 import React, { useEffect, useState } from "react";
-import "../../pages/Privateviews/Profile.css";                                // Estilos específicos de la vista de perfil
+import "../../pages/Privateviews/Profile.css";
+import Select from 'react-select';                            // Estilos específicos de la vista de perfil
 
 // Hooks y servicios
 import useGlobalReducer from "../../hooks/useGlobalReducer";                  // Hook para acceder al store global y dispatch
@@ -59,6 +60,7 @@ const Profile = () => {
   const { store, dispatch } = useGlobalReducer();
   const url = import.meta.env.VITE_BACKEND_URL;   // URL base del backend
   const rawgApi = import.meta.env.VITE_RAWG_KEY;
+  const gameOptions = availableGames.map(name => ({ value: name, label: name }));
 
   // Estados locales
   const [activeTab, setActiveTab] = useState("info");                    // Pestaña activa (info, activity, comments)
@@ -177,7 +179,6 @@ const Profile = () => {
       console.error('RAWG fetch error:', err);
     } finally {
       setLoading(false);
-      userServices.getUserInfo().then(data => dispatch({ type: 'getUserInfo', payload: data.user }))
     }
   };
 
@@ -271,12 +272,13 @@ const Profile = () => {
   };
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target;
     setGame((prev) => ({
       ...prev,
-      [id === 'gameName' ? 'title' : 'hours_played']: value,
+      [name]: name === "hours_played" ? Number(value) : value,
     }));
   };
+
 
   // Manejar cambios en inputs
   const handleInputChange = (field, value) => {
@@ -616,53 +618,42 @@ const Profile = () => {
                 Add a new game
               </button>
 
-              <div
-                className="modal fade"
-                id="commentModal"
-                tabIndex="-1"
-                aria-labelledby="commentModalLabel"
-                aria-hidden="true"
-              >
+              <div className="modal fade" id="commentModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="commentModalLabel">
+                  <div className="modal-content modal-sci-fi">
+                    <div className="modal-header modal-sci-fi-header">
+                      <h5 className="modal-title modal-sci-fi-title" id="commentModalLabel">
                         Add a new game
                       </h5>
                       <button
                         type="button"
-                        className="btn-close "
+                        className="btn-close btn-close-sci-fi"
                         data-bs-dismiss="modal"
                         aria-label="Cerrar"
                       />
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body modal-sci-fi-body">
                       <div className="mb-3">
-                        <label htmlFor="gameName" className="form-label">
-                          Choose a game
-                        </label>
-                        <select
-                          id="gameName"
-                          className="form-select"
-                          value={game.title}
-                          onChange={handleChange}
-                        >
-                          <option value="">-- Choose a game --</option>
-                          {availableGames.map((name) => (
-                            <option key={name} value={name}>
-                              {name}
-                            </option>
-                          ))}
-                        </select>
+                        <label htmlFor="gameName" className="label-sci-fi">Selecciona un juego</label>
+                        <Select
+                          className="selectorJuegos"
+                          options={gameOptions}
+                          value={gameOptions.find(opt => opt.value === game.title) || null}
+                          onChange={(selected) =>
+                            handleChange({ target: { name: 'title', value: selected?.value || "" } })
+                          }
+                          isClearable
+                          isSearchable
+                          placeholder="-- Elige un juego --"
+                        />
                       </div>
                       <div className="mb-3">
-                        <label htmlFor="hoursPlayed" className="form-label">
-                          Hours played
-                        </label>
+                        <label htmlFor="hoursPlayed" className="label-sci-fi">Horas jugadas</label>
                         <input
                           type="number"
-                          className="form-control"
+                          className="input-sci-fi"
                           id="hoursPlayed"
+                          name="hours_played"
                           value={game.hours_played}
                           onChange={handleChange}
                           placeholder="Ej. 42"
@@ -673,17 +664,17 @@ const Profile = () => {
 
                       </div>
                     </div>
-                    <div className="modal-footer">
+                    <div className="modal-footer modal-sci-fi-footer">
                       <button
                         type="button"
-                        className="btn btn-secondary "
+                        className="btn-sci-fi-secondary"
                         data-bs-dismiss="modal"
                       >
                         Cancel
                       </button>
                       <button
                         type="button"
-                        className="btn btn-primary"
+                        className="btn-sci-fi-primary"
                         onClick={handleAdd}
                       >
                         Add
