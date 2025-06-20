@@ -1,15 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
-
 .navbar-home-font {
-  font-family: "Audiowide", sans-serif;
   color: #ffffff !important;
   text-shadow: 0 1.5px 0 #0088fe, 0 1.5px 1.5px #0088fe;
+  font-size: 18px;
 }
 .navbar-home-btn {
   background: linear-gradient(#131219, #131219) padding-box,
     linear-gradient(var(--angle), #6bf1fa, #f538ff) border-box;
   animation: 2s rotate linear infinite;
   border-width: 2px;
+}
+
+.logo-navbar-home {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+
+.navbar-home-collapse {
+  flex-grow: 0 !important;
+}
+
+.navbar-home-start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 10px 20px;
+  background-color: black;
+}
+
+.start-text {
+  font-family: "Audiowide", sans-serif;
+  font-size: 30px;
+  color: white;
+  text-shadow: 0 2px 2px #00aaff, 0 4px 6px #0077ff;
+  position: relative;
+  z-index: 2;
+}
+
+.navbar-home-toggler {
+  border-color: #a41ef1;
+}
+
+.modal-home {
+  background: none;
+}
+
+.btn-close-modal {
+  background-color: #a41ef165;
 }
 
 /* animacion  */
@@ -58,47 +96,6 @@
   }
 }
 
-.logo-navbar-home {
-  width: 60px;
-  height: auto;
-  object-fit: contain;
-}
-
-.navbar-home-collapse {
-  flex-grow: 0 !important;
-}
-
-.navbar-home-start-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 10px 20px;
-  background-color: black;
-}
-
-.start-text {
-  font-family: "Audiowide", sans-serif;
-  font-size: 30px;
-  color: white;
-  text-shadow: 0 2px 2px #00aaff, 0 4px 6px #0077ff;
-  position: relative;
-  z-index: 2;
-}
-
-.navbar-home-toggler {
-  border-color: #a41ef1;
-}
-
-.modal-home {
-  background: none;
-}
-
-.btn-close-modal {
-  background-color: #a41ef165;
-
-} 
-
 /* Pantallas medias y pequeñas boton de start */
 
 @media (max-width: 1024px) {
@@ -109,6 +106,8 @@
     border-width: 2px;
     width: 100%;
     margin-right: 15%;
-      }
-
+  }
+  .navbar-home-font {
+    font-size: 15px;
+  }
 }
