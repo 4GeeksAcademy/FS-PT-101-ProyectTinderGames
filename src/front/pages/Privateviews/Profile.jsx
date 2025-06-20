@@ -127,10 +127,10 @@ const Profile = () => {
 
   useEffect(() => {
     // fetchGames()
-    if (activeTab === "Games" && availableGames.length<1) {
+    if (activeTab === "Games" && availableGames.length < 1) {
       fetchGames()
     }
-    
+
   }, [activeTab]);
 
 
@@ -547,9 +547,27 @@ const Profile = () => {
           </div>
         )}
         {activeTab === 'Games' && (
-                 <div className="container">
+          <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
-              <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
+              <h2 className="col-lg-6 col-md-12 col-sm-12 mt-3">
+                Games{" "}
+                <span className="tooltip-wrapper">
+                  <i className="fa-solid fa-circle-info fa-2xs medals-info-icon"></i>
+                  <span className="tooltip-text">
+                    <strong>Medal Info:</strong>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
+                    </div>
+                  </span>
+                </span>
+              </h2>
+
               <button
                 type="button"
                 className="btn botonLeaveComment col-lg-4 col-md-12 col-sm-12"
