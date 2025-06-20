@@ -7,16 +7,8 @@ import {
 } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
-import { Single } from "./pages/Single";
-import { Demo } from "./pages/Demo";
-import { Terms_page } from "./pages/Terms_page";
 
-
-import { Register_page } from "./pages/Register_page";
-import { Login_page } from "./pages/Login_page";
 import { Private_page } from "./pages/Private_page";
-import { Cardscomponents} from "./pages/cardscomponents"
-import { RegisterLoginTest } from "./pages/Register_login_test";
 
 import { PrivateLayout } from "./components/Private/Private-layout";
 import  Profile  from "./pages/Privateviews/Profile";
@@ -38,18 +30,8 @@ export const router = createBrowserRouter(
 
     // Root Route: All navigation will start from here.
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
-
       {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
       <Route path="/" element={<Home />} />
-      <Route path="/terms-and-conditions" element={<Terms_page/>} />
-      <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
-      <Route path="/demo" element={<Demo />} />
-
-
-      <Route path="/register" element={<Register_page />} />
-      <Route path="/registerprueba" element={<RegisterLoginTest/>} />  {/* aqui se ven lso componentes de Register/Sign-In y Reset password */}
-
-      <Route path="/login" element={<Login_page />} />
       {/* dejo comentario para separar vistas públicas de las privadas */}
       <Route path="/private" element={<PrivateLayout />}>
         <Route index element={<Private_page />} />
@@ -60,11 +42,7 @@ export const router = createBrowserRouter(
         <Route path="settings" element={<Settings />} />
         <Route path="your-matches/matchDetails/:id" element={<MatchUserDetails/>} />
       </Route>
-      <Route path="/cardscomponents" element={<Cardscomponents />} /> {/* aqui se ven lso componentes de SearhcMatchCard y ItsMatch */}
-
-      <Route path="/privateside" element={<PrivateLayout />} />  {/* esta ruta la tengo para ver solo la sidebar cuando la esté manejando. */}
       <Route path="/reset" element={<Reset/>} />
-
     </Route >
   )
 );

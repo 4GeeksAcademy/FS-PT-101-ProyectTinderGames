@@ -126,7 +126,7 @@ export const Reset = () => {
 									{
 										success !== '' ?
 											success ?
-												<h6 className="text-danger mt-3 reset-message-errors">
+												<h6 className="text-success mt-3 reset-message-errors">
 													Success! Your password has been updated.
 												</h6>
 												:

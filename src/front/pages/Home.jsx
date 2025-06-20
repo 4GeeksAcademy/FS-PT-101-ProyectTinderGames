@@ -76,7 +76,7 @@ export const Home = () => {
 											<div className="card-front">
 												<img src={logotarjeta} alt="logoapp" />
 											</div>
-											<div className="card-back p-2">Sing up on our app</div>
+											<div className="card-back p-2">Sing up on our web</div>
 										</div>
 									</div>
 									<div className="card col-lg-6">

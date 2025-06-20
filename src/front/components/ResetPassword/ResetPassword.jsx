@@ -47,8 +47,8 @@ export const ResetPassword = () => {
                                         <br />
 
                                         {emailSent && (
-                                            <h5 className="text-danger mt-3 sign-in-message-errors">
-                                                Check you email: instructions to reset your password have been sent.
+                                            <h5 className="text-success mt-3 sign-in-message-errors">
+                                                Check your email: instructions to reset your password have been sent. Check your spam 😳​
                                             </h5>
                                         )}
 
