@@ -132,27 +132,21 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
 
               {/* Location */}
-              <div className="row mt-2">
-                <div className="col d-flex justify-content-end">
-                  <h5 className='ms-4 search-match-text-sm'><i className="fa-solid fa-location-dot"></i></h5>
-                </div>
-                <div className="col d-flex justify-content-start">
+              <div className='d-flex justify-content-evenly'>
+
+                <div className='d-flex'>
+                  <h5 className='me-2 search-match-text-sm'><i className="fa-solid fa-location-dot"></i></h5>
                   <h5 className='me-4 search-match-text-sm '>{profile?.location || '-'}</h5>
                 </div>
-              </div>
 
-              {/* Language */}
-              <div className="row ">
-                <div className="col d-flex justify-content-end">
-                  <h5 className='ms-4 search-match-text-sm '><i className="fa-solid fa-language"></i></h5>
-                </div>
-                <div className="col d-flex justify-content-start">
-                  <h5 className=' me-4 search-match-text-sm'>{profile?.language || '-'}</h5>
+                {/* Language */}
+                <div className='d-flex'>
+                  <h5 className='me-2 search-match-text-sm '><i className="fa-solid fa-language"></i></h5>
+                  <h5 className='search-match-text-sm'>{profile?.language || '-'}</h5>
                 </div>
               </div>
 
-
-
+              <hr className="search-match-line mt-2" />
 
               {/* botones */}
               <div className='row mt-3 d-flex justify-content-center'>
