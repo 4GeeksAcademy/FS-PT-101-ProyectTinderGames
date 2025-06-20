@@ -7,22 +7,19 @@ import { MatchMiniCard } from "../../components/matchMiniCard.jsx"
 
 
 export const YourMatches = () => {
-    const navigate = useNavigate()
-    const { store, dispatch } = useGlobalReducer();
+  const navigate = useNavigate()
+  const { store, dispatch } = useGlobalReducer();
 
-    useEffect(() => {
-        matchServices.getAllMatchesInfo(store.user?.id).then(data => dispatch({ type: "getAllMatchesInfo", payload: data.matches }))
-    }, [])
-
-    const handleLogout = () => {
-        dispatch({ type: 'logout' })
-        navigate('/')
+  useEffect(() => {
+    if (!store.user) {
+      navigate('/')
+    } else {
+      matchServices.getAllMatchesInfo(store.user?.id).then(data => dispatch({ type: "getAllMatchesInfo", payload: data.matches }))
     }
-
-    // modificar endpoint de get a match con el posit que está pegado al ordenador
-    // a la card se le pasa lo necesario, solamente user_id, genero, nombre y juegos, (solo lo necesario!!!!), lo demás lo cogemos con un get_user_info en la página de detalles de ese usuario
-
-    return  (
+  }, [])
+  // modificar endpoint de get a match con el posit que está pegado al ordenador
+  // a la card se le pasa lo necesario, solamente user_id, genero, nombre y juegos, (solo lo necesario!!!!), lo demás lo cogemos con un get_user_info en la página de detalles de ese usuario
+  return (
     <div className="container-fluid px-2 px-sm-4">
       <div className="row gy-4 d-flex justify-content-around">
         {store.userMatchesInfo &&

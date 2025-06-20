@@ -2,10 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import './SignIn.css';
 import { useState } from 'react';
 import userServices from '../../services/userServices';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
 
 
 export const SignIn = ({ onSwitch }) => {
 
+    const {store, dispatch} = useGlobalReducer()
     const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
@@ -24,6 +26,8 @@ export const SignIn = ({ onSwitch }) => {
             const data = await userServices.login(formData)
             localStorage.setItem('token', data.token)
             if (data.success) {
+                await userServices.getUserInfo()
+                await dispatch({type:'getUserInfo', payload:localStorage.getItem('user')})
                 navigate('/private/profile')
             } else {
                 setErrorLogin("Incorrect email or password")

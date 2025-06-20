@@ -4,10 +4,11 @@ import { SearchMatchCard } from "../../components/SearchMatchCard/SearchMatchCar
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import searchMatchServices from "../../services/searchMatchServices";
 import { ItsMatch } from "../../components/ItsMatch/ItsMatch";
+import { useNavigate } from "react-router-dom";
 
 export const SearchMate = () => {
   const { store, dispatch } = useGlobalReducer();
-
+  const navigate = useNavigate()
   const [currentUser, setCurrentUser] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showLoadingMessage, setShowLoadingMessage] = useState(false);
@@ -16,7 +17,11 @@ export const SearchMate = () => {
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [matchProfile, setMatchProfile] = useState(null);
 
-
+  useEffect(() => {
+    if (!store.user) {
+      navigate('/')
+    }
+  })
   useEffect(() => {
     if (!store.user || !store.user.profile?.id) return;
 
@@ -221,7 +226,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center">
             <h1 className="search-mate-font">
-              Search a mate {store.user.profile?.nick_name} {store?.user.id}
+              Search a mate {store.user?.profile.nick_name ? store.user.profile.nick_name : 'undefinied'} {store.user?.id}
             </h1>
           </div>
 

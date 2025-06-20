@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Settings.css';
 import userServices from "../../services/userServices"
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx"
+import { useNavigate } from 'react-router-dom';
 
 
 const SettingsView = () => {
+  const navigate = useNavigate()
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [show2FAModal, setShow2FAModal] = useState(false);
@@ -19,6 +21,12 @@ const SettingsView = () => {
     confirmedPassword:''
   })
   const {store, dispatch} = useGlobalReducer();
+
+  useEffect(()=>{
+    if (!store.user){
+      navigate('/')
+    }
+  })
 
   const submitEmailChange = () => {
     console.log(email)

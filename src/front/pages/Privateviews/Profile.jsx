@@ -30,6 +30,7 @@ import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 
 import { GamingPreferencesModal } from "../../components/ProfileModals/GamingPreferencesModal.jsx";
 import { LanguageModal } from "../../components/ProfileModals/LanguageModal.jsx";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -51,6 +52,7 @@ const parsePreferences = (str) => {
 
 const Profile = () => {
   // Acceso al store global y dispatch para actualizar datos
+  const navigate = useNavigate()
   const [availableGames, setAvailableGames] = useState([]);
   const [game, setGame] = useState({ title: '', hours_played: '', image: '' });
   const [loading, setLoading] = useState(true);
@@ -96,12 +98,12 @@ const Profile = () => {
   ];
   const genders = ["Male", "Female", "Undefined"];
 
-  const allGames = store.user?.profile?.games ? store.user.profile.games : [];
-
+  let allGames = store.user?.profile?.games ? store.user.profile.games : [];
   const topThreeGames = allGames
     .slice() // Copia para no mutar original
     .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))
     .slice(0, 3);
+
 
   // Mapeo avatars: filename -> clave interna
   const picMap = {
@@ -119,18 +121,34 @@ const Profile = () => {
 
   // Carga inicial de perfil y reviews recibidos
   useEffect(() => {
-    loadProfile();
-    reviewServices.getAllReviewsReceived(store.user?.id)
-      .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
-    // fetchGames();
+    if (!store.user) {
+      navigate('/')
+    } else {
+      loadProfile();
+      reviewServices.getAllReviewsReceived(store.user?.id)
+        .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+      // fetchGames();
+    }
   }, []);
 
   useEffect(() => {
+  // Limpiar popovers anteriores (evita duplicados o errores)
+  document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+    const popover = bootstrap.Popover.getInstance(el);
+    if (popover) popover.dispose();
+  });
+
+  // Inicializar popovers actuales
+  document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+    new bootstrap.Popover(el);
+  });
+}, [topThreeGames]); // 🔥 Se reinicia solo cuando topThreeGames cambia
+
+  useEffect(() => {
     // fetchGames()
-    if (activeTab === "Games" && availableGames.length<1) {
+    if (activeTab === "Games" && availableGames.length < 1) {
       fetchGames()
     }
-    
   }, [activeTab]);
 
 
@@ -182,6 +200,7 @@ const Profile = () => {
         bio: profile.bio,
         photo: profile.photo || 'photo1',
       });
+
     } catch (error) {
       console.error('Error en loadProfile:', error);
     }
@@ -280,6 +299,12 @@ const Profile = () => {
     }
   };
   const handleAdd = async () => {
+    if (game.title.length < 0 || game.hours_played <= 0) {
+      return alert('error creating game')
+    }
+    if (store.user.profile.games.some(g => g.game.title === game.title)) {
+      return alert('game already exist')
+    }
     try {
       const image = await selectGameImage(game.title);
       console.log("La imagen es:", image);
@@ -288,9 +313,9 @@ const Profile = () => {
         ...game,
         image
       };
-
       console.log("Enviando:", newGame);
       await gameServices.postNewGame(store.user.profile?.id, newGame);
+      allGames = store.user?.profile?.games ? store.user.profile.games : [];
       await loadProfile();
 
       // Cerrar modal y limpiar
@@ -326,17 +351,21 @@ const Profile = () => {
           {topThreeGames.map((el, i) => (
             <div key={el.game?.id || i} className="medal-game-card">
               <img
-                src={selectMedal(el.game?.hours_played)}
+                src={selectMedal(el.game.hours_played)}
                 alt="Medal"
                 className="medal-icon"
+                role="button"
+                data-bs-toggle="popover"
+                data-bs-trigger="hover focus"
+                data-bs-container="body"
+                data-bs-placement="bottom"
+                data-bs-content={`${el.game.title} — ${el.game.hours_played} horas`}
               />
-              <div className="game-img-wrapper">
-                <img
-                  className="img-fluid gameImg"
-                  src={el.game?.image}
-                  alt={`Portada de ${el.game?.title}`}
-                />
-              </div>
+              <img
+                className="img-fluid gameImg"
+                src={el.game.image}
+                alt={`Portada de ${el.game.title}`}
+              />
             </div>
           ))}
         </div>
@@ -547,7 +576,7 @@ const Profile = () => {
           </div>
         )}
         {activeTab === 'Games' && (
-                 <div className="container">
+          <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
               <button
@@ -570,7 +599,7 @@ const Profile = () => {
                   <div className="modal-content">
                     <div className="modal-header">
                       <h5 className="modal-title" id="commentModalLabel">
-                        Nuevo comentario
+                        Add a new game
                       </h5>
                       <button
                         type="button"
@@ -636,11 +665,11 @@ const Profile = () => {
             <div className="row mt-5 gap-3 d-flez justify-content-center">
               {store.user.profile?.games ? store.user.profile.games.map((el, i) => (
                 <div key={i} className="row gamesbox d-flex align-content-center py-3">
-                  <div className="d-flex justify-content-around col-lg-10 col-md-12 col-sm-12 align-items-center">
+                  <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
                     <p className="m-0">{el.game.title}</p>
-                    <p className="m-0">{el.game.hours_played} hours</p>
                   </div>
-                  <div className="d-flex justify-content-around col-lg-2 col-md-12 col-sm-12 align-items-center">
+                  <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
+                    <p className="m-0">{el.game.hours_played} hours</p>
                     <span className="text-danger botonesAccionesJuegos" onClick={() => handleDeleteGame(el.id)}>D</span>
                   </div>
                 </div>
@@ -655,7 +684,7 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived?.reviews_received.length > 0 || !store.matchReviewsReceived ? (
+              {store.matchReviewsReceived?.reviews_received?.length > 0 ? (
                 store.matchReviewsReceived?.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
