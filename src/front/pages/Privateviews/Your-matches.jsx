@@ -23,7 +23,7 @@ export const YourMatches = () => {
     <div className="container-fluid px-2 px-sm-4">
       <div className="row gy-4 d-flex justify-content-around">
         {store.userMatchesInfo &&
-          store.userMatchesInfo.map((el) => (
+          store.userMatchesInfo.slice().reverse().map((el) => (
             <div
               key={el.id}
               className="col-lg-4 col-md-6 col-sm-12"

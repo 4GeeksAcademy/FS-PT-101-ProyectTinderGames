@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e7e80a0e413d
+Revision ID: c9ffc4724f37
 Revises: 
-Create Date: 2025-06-18 11:38:53.893547
+Create Date: 2025-06-20 15:54:14.710899
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e7e80a0e413d'
+revision = 'c9ffc4724f37'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,17 +46,17 @@ def upgrade():
     op.create_table('profiles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('gender', sa.String(length=15), nullable=True),
+    sa.Column('gender', sa.String(length=30), nullable=True),
     sa.Column('age', sa.Integer(), nullable=True),
-    sa.Column('name', sa.String(length=20), nullable=True),
+    sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('discord', sa.String(length=40), nullable=True),
-    sa.Column('preferences', sa.String(length=50), nullable=True),
+    sa.Column('preferences', sa.String(length=200), nullable=True),
     sa.Column('zodiac', sa.String(length=20), nullable=True),
     sa.Column('location', sa.String(length=50), nullable=True),
     sa.Column('nick_name', sa.String(length=21), nullable=True),
     sa.Column('bio', sa.String(length=500), nullable=True),
     sa.Column('photo', sa.String(length=20), nullable=True),
-    sa.Column('language', sa.String(length=50), nullable=True),
+    sa.Column('language', sa.String(length=100), nullable=True),
     sa.Column('steam_id', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
