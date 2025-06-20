@@ -631,7 +631,7 @@ const Profile = () => {
                       </h5>
                       <button
                         type="button"
-                        className="btn-close btn-close-sci-fi"
+                        className="btn-close btn-sci-fi"
                         data-bs-dismiss="modal"
                         aria-label="Cerrar"
                       />
