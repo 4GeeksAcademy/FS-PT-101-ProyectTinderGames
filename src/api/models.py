@@ -74,19 +74,19 @@ class Profile(db.Model):
     __tablename__ = 'profiles'
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
-    gender: Mapped[str] = mapped_column(String(15), nullable=True)
+    gender: Mapped[str] = mapped_column(String(30), nullable=True)
     age: Mapped[int] = mapped_column(Integer, nullable=True)
-    name: Mapped[str] = mapped_column(String(20), nullable=True)
+    name: Mapped[str] = mapped_column(String(40), nullable=True)
     discord: Mapped[str] = mapped_column(
         String(40), nullable=True)
-    preferences: Mapped[str] = mapped_column(String(50), nullable=True)
+    preferences: Mapped[str] = mapped_column(String(200), nullable=True)
     zodiac: Mapped[str] = mapped_column(String(20), nullable=True)
     location: Mapped[str] = mapped_column(String(50), nullable=True)
     nick_name: Mapped[str] = mapped_column(
         String(21), nullable=True)
     bio: Mapped[str] = mapped_column(String(500),nullable=True)
     photo: Mapped[str] = mapped_column(String(20), nullable=True)
-    language: Mapped[str] = mapped_column(String(50), nullable=True)
+    language: Mapped[str] = mapped_column(String(100), nullable=True)
     steam_id: Mapped[str] = mapped_column(
         String(200),nullable=True)
 

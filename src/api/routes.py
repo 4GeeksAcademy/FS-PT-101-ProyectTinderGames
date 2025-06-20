@@ -14,8 +14,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from flask_mail import Message
 from api.mail.mailer import send_email
-from flask_mail import Message
-from api.mail.mailer import send_email
 
 # Carga variables de entorno desde .env
 load_dotenv()
