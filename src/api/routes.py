@@ -34,33 +34,38 @@ CORS(api)
 @api.route("/chat", methods=["POST"])
 def chat():
     """
-    Recibe JSON: { "message": "texto del usuario" }
+    Recibe JSON: { "messages": [...], "userInfo": "..." }
     Llama a OpenAI y devuelve el texto generado.
     """
     data = request.get_json()
-    if not data or "message" not in data or "userInfo" not in data:
-        return jsonify({"error": "Falta el campo 'message'"}), 400
+    if not data or "messages" not in data or "userInfo" not in data:
+        return jsonify({"error": "Faltan los campos 'messages' o 'userInfo'"}), 400
 
-    user_message = data["message"]
-    userInfo = data['userInfo']
+    messages = data["messages"]
+    user_info = data["userInfo"]
 
     try:
-        # Versión nueva de la librería (>=1.0.0):
+        # Convertimos el historial al formato que requiere OpenAI
+        formatted_messages = [{"role": "system", "content": (
+            f"Eres un asistente virtual experto en videojuegos. "
+            f"Siempre saludas con cercanía y amabilidad, y usas el nombre si lo conoces. "
+            f"Estás limitado a hablar solo de temas relacionados con videojuegos. "
+            f"Información del usuario: {user_info}"
+        )}]
+
+        for msg in messages:
+            role = "user" if msg.get("sender") == "user" else "assistant"
+            content = msg.get("text", "")
+            formatted_messages.append({"role": role, "content": content})
+
         response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "system",
-                    "content": f"Eres un asistente virtual que en la primera insteracción siempre llama por el nombre de usuario experto en videojuegos, (solo estás capacitado para responder sobre temas de videojuegos)con un tono majo, agradable y muy cercano al usuario Utiliza la siguiente información del usuario para personalizar tus respuestas, ten en cuenta los juegos a los que juega siempre para dar tu respuesta:${userInfo}"
-                },
-                {"role": "user", "content": user_message}
-            ],
+            messages=formatted_messages,
             temperature=0.7,
             max_tokens=512,
             n=1,
         )
 
-        # Extraer el texto de la primera respuesta
         reply_text = response.choices[0].message.content.strip()
         return jsonify({"reply": reply_text})
 
