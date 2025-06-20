@@ -314,8 +314,8 @@ const Profile = () => {
     setErrorRepeatedGame('');
     setErrorHoursPlayed('');
 
-    if (game.title.length < 0 || game.hours_played <= 0) {
-      setErrorHoursPlayed('Your must add your played hours')
+    if (game.title.length <= 0 || game.hours_played <= 0) {
+      setErrorHoursPlayed('Your must complete all the information')
       return;
     }
     if (store.user.profile.games.some(g => g.game.title === game.title)) {
