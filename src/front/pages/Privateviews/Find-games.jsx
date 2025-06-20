@@ -16,8 +16,8 @@ export const FindGames = () => {
   const [isLoading, setIsLoading] = useState(false);
   const chatScrollRef = useRef(null);
 
-  useEffect(()=>{
-    if (!store.user){
+  useEffect(() => {
+    if (!store.user) {
       navigate('/')
     }
   })
@@ -37,12 +37,12 @@ export const FindGames = () => {
     // Construimos userInfo según store.user.profile
     const userInfo = store.user?.profile
       ? (() => {
-          const { name, age, games } = store.user.profile;
-          const juegosStr = Array.isArray(games)
-            ? games.map((item) => item.game.title).join(", ")
-            : "sin juegos";
-          return `Nombre: ${name}, Edad: ${age}, Juegos: ${juegosStr}`;
-        })()
+        const { name, age, games } = store.user.profile;
+        const juegosStr = Array.isArray(games)
+          ? games.map((item) => item.game.title).join(", ")
+          : "sin juegos";
+        return `Nombre: ${name}, Edad: ${age}, Juegos: ${juegosStr}`;
+      })()
       : "the user has no data";
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
@@ -52,7 +52,10 @@ export const FindGames = () => {
     try {
       const respuesta = await axios.post(
         `${BACKEND_URL}/api/chat`,
-        { message: text, userInfo },
+        {
+          messages: [...messages, { sender: "user", text }], // Enviamos toda la conversación
+          userInfo
+        },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -93,9 +96,8 @@ export const FindGames = () => {
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`d-flex mb-3 ${
-                  msg.sender === "user" ? "justify-content-end" : "justify-content-start"
-                }`}
+                className={`d-flex mb-3 ${msg.sender === "user" ? "justify-content-end" : "justify-content-start"
+                  }`}
               >
                 {/* Si es bot, mostramos avatar */}
                 {msg.sender === "bot" && (
@@ -107,11 +109,10 @@ export const FindGames = () => {
                   />
                 )}
                 <div
-                  className={`px-3 py-2 rounded-3 text-wrap ${
-                    msg.sender === "user"
+                  className={`px-3 py-2 rounded-3 text-wrap ${msg.sender === "user"
                       ? "bg-gradient-user text-white shadow-user"
                       : "bg-gradient-bot text-white shadow-bot"
-                  }`}
+                    }`}
                   style={{ maxWidth: "75%" }}
                 >
                   {msg.text}

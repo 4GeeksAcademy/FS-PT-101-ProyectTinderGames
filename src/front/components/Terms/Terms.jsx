@@ -29,7 +29,7 @@ export const Terms = ({ onAccept }) => {
       </button> */}
 
       {/* <!-- Modal --> */}
-      <div className="modal fade" id="TermsAndConditionsModal" tabindex="-1" aria-labelledby="TermsAndConditionsModalLabel" aria-hidden="true">
+      <div className="modal fade" id="TermsAndConditionsModal" tabIndex="-1" aria-labelledby="TermsAndConditionsModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
