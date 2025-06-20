@@ -634,7 +634,7 @@ const Profile = () => {
                     </div>
                     <div className="modal-body modal-sci-fi-body">
                       <div className="mb-3">
-                        <label htmlFor="gameName" className="label-sci-fi">Selecciona un juego</label>
+                        <label htmlFor="gameName" className="label-sci-fi">Select a game</label>
                         <Select
                           className="selectorJuegos"
                           options={gameOptions}
@@ -644,11 +644,11 @@ const Profile = () => {
                           }
                           isClearable
                           isSearchable
-                          placeholder="-- Elige un juego --"
+                          placeholder="-- Select a game --"
                         />
                       </div>
                       <div className="mb-3">
-                        <label htmlFor="hoursPlayed" className="label-sci-fi">Horas jugadas</label>
+                        <label htmlFor="hoursPlayed" className="label-sci-fi">Hours played</label>
                         <input
                           type="number"
                           className="input-sci-fi"
@@ -656,7 +656,7 @@ const Profile = () => {
                           name="hours_played"
                           value={game.hours_played}
                           onChange={handleChange}
-                          placeholder="Ej. 42"
+                          placeholder="Eg.: 42"
                           min="0"
                         />
                         {errorHoursPlayed && <h6 className="text-danger ms-2 mt-2 ">{errorHoursPlayed}</h6>}
@@ -667,7 +667,7 @@ const Profile = () => {
                     <div className="modal-footer modal-sci-fi-footer">
                       <button
                         type="button"
-                        className="btn-sci-fi-secondary"
+                        className="btn-sci-fi-primary"
                         data-bs-dismiss="modal"
                       >
                         Cancel
