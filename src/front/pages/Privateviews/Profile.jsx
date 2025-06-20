@@ -132,17 +132,17 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-  // Limpiar popovers anteriores (evita duplicados o errores)
-  document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
-    const popover = bootstrap.Popover.getInstance(el);
-    if (popover) popover.dispose();
-  });
+    // Limpiar popovers anteriores (evita duplicados o errores)
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+      const popover = bootstrap.Popover.getInstance(el);
+      if (popover) popover.dispose();
+    });
 
-  // Inicializar popovers actuales
-  document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
-    new bootstrap.Popover(el);
-  });
-}, [topThreeGames]); // 🔥 Se reinicia solo cuando topThreeGames cambia
+    // Inicializar popovers actuales
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+      new bootstrap.Popover(el);
+    });
+  }, [topThreeGames]); // 🔥 Se reinicia solo cuando topThreeGames cambia
 
   useEffect(() => {
     // fetchGames()
@@ -578,8 +578,24 @@ const Profile = () => {
         {activeTab === 'Games' && (
           <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
-              <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
-              <button
+              <h2 className="col-lg-6 col-md-12 col-sm-12 mt-3">
+                Games{" "}
+                <span className="tooltip-wrapper">
+                  <i className="fa-solid fa-circle-info fa-2xs medals-info-icon"></i>
+                  <span className="tooltip-text">
+                    <strong>Medal Info:</strong>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
+                    </div>
+                  </span>
+                </span>
+              </h2>              <button
                 type="button"
                 className="btn botonLeaveComment col-lg-4 col-md-12 col-sm-12"
                 data-bs-toggle="modal"
@@ -611,7 +627,7 @@ const Profile = () => {
                     <div className="modal-body">
                       <div className="mb-3">
                         <label htmlFor="gameName" className="form-label">
-                          Selecciona un juego
+                          Choose a game
                         </label>
                         <select
                           id="gameName"
@@ -619,7 +635,7 @@ const Profile = () => {
                           value={game.title}
                           onChange={handleChange}
                         >
-                          <option value="">-- Elige un juego --</option>
+                          <option value="">-- Choose a game --</option>
                           {availableGames.map((name) => (
                             <option key={name} value={name}>
                               {name}
@@ -629,7 +645,7 @@ const Profile = () => {
                       </div>
                       <div className="mb-3">
                         <label htmlFor="hoursPlayed" className="form-label">
-                          Horas jugadas
+                          Hours played
                         </label>
                         <input
                           type="number"
@@ -648,14 +664,14 @@ const Profile = () => {
                         className="btn btn-secondary"
                         data-bs-dismiss="modal"
                       >
-                        Cancelar
+                        Cancel
                       </button>
                       <button
                         type="button"
                         className="btn btn-primary"
                         onClick={handleAdd}
                       >
-                        Añadir
+                        Add
                       </button>
                     </div>
                   </div>

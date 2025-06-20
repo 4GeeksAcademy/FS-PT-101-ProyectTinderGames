@@ -553,3 +553,60 @@
   box-shadow: 0 0 14px #00ffffcc, 0 0 24px #ff00ff88;
   transform: scale(1.05);
 }
+
+
+
+/* tooltip medals info */
+.medals-info-icon {
+  color: #7826d6 !important;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.medals-info-icon:hover {
+  color: #00ffff !important;
+}
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  position: absolute;
+  top: 5%;
+  left: 490%;
+  transform: translateX(-50%);
+  background: transparent;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 1px 2px #00ffff;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 999;
+}
+
+.tooltip-text strong {
+  color: #00ffff;
+}
+
+.tooltip-wrapper:hover .tooltip-text {
+  opacity: 1;
+  visibility: visible;
+}
+
+.medal-info-gold {
+  color: #ffd700;
+}
+
+.medal-info-silver {
+  color: #c0c0c0;
+}
+
+.medal-info-bronze {
+  color: #CD7F32;
+}
