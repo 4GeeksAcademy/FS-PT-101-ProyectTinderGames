@@ -29,26 +29,39 @@ export const MatchUserDetails = () => {
   const [rating, setRating] = useState(0);
   const [newComment, setNewComment] = useState({ stars: 0, comment: "" });
   const [hoverRating, setHoverRating] = useState(0);
+    const allGames = store.itsMatchInfo?.profile?.games ?? [];
+  const topThreeGames = allGames
+    .slice()                                      // 1. Copia el array para no mutar el original
+    .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))  // 2. Orden descendente por horas
+    .slice(0, 3);
+
+
   useEffect(() => {
     if (!store.user) {
       navigate('/')
     } else {
-      document
-        .querySelectorAll('[data-bs-toggle="popover"]')
-        .forEach((el) => {
-          // eslint-disable-next-line no-new
-          new bootstrap.Popover(el);
-        });
       userServices
         .getUserInfoById(id)
         .then(data => dispatch({ type: "getItsMatchInfo", payload: data }))
         .catch(err => console.error("Failed to load user info:", err));
-
       reviewServices
         .getAllReviewsReceived(id)
         .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
     }
   }, []);
+
+  useEffect(() => {
+      // Limpiar popovers anteriores (evita duplicados o errores)
+      document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+        const popover = bootstrap.Popover.getInstance(el);
+        if (popover) popover.dispose();
+      });
+  
+      // Inicializar popovers actuales
+      document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+        new bootstrap.Popover(el);
+      });
+    }, [topThreeGames]); // 🔥 Se reinicia solo cuando topThreeGames cambia
 
   // El hook useMemo de React sirve para “memorizar” (cachear) el resultado de una función de cálculo y sólo volver a 
   // ejecutarla cuando cambien unas dependencias que tú le indiques. Se utiliza para optimizar el rendimiento, evitando 
@@ -126,12 +139,6 @@ export const MatchUserDetails = () => {
       default: return "photo1";
     }
   };
-  const allGames = store.itsMatchInfo?.profile?.games ?? [];
-  const topThreeGames = allGames
-    .slice()                                      // 1. Copia el array para no mutar el original
-    .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))  // 2. Orden descendente por horas
-    .slice(0, 3);
-
 
   return (
     <div className="profile-container">

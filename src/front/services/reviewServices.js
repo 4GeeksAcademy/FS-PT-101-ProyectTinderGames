@@ -7,6 +7,7 @@ reviewServices.getAllReviewsReceived = async (user_id) => {
     if (!resp.ok)
       throw Error("Something went wrong traying to get matches info");
     const data = await resp.json();
+    console.log(data)
     return data;
   } catch (error) {
     console.log(error);

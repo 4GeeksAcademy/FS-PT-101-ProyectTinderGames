@@ -127,8 +127,7 @@ const Profile = () => {
       navigate('/')
     } else {
       loadProfile();
-      reviewServices.getAllReviewsReceived(store.user?.id)
-        .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+      getReviews();
       // fetchGames();
     }
   }, []);
@@ -153,7 +152,10 @@ const Profile = () => {
     }
   }, [activeTab]);
 
-
+  const getReviews = async () => {
+    await reviewServices.getAllReviewsReceived(store.user?.id)
+      .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+  }
   const fetchGames = async () => {
     try {
       const pageSize = 40; // max permitido por petición
