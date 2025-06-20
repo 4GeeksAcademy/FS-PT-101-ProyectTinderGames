@@ -89,6 +89,11 @@ const Profile = () => {
     parsePreferences(profile.languages) // reutilizo parse para la puntuación.
   );
 
+  //estados para los errores de juego repetido y horas
+  const [errorRepeatedGame, setErrorRepeatedGame] = useState("")
+  const [errorHoursPlayed, setErrorHoursPlayed] = useState("")
+
+
 
   // Opciones para selects
   const zodiacSigns = [
@@ -299,11 +304,17 @@ const Profile = () => {
     }
   };
   const handleAdd = async () => {
+
+    setErrorRepeatedGame('');
+    setErrorHoursPlayed('');
+
     if (game.title.length < 0 || game.hours_played <= 0) {
-      return alert('error creating game')
+      setErrorHoursPlayed('Your must add your played hours')
+      return;
     }
     if (store.user.profile.games.some(g => g.game.title === game.title)) {
-      return alert('game already exist')
+      setErrorRepeatedGame('This game is already on the list')
+      return;
     }
     try {
       const image = await selectGameImage(game.title);
@@ -595,7 +606,8 @@ const Profile = () => {
                     </div>
                   </span>
                 </span>
-              </h2>              <button
+              </h2>
+              <button
                 type="button"
                 className="btn botonLeaveComment col-lg-4 col-md-12 col-sm-12"
                 data-bs-toggle="modal"
@@ -619,7 +631,7 @@ const Profile = () => {
                       </h5>
                       <button
                         type="button"
-                        className="btn-close"
+                        className="btn-close "
                         data-bs-dismiss="modal"
                         aria-label="Cerrar"
                       />
@@ -656,12 +668,15 @@ const Profile = () => {
                           placeholder="Ej. 42"
                           min="0"
                         />
+                        {errorHoursPlayed && <h6 className="text-danger ms-2 mt-2 ">{errorHoursPlayed}</h6>}
+                        {errorRepeatedGame && <h6 className="text-danger ms-2 mt-2 ">{errorRepeatedGame}</h6>}
+
                       </div>
                     </div>
                     <div className="modal-footer">
                       <button
                         type="button"
-                        className="btn btn-secondary"
+                        className="btn btn-secondary "
                         data-bs-dismiss="modal"
                       >
                         Cancel
