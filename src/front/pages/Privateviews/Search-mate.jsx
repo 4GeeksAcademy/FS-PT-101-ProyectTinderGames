@@ -82,7 +82,6 @@ export const SearchMate = () => {
   };
 
   //Maneja los likes
-  //Maneja los likes
   const handleLike = async () => {
     const likedProfile = store.searchMatchProfiles[currentUser];
     if (!store.user?.profile?.id || !likedProfile?.id) return;
@@ -226,7 +225,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center">
             <h1 className="search-mate-font">
-              Search a mate {store.user?.profile.nick_name ? store.user.profile.nick_name : 'undefinied'} {store.user?.id}
+              Search a mate {store.user?.profile.nick_name ? store.user.profile.nick_name : 'undefinied'} 
             </h1>
           </div>
 
