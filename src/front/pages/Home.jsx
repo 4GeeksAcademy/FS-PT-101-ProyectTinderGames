@@ -200,7 +200,7 @@ export const Home = () => {
 										<div className="card-body">
 											<h3 className="neon-heading mb-3">Who are we?</h3>
 											<p className="flex-grow-1">
-												We are a aquad of gaming enthusiast who know the real fun starts when we play together <br />
+												We are a aquad of gaming enthusiast who know the real fun starts when we play together: <br />
 												Bryan, Alba & Toni
 											</p>
 										</div>

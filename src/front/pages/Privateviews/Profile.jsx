@@ -122,13 +122,16 @@ const Profile = () => {
     loadProfile();
     reviewServices.getAllReviewsReceived(store.user?.id)
       .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
-    fetchGames();
+    // fetchGames();
   }, []);
 
   useEffect(() => {
-    loadProfile();
-    console.log("El usuario ha cambiado")
-  }, [changer]);
+    // fetchGames()
+    if (activeTab === "Games" && availableGames.length<1) {
+      fetchGames()
+    }
+    
+  }, [activeTab]);
 
 
   const fetchGames = async () => {
@@ -161,7 +164,7 @@ const Profile = () => {
       const data = await userServices.getUserInfo();
       dispatch({ type: 'getUserInfo', payload: data.user });
 
-      const profile = data.user.profile;
+      const profile = data.user?.profile;
 
       if (!profile) return;
 
@@ -174,7 +177,7 @@ const Profile = () => {
         zodiac: profile.zodiac,
         discord: profile.discord,
         steam_id: profile.steam,
-        languages: profile.languages,
+        languages: profile.language,
         preferences: profile.preferences,
         bio: profile.bio,
         photo: profile.photo || 'photo1',
@@ -544,7 +547,7 @@ const Profile = () => {
           </div>
         )}
         {activeTab === 'Games' && (
-          <div className="container">
+                 <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
               <button
@@ -641,7 +644,7 @@ const Profile = () => {
                     <span className="text-danger botonesAccionesJuegos" onClick={() => handleDeleteGame(el.id)}>D</span>
                   </div>
                 </div>
-              )): <p>No games yet</p>}
+              )) : <p>No games yet</p>}
             </div>
           </div>
         )}
@@ -652,8 +655,8 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived.reviews_received.length > 0 || !store.matchReviewsReceived? (
-                store.matchReviewsReceived.reviews_received.map(el => (
+              {store.matchReviewsReceived?.reviews_received.length > 0 || !store.matchReviewsReceived ? (
+                store.matchReviewsReceived?.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
                       Author: {el.author_nickname} — {el.stars} ⭐️

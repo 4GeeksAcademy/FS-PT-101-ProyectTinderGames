@@ -432,7 +432,7 @@ def put_profile(user_id):
     user.profile.location = data.get('location', user.profile.location)
     user.profile.nick_name = data.get('nick_name', user.profile.nick_name)
     user.profile.bio = data.get('bio', user.profile.bio)
-    user.profile.language = data.get('language', user.profile.language)
+    user.profile.language = data.get('languages', user.profile.language)
     user.profile.steam_id = data.get('steam_id', user.profile.steam_id)
     user.profile.photo = data.get('photo', user.profile.photo)
 
