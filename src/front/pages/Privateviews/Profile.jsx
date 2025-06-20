@@ -174,7 +174,7 @@ const Profile = () => {
         zodiac: profile.zodiac,
         discord: profile.discord,
         steam_id: profile.steam,
-        languages: profile.languages,
+        languages: profile.language,
         preferences: profile.preferences,
         bio: profile.bio,
         photo: profile.photo || 'photo1',
@@ -652,7 +652,7 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived.reviews_received.length > 0 || !store.matchReviewsReceived? (
+              {store.matchReviewsReceived.reviews_received?.length > 0 || !store.matchReviewsReceived? (
                 store.matchReviewsReceived.reviews_received.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
