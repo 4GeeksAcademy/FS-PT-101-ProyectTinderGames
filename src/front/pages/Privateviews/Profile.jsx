@@ -655,8 +655,8 @@ const Profile = () => {
               <div className="col-auto m-2 mb-4"></div>
             </div>
             <div className="row">
-              {store.matchReviewsReceived?.reviews_received.length > 0 || !store.matchReviewsReceived ? (
-                store.matchReviewsReceived?.reviews_received.map(el => (
+              {store.matchReviewsReceived?.reviews_received?.length > 0 || !store.matchReviewsReceived ? (
+                store.matchReviewsReceived?.reviews_received?.map(el => (
                   <div key={el.id} className="review-card">
                     <div className="review-container">
                       Author: {el.author_nickname} — {el.stars} ⭐️

@@ -18,22 +18,21 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
   const [avgStars, setAvgStars] = useState(0);
 
   const selectPhoto = () => {
-        switch (profile.photo) {
-            
-            case "photo1": return photo1;
-            case "photo2": return photo2;
-            case "photo3": return photo3;
-            case "photo4": return photo4;
-            case "photo5": return photo5;
-            case "photo6": return photo6;
-            case "photo7": return photo7;
-            case "photo8": return photo8;
-            case "photo9": return photo9;
-            default: return "defaultPhoto";
-        }
-        
-    };
-console.log('Profile photo string___> del searchcard:', profile.photo);
+    switch (profile.photo) {
+
+      case "photo1": return photo1;
+      case "photo2": return photo2;
+      case "photo3": return photo3;
+      case "photo4": return photo4;
+      case "photo5": return photo5;
+      case "photo6": return photo6;
+      case "photo7": return photo7;
+      case "photo8": return photo8;
+      case "photo9": return photo9;
+      default: return "defaultPhoto";
+    }
+
+  };
 
   useEffect(() => {
     if (!profile?.id) return;
@@ -79,7 +78,7 @@ console.log('Profile photo string___> del searchcard:', profile.photo);
                 <div className='d-flex justify-content-center rounded-circle'>
 
 
-                  <img src={selectPhoto()}  alt="App Logo" className='search-match-profile-pic border border-3'></img>
+                  <img src={selectPhoto()} alt="App Logo" className='search-match-profile-pic border border-3'></img>
                 </div>
               </div>
 
@@ -103,16 +102,19 @@ console.log('Profile photo string___> del searchcard:', profile.photo);
               <hr className="search-match-line" />
 
               {/* Games */}
-              {profile?.games?.slice(0, 3).map((g, index) => (
-                <div className="row align-items-center mb-2" key={index}>
-                  <div className="col">
-                    <h5 className='ms-4 search-match-text-sm'>{g.game.title}</h5>
+              {profile?.games
+                ?.sort((a, b) => b.game.hours_played - a.game.hours_played)
+                .slice(0, 3)
+                .map((g, index) => (
+                  <div className="row align-items-center mb-2" key={index}>
+                    <div className="col">
+                      <h5 className='ms-4 search-match-text-sm'>{g.game.title}</h5>
+                    </div>
+                    <div className="col text-end">
+                      <h5 className=' me-4 search-match-text-sm'>{g.game.hours_played} h</h5>
+                    </div>
                   </div>
-                  <div className="col text-end">
-                    <h5 className=' me-4 search-match-text-sm'>{g.game.hours_played} h</h5>
-                  </div>
-                </div>
-              ))}
+                ))}
 
               <hr className="search-match-line" />
 

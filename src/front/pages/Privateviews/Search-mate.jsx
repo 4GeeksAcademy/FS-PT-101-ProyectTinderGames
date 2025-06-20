@@ -76,7 +76,7 @@ export const SearchMate = () => {
     setCurrentUser(0);
   };
 
-  //Maneja los likes
+ 
   //Maneja los likes
   const handleLike = async () => {
     const likedProfile = store.searchMatchProfiles[currentUser];
