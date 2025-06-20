@@ -13,7 +13,7 @@ body {
       ) border-box;
   animation: 2s rotate linear infinite;
   background-color: transparent;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }
 
 /* Secciones con fondo negro y bordes */
@@ -56,7 +56,7 @@ body {
 
 /* Título neón horizontal */
 .neon-heading {
-  text-shadow: 0 0 4px #fff, 0 0 4px #ff00ff, 0 0 8px #00ffff;
+  text-shadow: 0 0 1px #fff, 0 0 5px #ff00ff, 0 0 5px #00ffff;
   color: #f8f8f8;
 }
 
@@ -121,7 +121,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }
 
 .card-front {
