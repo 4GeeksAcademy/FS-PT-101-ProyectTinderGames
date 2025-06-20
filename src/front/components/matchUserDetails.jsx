@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import userServices from "../services/userServices";
 import useGlobalReducer, { StoreProvider } from "../hooks/useGlobalReducer";
 import "../pages/Privateviews/Profile.css";
@@ -20,6 +20,7 @@ import photo9 from "../assets/img/profile-pics/profile-pic-9.png";
 
 
 export const MatchUserDetails = () => {
+  const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("info");
@@ -28,16 +29,25 @@ export const MatchUserDetails = () => {
   const [rating, setRating] = useState(0);
   const [newComment, setNewComment] = useState({ stars: 0, comment: "" });
   const [hoverRating, setHoverRating] = useState(0);
-
   useEffect(() => {
-    userServices
-      .getUserInfoById(id)
-      .then(data => dispatch({ type: "getItsMatchInfo", payload: data }))
-      .catch(err => console.error("Failed to load user info:", err));
+    if (!store.user) {
+      navigate('/')
+    } else {
+      document
+        .querySelectorAll('[data-bs-toggle="popover"]')
+        .forEach((el) => {
+          // eslint-disable-next-line no-new
+          new bootstrap.Popover(el);
+        });
+      userServices
+        .getUserInfoById(id)
+        .then(data => dispatch({ type: "getItsMatchInfo", payload: data }))
+        .catch(err => console.error("Failed to load user info:", err));
 
-    reviewServices
-      .getAllReviewsReceived(id)
-      .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+      reviewServices
+        .getAllReviewsReceived(id)
+        .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
+    }
   }, []);
 
   // El hook useMemo de React sirve para “memorizar” (cachear) el resultado de una función de cálculo y sólo volver a 
@@ -60,7 +70,6 @@ export const MatchUserDetails = () => {
       photo: p.photo ?? "no data"
     };
   }, [store.itsMatchInfo]);
-  const allGames = store.itsMatchInfo?.profile?.games ?? [];
 
   const selectMedal = (gamehours) => {
     const hours = parseInt(gamehours, 10);
@@ -79,7 +88,6 @@ export const MatchUserDetails = () => {
 
   const handleSaveComment = async (e) => {
     e.preventDefault();
-
     try {
       // 1. Envía la nueva review: userId, recipientId, { stars, comment }
       await reviewServices.postNewReview(
@@ -118,11 +126,12 @@ export const MatchUserDetails = () => {
       default: return "photo1";
     }
   };
-
+  const allGames = store.itsMatchInfo?.profile?.games ?? [];
   const topThreeGames = allGames
     .slice()                                      // 1. Copia el array para no mutar el original
     .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))  // 2. Orden descendente por horas
     .slice(0, 3);
+
 
   return (
     <div className="profile-container">
@@ -140,32 +149,26 @@ export const MatchUserDetails = () => {
 
         {/* Medals */}
         <div className="medal-list">
-          {topThreeGames.map((el, index) => {
-            const hours = el.game?.hours_played ?? 0;
-            const title = el.game?.title ?? `Game ${index + 1}`;
-
-            return (
-              <div key={el.game?.id ?? index} className="medal-game-card">
-                {/* Icono de la medalla según horas jugadas */}
-                <img
-                  src={selectMedal(hours)}
-                  alt={`${title} Medal`}
-                  className="medal-icon"
-                  role="button"
-                  data-bs-toggle="popover"
-                  data-bs-trigger="hover focus"
-                  data-bs-container="body"
-                  data-bs-placement="bottom"
-                  data-bs-content={`${title} — ${hours} horas`}
-                />
-
-                {/* Carátula del juego */}
-                <div className="game-img-wrapper w-100">
-                  <h5 className="m-0 p-2">{el.game.title}</h5>
-                </div>
-              </div>
-            );
-          })}
+          {topThreeGames.map((el, index) => (
+            <div key={el.game?.id ?? index} className="medal-game-card">
+              <img
+                src={selectMedal(el.game.hours_played)}
+                alt={`${el.game.title} Medal`}
+                className="medal-icon"
+                role="button"
+                data-bs-toggle="popover"
+                data-bs-trigger="hover focus"
+                data-bs-container="body"
+                data-bs-placement="bottom"
+                data-bs-content={`${el.game.title} — ${el.game.hours_played} horas`}
+              />
+              <img
+                className="img-fluid gameImg"
+                src={el.game.image}
+                alt={`Portada de ${el.game.title}`}
+              />
+            </div>
+          ))}
         </div>
       </div>
 

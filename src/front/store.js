@@ -84,6 +84,7 @@ export default function storeReducer(store, action = {}) {
       localStorage.removeItem("likesSent");
       localStorage.removeItem("dislikesSent");
       localStorage.removeItem("searchMatchProfiles");
+      localStorage.removeItem("profile")
 
       return {
         ...store,

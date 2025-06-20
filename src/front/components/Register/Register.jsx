@@ -3,10 +3,12 @@ import './Register.css';
 import { useState } from 'react';
 import userServices from '../../services/userServices';
 import { Terms } from '../Terms/Terms';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
 
 export const Register = ({ onSwitch }) => {
 
     const navigate = useNavigate()
+    const {store, dispatch} = useGlobalReducer()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -44,14 +46,20 @@ export const Register = ({ onSwitch }) => {
             return;
         }
 
-        userServices.register(formData).then(data => {
-            localStorage.setItem('token', data.token)
+        userServices.register(formData).then(async data => {
             if (data.success) {
+                localStorage.setItem('token', data.token);
+                const user = await userServices.getUserInfo();
+                await dispatch({ type: 'getUserInfo', payload: user });
                 navigate('/private/profile');
             } else {
-                setErrorEmailRegistered("Email already registered")
+                setErrorEmailRegistered("Email already registered");
             }
-        })
+        }).catch(err => {
+            console.error("Error en registro:", err);
+            setErrorEmailRegistered("Error inesperado. Intenta de nuevo.");
+        });
+
     }
 
     const handleChange = e => {
