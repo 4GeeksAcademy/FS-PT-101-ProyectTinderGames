@@ -132,7 +132,6 @@ const Profile = () => {
       navigate('/')
     } else {
       loadProfile();
-      getReviews();
       // fetchGames();
     }
   }, []);
@@ -155,10 +154,13 @@ const Profile = () => {
     if (activeTab === "Games" && availableGames.length < 1) {
       fetchGames()
     }
+    if (activeTab === "comments") {
+      getReviews();
+    }
   }, [activeTab]);
 
   const getReviews = async () => {
-    await reviewServices.getAllReviewsReceived(store.user?.id)
+    reviewServices.getAllReviewsReceived(store.user?.id)
       .then(data => dispatch({ type: "matchReviewsReceived", payload: data }));
   }
   const fetchGames = async () => {
@@ -188,7 +190,7 @@ const Profile = () => {
   const loadProfile = async () => {
     try {
       const data = await userServices.getUserInfo();
-      dispatch({ type: 'getUserInfo', payload: data.user });
+      await dispatch({ type: 'getUserInfo', payload: data.user });
 
       const profile = data.user?.profile;
 
