@@ -91,6 +91,11 @@ const Profile = () => {
     parsePreferences(profile.languages) // reutilizo parse para la puntuación.
   );
 
+  //estados para los errores de juego repetido y horas
+  const [errorRepeatedGame, setErrorRepeatedGame] = useState("")
+  const [errorHoursPlayed, setErrorHoursPlayed] = useState("")
+
+
 
   // Opciones para selects
   const zodiacSigns = [
@@ -301,11 +306,17 @@ const Profile = () => {
     }
   };
   const handleAdd = async () => {
-    if (game.title.length <= 0 || game.hours_played <= 0) {
-      return alert('error creating game')
+
+    setErrorRepeatedGame('');
+    setErrorHoursPlayed('');
+
+    if (game.title.length < 0 || game.hours_played <= 0) {
+      setErrorHoursPlayed('Your must add your played hours')
+      return;
     }
     if (store.user.profile.games.some(g => g.game.title === game.title)) {
-      return alert('game already exist')
+      setErrorRepeatedGame('This game is already on the list')
+      return;
     }
     try {
       const image = await selectGameImage(game.title);
@@ -580,7 +591,24 @@ const Profile = () => {
         {activeTab === 'Games' && (
           <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
-              <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
+              <h2 className="col-lg-6 col-md-12 col-sm-12 mt-3">
+                Games{" "}
+                <span className="tooltip-wrapper">
+                  <i className="fa-solid fa-circle-info fa-2xs medals-info-icon"></i>
+                  <span className="tooltip-text">
+                    <strong>Medal Info:</strong>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
+                    </div>
+                  </span>
+                </span>
+              </h2>
               <button
                 type="button"
                 className="btn botonLeaveComment col-lg-4 col-md-12 col-sm-12"
@@ -606,7 +634,7 @@ const Profile = () => {
                     </div>
                     <div className="modal-body modal-sci-fi-body">
                       <div className="mb-3">
-                        <label htmlFor="gameName" className="label-sci-fi">Selecciona un juego</label>
+                        <label htmlFor="gameName" className="label-sci-fi">Select a game</label>
                         <Select
                           className="selectorJuegos"
                           options={gameOptions}
@@ -616,11 +644,11 @@ const Profile = () => {
                           }
                           isClearable
                           isSearchable
-                          placeholder="-- Elige un juego --"
+                          placeholder="-- Select a game --"
                         />
                       </div>
                       <div className="mb-3">
-                        <label htmlFor="hoursPlayed" className="label-sci-fi">Horas jugadas</label>
+                        <label htmlFor="hoursPlayed" className="label-sci-fi">Hours played</label>
                         <input
                           type="number"
                           className="input-sci-fi"
@@ -628,25 +656,28 @@ const Profile = () => {
                           name="hours_played"
                           value={game.hours_played}
                           onChange={handleChange}
-                          placeholder="Ej. 42"
+                          placeholder="Eg.: 42"
                           min="0"
                         />
+                        {errorHoursPlayed && <h6 className="text-danger ms-2 mt-2 ">{errorHoursPlayed}</h6>}
+                        {errorRepeatedGame && <h6 className="text-danger ms-2 mt-2 ">{errorRepeatedGame}</h6>}
+
                       </div>
                     </div>
                     <div className="modal-footer modal-sci-fi-footer">
                       <button
                         type="button"
-                        className="btn-sci-fi-secondary"
+                        className="btn-sci-fi-primary"
                         data-bs-dismiss="modal"
                       >
-                        Cancelar
+                        Cancel
                       </button>
                       <button
                         type="button"
-                        className="btn-sci-fi-primary"
+                        className="btn-sci-fi-secundary"
                         onClick={handleAdd}
                       >
-                        Añadir
+                        Add
                       </button>
                     </div>
                   </div>
