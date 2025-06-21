@@ -32,7 +32,7 @@ export const MatchUserDetails = () => {
     const allGames = store.itsMatchInfo?.profile?.games ?? [];
   const topThreeGames = allGames
     .slice()                                      // 1. Copia el array para no mutar el original
-    .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))  // 2. Orden descendente por horas
+    .sort((a, b) => (b.gameHoursPlayed ?? 0) - (a.gameHoursPlayed ?? 0))  // 2. Orden descendente por horas
     .slice(0, 3);
 
 
@@ -157,22 +157,22 @@ export const MatchUserDetails = () => {
         {/* Medals */}
         <div className="medal-list">
           {topThreeGames.map((el, index) => (
-            <div key={el.game?.id ?? index} className="medal-game-card">
+            <div key={el.id ?? index} className="medal-game-card">
               <img
-                src={selectMedal(el.game.hours_played)}
-                alt={`${el.game.title} Medal`}
+                src={selectMedal(el.gameHoursPlayed)}
+                alt={`${el.gameTitle} Medal`}
                 className="medal-icon"
                 role="button"
                 data-bs-toggle="popover"
                 data-bs-trigger="hover focus"
                 data-bs-container="body"
                 data-bs-placement="bottom"
-                data-bs-content={`${el.game.title} — ${el.game.hours_played} horas`}
+                data-bs-content={`${el.gameTitle} — ${el.gameHoursPlayed} horas`}
               />
               <img
                 className="img-fluid gameImg"
-                src={el.game.image}
-                alt={`Portada de ${el.game.title}`}
+                src={el.gameImage}
+                alt={`Portada de ${el.gameTitle}`}
               />
             </div>
           ))}
@@ -259,8 +259,8 @@ export const MatchUserDetails = () => {
                   <div key={i} className="col-12 gamesbox d-flex align-items-center py-3">
                     <div className="row w-100 m-0">
                       <div className="col-lg-10 col-md-12 d-flex justify-content-around align-items-center">
-                        <p className="m-0">{el.game.title}</p>
-                        <p className="m-0">{el.game.hours_played} hours</p>
+                        <p className="m-0">{el.gameTitle}</p>
+                        <p className="m-0">{el.gameHoursPlayed} hours</p>
                       </div>
                     </div>
                   </div>

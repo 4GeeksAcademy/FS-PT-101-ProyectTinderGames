@@ -9,11 +9,10 @@ const gameServices = {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          game: {
             title: form.title,
             hours_played: form.hours_played,
-            image: form.image
-          },
+            image: form.image,
+          
         }),
       });
 
@@ -38,6 +37,30 @@ const gameServices = {
 
       if (!resp.ok) {
         throw new Error("Something went wrong trying to delete game");
+      }
+      // Opcional: parseamos la respuesta JSON
+      const data = await resp.json();
+      return data;
+    } catch (error) {
+      console.error("postNewGame error:", error);
+      throw error;
+    }
+  },
+
+  updateGameInfo: async (game_id, hours) => {
+    try {
+      const resp = await fetch(`${url}/api/games/hours/${game_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            hours_played: hours,
+        }),
+      });
+
+      if (!resp.ok) {
+        throw new Error("Something went wrong trying to update game");
       }
       // Opcional: parseamos la respuesta JSON
       const data = await resp.json();

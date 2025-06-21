@@ -23,7 +23,7 @@ export const MatchMiniCard = ({ id, nickname, gender, games, age, location }) =>
   // Dentro del componente (antes del return), calcula los 3 juegos con más horas:
   const topThreeGames = games
     ? [...games]
-      .sort((a, b) => b.game.hours_played - a.game.hours_played)
+      .sort((a, b) => b.gameHoursPlayed - a.gameHoursPlayed)
       .slice(0, 3)
     : [];
 
@@ -65,15 +65,15 @@ export const MatchMiniCard = ({ id, nickname, gender, games, age, location }) =>
             {topThreeGames && topThreeGames.length > 0 ? (
               <div className="col-lg-4 col-md-6 col-lg-12 d-flex flex-row flex-nowrap justify-content-around">
                 {topThreeGames.map((el, index) => (
-                  <div key={el.game.id || index} className="d-flex flex-column justify-content-center align-items-center">
+                  <div key={el.id || index} className="d-flex flex-column justify-content-center align-items-center">
                     <img
-                      src={el.game.image}
+                      src={el.gameImage}
                       className="img-fluid imagenminicard"
                       style={{ width: '100px', height: '50px', cursor: 'pointer', objectFit:'cover' }}
-                      alt={el.game.title}
+                      alt={el.gameTitle}
                     />
                     <img
-                      src={selectMedal(el.game.hours_played)}
+                      src={selectMedal(el.gameHoursPlayed)}
                       className="img-fluid"
                       style={{ width: '3rem', height: 'auto', cursor: 'pointer' }}
                       alt="Medal"
@@ -82,7 +82,7 @@ export const MatchMiniCard = ({ id, nickname, gender, games, age, location }) =>
                       data-bs-trigger="hover focus"
                       data-bs-container="body"
                       data-bs-placement="bottom"
-                      data-bs-content={`${el.game.title} — ${el.game.hours_played} horas`}
+                      data-bs-content={`${el.gameTitle} — ${el.gameHoursPlayed} horas`}
                     />
                   </div>
                 ))}

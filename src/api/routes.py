@@ -855,6 +855,29 @@ def get_games_by_profile_id(profile_id):
     serialized = [game.serialize() for game in games]
     return jsonify(serialized), 200
 
+# PUT A GAME HOURS
+@api.route('/games/hours/<int:game_id>', methods=['PUT'])
+def put_game_hours(game_id):
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No se están enviando los datos correctamente'}), 400
+
+    # Buscar juego
+    stmt = select(Game).where(Game.id == game_id)
+    game = db.session.execute(stmt).scalar_one_or_none()
+
+    if game is None:
+        return jsonify({'error': 'Este juego no existe'}), 404
+
+    # Actualizar los valores
+    game.game_hoursPlayed = data.get("hours_played") or 'undefined'
+
+    # Guardar cambios
+    db.session.commit()
+
+    return jsonify(game.serialize()), 200
+
 
 # POST GAMES
 @api.route('/games/<profile_id>', methods=['POST'])
@@ -866,25 +889,20 @@ def post_game(profile_id):
     data = request.get_json()
 
     # 2) Validar que venga la clave "game"
-    if 'game' not in data:
+    if not data:
         return jsonify({'error': 'Falta el campo "game" en el JSON'}), 400
-
-    # 3) Validar que game sea un objeto JSON (dict)
-    if not isinstance(data['game'], dict):
-        return jsonify({'error': 'El campo "game" debe ser un objeto JSON'}), 400
 
     # 4) Crear y persistir la nueva partida
     new_game = Game(
         profile_id=profile_id,
-        # Asumiendo que el tipo de columna es JSON/Text en tu modelo
-        game=data['game']
+        game_hoursPlayed = data['hours_played'] or 'undefined',
+        game_image = data['image'] or 'undefined',
+        game_title = data['title'] or 'undefined'
     )
     db.session.add(new_game)
     db.session.commit()
 
-    return jsonify({'message': f'Game añadido al perfil {profile_id}', 'game_id': new_game.id,  # si tu modelo los tiene
-                    'game':       new_game.game
-                    }), 201
+    return jsonify(new_game.serialize()), 201
 
 
 # DELETE GAME

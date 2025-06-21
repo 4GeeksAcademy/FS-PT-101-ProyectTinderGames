@@ -148,7 +148,9 @@ class Game(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     profile_id: Mapped[int] = mapped_column(ForeignKey(
         'profiles.id', ondelete='CASCADE'), nullable=False)
-    game: Mapped[dict] = mapped_column(JSON, nullable=False)
+    game_title: Mapped[str] = mapped_column(nullable=True)
+    game_image: Mapped[str] = mapped_column(nullable=True)
+    game_hoursPlayed: Mapped[int]=mapped_column(nullable=True)
 
     # Relaciones
     profile: Mapped[Profile] = relationship('Profile', back_populates='games')
@@ -157,7 +159,9 @@ class Game(db.Model):
         return {
             "id": self.id,
             "profile_id": self.profile_id,
-            "game": self.game
+            "gameTitle": self.game_title,
+            "gameImage": self.game_image,
+            "gameHoursPlayed":self.game_hoursPlayed
         }
 
 

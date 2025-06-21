@@ -123,15 +123,15 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
               {/* Games */}
 
               {profile?.games
-                ?.sort((a, b) => b.game.hours_played - a.game.hours_played)
+                ?.sort((a, b) => b.gameHoursPlayed - a.gameHoursPlayed)
                 .slice(0, 3)
                 .map((g, index) => (
                   <div className="row align-items-center mb-2" key={index}>
                     <div className="col">
-                      <h5 className='ms-4 search-match-text-sm'>{g.game.title}</h5>
+                      <h5 className='ms-4 search-match-text-sm'>{g.gameTitle}</h5>
                     </div>
                     <div className="col text-end">
-                      <h5 className=' me-4 search-match-text-sm'>{g.game.hours_played} h</h5>
+                      <h5 className=' me-4 search-match-text-sm'>{g.gameHoursPlayed} h</h5>
                     </div>
                   </div>
                 ))}

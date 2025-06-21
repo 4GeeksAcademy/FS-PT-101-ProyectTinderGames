@@ -61,6 +61,7 @@ const Profile = () => {
   const url = import.meta.env.VITE_BACKEND_URL;   // URL base del backend
   const rawgApi = import.meta.env.VITE_RAWG_KEY;
   const gameOptions = availableGames.map(name => ({ value: name, label: name }));
+  const [idOfGameBeingEdited, setIdOfGameBeingEdited] = useState(0);
 
   // Estados locales
   const [activeTab, setActiveTab] = useState("info");                    // Pestaña activa (info, activity, comments)
@@ -108,7 +109,7 @@ const Profile = () => {
   let allGames = store.user?.profile?.games ? store.user.profile.games : [];
   const topThreeGames = allGames
     .slice() // Copia para no mutar original
-    .sort((a, b) => (b.game.hours_played ?? 0) - (a.game.hours_played ?? 0))
+    .sort((a, b) => (b.gameHoursPlayed ?? 0) - (a.gameHoursPlayed ?? 0))
     .slice(0, 3);
 
 
@@ -318,7 +319,7 @@ const Profile = () => {
       setErrorHoursPlayed('Your must complete all the information')
       return;
     }
-    if (store.user.profile.games.some(g => g.game.title === game.title)) {
+    if (store.user.profile.games.some(g => g.gameTitle === game.title)) {
       setErrorRepeatedGame('This game is already on the list')
       return;
     }
@@ -351,6 +352,21 @@ const Profile = () => {
     await loadProfile();
   }
 
+  const handleSubmit = async (e, gameId) => {
+    e.preventDefault()
+    const hours = game.hours_played
+    
+    if (hours <= 0){
+      return alert('Hours must be more than 0')
+    }
+    await gameServices.updateGameInfo(gameId, hours)
+    await loadProfile()
+    setIdOfGameBeingEdited(0)
+    setGame({
+      hours_played: 0,
+    })
+  }
+
 
   return (
     <div className="profile-container">
@@ -366,9 +382,9 @@ const Profile = () => {
         <p className="location">{profile.location}</p>
         <div className="medal-list">
           {topThreeGames.map((el, i) => (
-            <div key={el.game?.id || i} className="medal-game-card">
+            <div key={el.id || i} className="medal-game-card">
               <img
-                src={selectMedal(el.game.hours_played)}
+                src={selectMedal(el.gameHoursPlayed)}
                 alt="Medal"
                 className="medal-icon"
                 role="button"
@@ -376,12 +392,12 @@ const Profile = () => {
                 data-bs-trigger="hover focus"
                 data-bs-container="body"
                 data-bs-placement="bottom"
-                data-bs-content={`${el.game.title} — ${el.game.hours_played} horas`}
+                data-bs-content={`${el.gameTitle} — ${el.gameHoursPlayed} horas`}
               />
               <img
                 className="img-fluid gameImg"
-                src={el.game.image}
-                alt={`Portada de ${el.game.title}`}
+                src={el.gameImage}
+                alt={`Portada de ${el.gameTitle}`}
               />
             </div>
           ))}
@@ -694,12 +710,22 @@ const Profile = () => {
               {store.user.profile?.games ? store.user.profile.games.map((el, i) => (
                 <div key={i} className="row gamesbox d-flex align-content-center py-3">
                   <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
-                    <p className="m-0">{el.game.title}</p>
+                    <p className="m-0">{el.gameTitle}</p>
                   </div>
-                  <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
-                    <p className="m-0">{el.game.hours_played} hours</p>
-                    <span className="text-danger botonesAccionesJuegos" onClick={() => handleDeleteGame(el.id)}>D</span>
-                  </div>
+                  {idOfGameBeingEdited === el.id ?
+                    <form className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center" onSubmit={(e)=>handleSubmit(e, el.id)}>
+                      <input className="col-1"type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours Played" />
+                      <input type="submit" />
+                      <span className="text-danger botonesAccionesJuegos col-auto" onClick={() => setIdOfGameBeingEdited(0)}>X</span>
+
+                    </form>
+                    :
+                    <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
+                      <p className="m-0 col-4">{el.gameHoursPlayed} hours</p>
+                      <span className="text-light botonesAccionesJuegos col-auto" onClick={() => setIdOfGameBeingEdited(el.id)}>E</span>
+                      <span className="text-danger botonesAccionesJuegos col-auto" onClick={() => handleDeleteGame(el.id)}>D</span>
+                    </div>
+                  }
                 </div>
               )) : <p>No games yet</p>}
             </div>
