@@ -31,12 +31,12 @@ export const Terms = ({ onAccept }) => {
       {/* <!-- Modal --> */}
       <div className="modal fade" id="TermsAndConditionsModal" tabIndex="-1" aria-labelledby="TermsAndConditionsModalLabel" aria-hidden="true">
         <div className="modal-dialog">
-          <div className="modal-content">
+          <div className="modal-content terms-border ">
             <div className="modal-header">
-              <h1 className="modal-title fs-5 " id="TermsAndConditionsModalLabel">Terms and Conditions</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h1 className="modal-title fs-5" id="TermsAndConditionsModalLabel">Terms and Conditions</h1>
+              <button type="button" className="btn-close terms-close-modal me-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body ms-2 ">
               <p>
                 Welcome to PlayerLInk, our platform for connecting gamers. By registering, you agree to the following terms and conditions. Please read them carefully before using our services.
               </p>
@@ -94,15 +94,15 @@ export const Terms = ({ onAccept }) => {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn terms-decline-btn" data-bs-dismiss="modal">Decline</button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn terms-accept-btn"
                 disabled={!accepted}
                 data-bs-dismiss={accepted ? "modal" : undefined}
                 onClick={handleSave}
               >
-                Save changes
+                Accept
               </button>
             </div>
           </div>

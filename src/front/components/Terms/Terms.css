@@ -1,0 +1,22 @@
+.terms-border {
+  border: solid 3px !important;
+  border-color: #8f00ff !important;
+}
+
+.terms-close-modal {
+  background-color: #a41ef165;
+}
+.terms-accept-btn{
+    background-color: #00f0ff
+}
+
+.terms-accept-btn:hover{
+    background-color: #8f00ff 
+}
+
+.terms-decline-btn{
+    background-color: #64646465;
+}
+.terms-decline-btn:hover{
+    background-color: #ff000065;
+}
