@@ -496,7 +496,7 @@
 .botonesAccionesJuegos {
   display: inline-block;
   padding: 0.5rem 1rem;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 0.25rem;
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
@@ -508,7 +508,7 @@
 }
 
 .botonesAccionesJuegos:hover {
-  border-color: #fff;
+  border-color: #7f00ff;
   background-color: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -528,7 +528,7 @@
   width: 150px;
   height: 70px;
   object-fit: cover;
-  border: 2px solid black
+  border: 2px solid black;
 }
 /* === MODAL SCI-FI === */
 .modal-sci-fi {
@@ -624,7 +624,6 @@
   background-color: #475569;
 }
 
-
 /* Botones de las modales */
 .section-button {
   padding: 2px 8px;
@@ -648,12 +647,10 @@
   transform: scale(1.05);
 }
 
-.selectorJuegos{
+.selectorJuegos {
   background-color: black;
   color: black;
 }
-
-
 
 /* tooltip medals info */
 .medals-info-icon {
@@ -707,6 +704,26 @@
 }
 
 .medal-info-bronze {
-  color: #CD7F32;
+  color: #cd7f32;
 }
 
+.error-hours-font {
+  font-size: 10px;
+}
+
+.btn-save-game {
+  color: #8f00ff;
+}
+
+.btn-save-game:hover {
+  color: #00f7ff;
+}
+.btn-close-edit-game{
+background: transparent !important;
+
+}
+
+.input-hours{
+  border-color: #00f7ff !important;
+  
+}

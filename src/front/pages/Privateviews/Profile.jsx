@@ -95,8 +95,7 @@ const Profile = () => {
   //estados para los errores de juego repetido y horas
   const [errorRepeatedGame, setErrorRepeatedGame] = useState("")
   const [errorHoursPlayed, setErrorHoursPlayed] = useState("")
-
-
+  const [errorCeroHours, setErrorCeroHours] = useState("")
 
   // Opciones para selects
   const zodiacSigns = [
@@ -357,14 +356,18 @@ const Profile = () => {
     const hours = game.hours_played
 
     if (hours <= 0) {
-      return alert('Hours must be more than 0')
+      setErrorCeroHours('Hours must be more than 0')
+      return;
     }
     await gameServices.updateGameInfo(gameId, hours)
     await loadProfile()
     setIdOfGameBeingEdited(0)
     setGame({
       hours_played: 0,
-    })
+    });
+
+    setErrorCeroHours("")
+
   }
 
 
@@ -711,12 +714,26 @@ const Profile = () => {
                 <div key={i} className="row gamesbox d-flex align-content-center py-3">
                   <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
                     <p className="m-0">{el.gameTitle}</p>
+
+
                   </div>
                   {idOfGameBeingEdited === el.id ?
+
                     <form className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center" onSubmit={(e) => handleSubmit(e, el.id)}>
-                      <input className="col-3" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours Played" />
-                      <button type="submit" className="fa-solid fa-xl fa-save btn p-0 border-0 bg-transparent botonesAccionesJuegos" />
-                      <span className="text-danger botonesAccionesJuegos col-auto" onClick={() => setIdOfGameBeingEdited(0)}>X</span>
+
+                      <div className="d-flex justify-content-evenly">
+
+                        {errorCeroHours && <h6 className="me-4 text-danger mt-2 error-hours-font">{errorCeroHours}</h6>}
+
+                        <input className="col-3 me-2 input-hours border-2 rounded-2 ms-2" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours Played" />
+                        <div className="d-flex justify-content-end">
+                          <button type="submit" className="me-1 fa-solid fa-solid fa-floppy-disk btn bg-transparent botonesAccionesJuegos btn-save-game" />
+
+                          <span className="ms-1 text-danger botonesAccionesJuegos btn-close-edit-game col-auto" onClick={() => setIdOfGameBeingEdited(0)}>X</span>
+
+                        </div>
+                      </div>
+
 
                     </form>
                     :
