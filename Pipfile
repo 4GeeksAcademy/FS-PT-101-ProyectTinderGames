@@ -3,6 +3,11 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+[[source]]
+url = "l"
+verify_ssl = true
+name = ""
+
 [dev-packages]
 
 [packages]
@@ -10,7 +15,6 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-swagger = "*"
 psycopg2-binary = "*"
-python-dotenv = "*"
 flask-cors = "*"
 gunicorn = "*"
 cloudinary = "*"
@@ -19,10 +23,11 @@ typing-extensions = "*"
 wtforms = "==3.1.2"
 sqlalchemy = "*"
 shell = "*"
+openai = "*"
 flask = "*"
 flask-jwt-extended = "*"
 werkzeug = "*"
-openai = "*"
+python-dotenv = "*"
 flask-mail = "*"
 
 [requires]

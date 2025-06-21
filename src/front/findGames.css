@@ -1,29 +1,69 @@
-/* findGames.css */
-
-/* 1) Degradado del header */
-.bg-gradient-header {
-  background: linear-gradient(90deg, #1ab3ff, #9900ff);
+body {
+  background-color: #0e0e1a;
+  color: #fff;
 }
 
-/* 2) Burbujas de usuario (neón azul) */
+/* Glowwww */
+@keyframes ab-border-glow {
+  0% {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+  }
+  100% {
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px #ff00ff, 0 0 25px #00ffff;
+  }
+}
+
+
+.chat-container {
+  margin: 0 auto;
+  max-width: 750px;
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  border: 2px solid #00ffff;
+  animation: ab-border-glow 2s ease-in-out infinite alternate;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #10101a 0%, #1a002a 100%);
+  backdrop-filter: blur(4px);
+  padding: 1rem;
+}
+
+/* glowww */
+.bg-gradient-header {
+  background: linear-gradient(90deg, #00f0ff, #8f00ff);
+  box-shadow: 0 0 10px #00f0ff, 0 0 20px #8f00ff;
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, #00f0ff, #8f00ff) 1;
+  border-image-slice: 1;
+}
+
+/* chat de usuario */
 .bg-gradient-user {
-  background: linear-gradient(135deg, #0066ff, #33ccff);
+  background: linear-gradient(135deg, #00e0ff, #004eff);
+  border: 1px solid #00f0ff;
   border-bottom-right-radius: 0 !important;
 }
 .shadow-user {
-  box-shadow: 0 2px 6px rgba(0, 102, 255, 0.5);
+  box-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
 }
 
-/* 3) Burbujas del bot (neón morado) */
+/* ia */
 .bg-gradient-bot {
-  background: linear-gradient(135deg, #9900ff, #cc33ff);
+  background: linear-gradient(135deg, #9a00ff, #d633ff);
+  border: 1px solid #9a00ff;
   border-bottom-left-radius: 0 !important;
 }
 .shadow-bot {
-  box-shadow: 0 2px 6px rgba(153, 0, 255, 0.5);
+  box-shadow: 0 0 10px #9a00ff, 0 0 20px #d633ff;
 }
 
-/* 4) Spinner personalizado */
+/* Spinner */
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -32,32 +72,61 @@
 .spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.1);
   border-top: 3px solid #00f0ff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 2px; /* alinea con texto */
+  box-shadow: 0 0 10px #00f0ff;
 }
 
-/* 5) Input oscuro */
-.bg-input {
-  background-color: #1a1a1a !important;
-  border-color: #444 !important;
+/* Input */
+.form-control {
+  background-color: #10101a !important;
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+  box-shadow: 0 0 5px #00f0ff;
+}
+.form-control:focus {
+  box-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
 }
 
-/* 6) Texto de las burbujas */
-.text-white {
-  color: #ffffff !important;
+/* Send */
+.botonenviar {
+  background: linear-gradient(135deg, #00f0ff, #8f00ff);
+  color: white;
+  border: none;
+  box-shadow: 0 0 10px #00f0ff, 0 0 20px #8f00ff;
+  transition: all 0.3s ease-in-out;
+}
+.botonenviar:hover {
+  box-shadow: 0 0 20px #00f0ff, 0 0 30px #8f00ff;
+  transform: scale(1.05);
 }
 
-/* 7) Para pantallas súper pequeñas (opcional) */
+/* Slides */
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.message-bubble {
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Responsive resoluciones pequñas. */
 @media (max-width: 480px) {
   .col-12 {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
-  .rounded-3 {
-    border-radius: 0.5rem !important;
-  }
 }
 
+.form-control::placeholder {
+  color: #fffdfd;
+  opacity: 1;
+}
