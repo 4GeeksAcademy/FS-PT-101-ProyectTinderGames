@@ -725,7 +725,7 @@ const Profile = () => {
 
                         {errorCeroHours && <h6 className="me-4 text-danger mt-2 error-hours-font">{errorCeroHours}</h6>}
 
-                        <input className="col-3 me-2 input-hours border-2 rounded-2 ms-2" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours Played" />
+                        <input className="col-3 me-2 input-hours border-2 rounded-2 ms-2" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours" />
                         <div className="d-flex justify-content-end">
                           <button type="submit" className="me-1 fa-solid fa-solid fa-floppy-disk btn bg-transparent botonesAccionesJuegos btn-save-game" />
 
