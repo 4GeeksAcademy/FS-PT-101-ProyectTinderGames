@@ -355,8 +355,8 @@ const Profile = () => {
   const handleSubmit = async (e, gameId) => {
     e.preventDefault()
     const hours = game.hours_played
-    
-    if (hours <= 0){
+
+    if (hours <= 0) {
       return alert('Hours must be more than 0')
     }
     await gameServices.updateGameInfo(gameId, hours)
@@ -713,17 +713,17 @@ const Profile = () => {
                     <p className="m-0">{el.gameTitle}</p>
                   </div>
                   {idOfGameBeingEdited === el.id ?
-                    <form className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center" onSubmit={(e)=>handleSubmit(e, el.id)}>
-                      <input className="col-1"type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours Played" />
-                      <input type="submit" />
+                    <form className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center" onSubmit={(e) => handleSubmit(e, el.id)}>
+                      <input className="col-3" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours Played" />
+                      <button type="submit" className="fa-solid fa-xl fa-save btn p-0 border-0 bg-transparent botonesAccionesJuegos" />
                       <span className="text-danger botonesAccionesJuegos col-auto" onClick={() => setIdOfGameBeingEdited(0)}>X</span>
 
                     </form>
                     :
                     <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
                       <p className="m-0 col-4">{el.gameHoursPlayed} hours</p>
-                      <span className="text-light botonesAccionesJuegos col-auto" onClick={() => setIdOfGameBeingEdited(el.id)}>E</span>
-                      <span className="text-danger botonesAccionesJuegos col-auto" onClick={() => handleDeleteGame(el.id)}>D</span>
+                      <span className="text-light botonesAccionesJuegos col-auto fa-solid fa-pencil" onClick={() => setIdOfGameBeingEdited(el.id)}></span>
+                      <span className="text-danger botonesAccionesJuegos col-auto fa-solid fa-trash" onClick={() => handleDeleteGame(el.id)}></span>
                     </div>
                   }
                 </div>
