@@ -18,22 +18,22 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
   const [avgStars, setAvgStars] = useState(0);
 
   const selectPhoto = () => {
-        switch (profile.photo) {
-            
-            case "photo1": return photo1;
-            case "photo2": return photo2;
-            case "photo3": return photo3;
-            case "photo4": return photo4;
-            case "photo5": return photo5;
-            case "photo6": return photo6;
-            case "photo7": return photo7;
-            case "photo8": return photo8;
-            case "photo9": return photo9;
-            default: return "defaultPhoto";
-        }
-        
-    };
-console.log('Profile photo string___> del searchcard:', profile.photo);
+    switch (profile.photo) {
+
+      case "photo1": return photo1;
+      case "photo2": return photo2;
+      case "photo3": return photo3;
+      case "photo4": return photo4;
+      case "photo5": return photo5;
+      case "photo6": return photo6;
+      case "photo7": return photo7;
+      case "photo8": return photo8;
+      case "photo9": return photo9;
+      default: return "defaultPhoto";
+    }
+
+  };
+  console.log('Profile photo string___> del searchcard:', profile.photo);
 
   useEffect(() => {
     if (!profile?.id) return;
@@ -66,7 +66,25 @@ console.log('Profile photo string___> del searchcard:', profile.photo);
     }, 500);
   };
 
+  const formattedPreferences = profile?.preferences
+    ? profile.preferences
+      .replace(/\band\b/g, ',')   // reemplaza "and" por coma
+      .replace(/\.+$/, '')        // elimina punto final al final
+      .split(',')                 // separa en array por comas
+      .map(pref => pref.trim())   // quita espacios
+      .filter(Boolean)            // elimina vacíos
+      .join(', ')                 // une con comas sin coma final
+    : '-';
 
+  const formattedLanguages = profile?.language ? profile.language
+    .replace(/\band\b/g, ',')   // reemplaza "and" por coma
+    .replace(/\.+$/, '')        // elimina punto final al final
+    .split(',')                 // separa en array por comas
+    .map(pref => pref.trim())   // quita espacios
+    .filter(Boolean)            // elimina vacíos
+    .join(', ')                 // une con comas sin coma final
+
+    : '-';
   return (
     <>
       <div className='d-flex justify-content-center'>
@@ -79,7 +97,7 @@ console.log('Profile photo string___> del searchcard:', profile.photo);
                 <div className='d-flex justify-content-center rounded-circle'>
 
 
-                  <img src={selectPhoto()}  alt="App Logo" className='search-match-profile-pic border border-3'></img>
+                  <img src={selectPhoto()} alt="App Logo" className='search-match-profile-pic border border-3'></img>
                 </div>
               </div>
 
@@ -121,32 +139,72 @@ console.log('Profile photo string___> del searchcard:', profile.photo);
               <hr className="search-match-line" />
 
               {/* Preferences */}
-              <div className="row align-items-center">
+
+              <div className="col">
+            
+                  <div className='d-flex ms-4'>
+                    <h5 className='search-match-text-sm me-4 preferences-full'>Preferences</h5>
+                     <i className="fa-solid fa-thumbs-up preferences-small ms-4"></i>
+                    <h5 className='search-match-text-sm me-4 text-end '>{formattedPreferences || '-'}</h5>
+                  </div>
+                </div>
+      
+              {/* <div className="row ">
                 <div className="col">
-                  <h5 className='ms-4 search-match-text-sm'>Preferences</h5>
+                  <div className='d-flex'>
+                    <h5 className='ms-4 search-match-text-sm preferences-full'>Preferences</h5>
+                    <i className="fa-solid fa-thumbs-up preferences-small ms-4"></i>
+
+                  </div>
                 </div>
                 <div className="col text-end">
-                  <h5 className='me-4 search-match-text-sm'>{profile?.preferences || '-'}</h5>
+                  <h5 className='me-4 search-match-text-sm'>{formattedPreferences || '-'}</h5>
                 </div>
-              </div>
+              </div> */}
 
               <hr className="search-match-line" />
 
 
-              {/* Location */}
+              {/* Location
               <div className='d-flex justify-content-evenly'>
 
-                <div className='d-flex'>
+                <div className='d-flex ms-4'>
                   <h5 className='me-2 search-match-text-sm'><i className="fa-solid fa-location-dot"></i></h5>
                   <h5 className='me-4 search-match-text-sm '>{profile?.location || '-'}</h5>
                 </div>
 
                 {/* Language */}
-                <div className='d-flex'>
+              {/* <div className='d-flex'>
                   <h5 className='me-2 search-match-text-sm '><i className="fa-solid fa-language"></i></h5>
-                  <h5 className='search-match-text-sm'>{profile?.language || '-'}</h5>
+                  <h5 className='search-match-text-sm'>{formattedLanguages || '-'}</h5>
+                </div>
+              </div>  */}
+
+
+              {/* Language */}
+
+              <div className="col">
+                <div className='d-flex justify-content-center '>
+                  <div className='d-flex ms-4'>
+                    <i className="fa-solid fa-language me-2 ms-4"></i>
+                    <h5 className='search-match-text-sm me-4'>{formattedLanguages || '-'}</h5>
+                  </div>
                 </div>
               </div>
+
+              <hr className="search-match-line" />
+
+              {/* Location */}
+              <div className="col">
+                <div className='d-flex justify-content-center '>
+                  <div className='d-flex ms-4'>
+                    <i className="fa-solid fa-location-dot me-2"></i>
+                    <h5 className='search-match-text-sm'>{profile?.location || '-'}</h5>
+                  </div>
+                </div>
+              </div>
+
+              <hr className="search-match-last-line" />
 
               {/* botones */}
               <div className='row mt-3 d-flex justify-content-center'>

@@ -225,7 +225,7 @@ export const SearchMate = () => {
         <>
           <div className="d-flex justify-content-center">
             <h1 className="search-mate-font">
-              Search a mate {store.user?.profile.nick_name ? store.user.profile.nick_name : 'undefinied'} 
+              Search a mate
             </h1>
           </div>
 

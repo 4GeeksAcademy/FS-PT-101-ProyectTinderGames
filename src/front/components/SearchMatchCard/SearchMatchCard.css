@@ -1,6 +1,6 @@
 .search-match-card {
   color: #00f0ff;
-  width: 32rem;
+  width: 35rem;
   height: auto;
   border-radius: 30px;
   background-color: #0a0f1c;
@@ -11,7 +11,7 @@
 .search-match-profile-pic {
   width: 180px;
   height: 200px;
-   border-radius: 20px;
+  border-radius: 20px;
   border-color: #00f0ff !important;
 }
 
@@ -40,8 +40,17 @@
 .search-match-line {
   border: none;
   height: 2px;
-  background-color: #008cff; 
+  background-color: #008cff;
   width: 100%;
+  margin: 0 auto 1rem auto;
+  opacity: 0.5;
+}
+
+.search-match-last-line {
+  border: none;
+  height: 2px;
+  background-color: #008cff;
+  width: 75%;
   margin: 0 auto 1rem auto;
   opacity: 0.5;
 }
@@ -239,6 +248,14 @@
 	animation: slide-out-blurred-right 0.60s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
 } */
 
+.preferences-full{
+  display: inline;
+}
+
+.preferences-small{
+  display: none;
+}
+
 /* Pantalas móviles */
 
 @media (max-width: 576px) {
@@ -251,6 +268,16 @@
     margin-top: 0;
   }
   .search-match-text-sm {
-    justify-self: center;
+    justify-self: center !important;
+    font-size: smaller;
+
   }
+  .preferences-full{
+  display: none;
+}
+
+.preferences-small{
+  display: inline;
+  place-items: center !important;
+}
 }
