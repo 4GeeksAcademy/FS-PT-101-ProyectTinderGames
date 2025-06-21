@@ -111,16 +111,12 @@ export const Register = ({ onSwitch }) => {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     name="password"
-                                    placeholder="password"
+                                    placeholder="Password"
                                     value={formData.password}
                                     onChange={handleChange}
                                     className="w-100 border-0 "
                                 />
-                                <span
-                                    className="input-group-text border-0 bg-white"
-
-                                    onClick={() => setShowPassword(prev => !prev)}
-                                >
+                                <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
                                     <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                                 </span>
                             </div>
