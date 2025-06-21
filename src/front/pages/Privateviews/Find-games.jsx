@@ -10,7 +10,7 @@ export const FindGames = () => {
   const { store } = useGlobalReducer();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "¡Hi! I'm the PlayerLink AI. ¿How may I help?" },
+    { sender: "bot", text: "Hi! I'm PlayerLink AI. I'm here to recommend new games and answer any other game-related questions. How can I help you today?" },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
