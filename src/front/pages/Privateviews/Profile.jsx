@@ -391,6 +391,8 @@ const Profile = () => {
       {/* PANEL DERECHO: Bio, Tabs e Info */}
       <div className="right-panel">
         <div className="bio-box">
+          <h3>Bio</h3>
+
           {isEditing ? (
             <textarea
               className="form-control textareastyle"
