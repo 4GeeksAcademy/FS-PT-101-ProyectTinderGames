@@ -23,6 +23,10 @@ const SettingsView = () => {
   const [showPassword, setShowPassword] = useState(false); // estado para ver/ocultar la contraseña
   const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
   const [correctPassword, setCorrectPassword] = useState("") //estado para mensaje si la conrtaseña se cambió correctamente
+  const [emailVerification, setEmailVerification] = useState("") //estado para mensaje de verificación enviado
+  const [sameEmail, setSameEmail] = useState("") // estado para mensaje de que el email sea el mismo
+  const [emailChanged, setEmailChanged] = useState("") //estado para mensaje email cambiado correctamente
+  const [errorEmailChange, setErrorEmailChange] = useState("") //estado mensaje error en el cambio de contraseña
 
   const { store, dispatch } = useGlobalReducer();
 
@@ -30,54 +34,75 @@ const SettingsView = () => {
     if (!store.user) {
       navigate('/')
     }
-  })
+  });
 
-  const submitEmailChange = () => {
-    console.log(email)
+  const submitEmailChange = async (e) => {
+    e.preventDefault();
+    setSameEmail("");
+    setEmailChanged("");
+    setErrorEmailChange("");
+
+    console.log(email);
     if (email.email !== email.confirmedEmail) {
-      return alert('email must be the same')
+      setSameEmail("Emails must be the same")
+      return;
     }
-    userServices.changeUserEmail(store.user?.id, email.email)
-    setShowEmailModal(false)
-    setEmail(() => ({
-      email: "",
-      confirmedEmail: ""
-    }))
-    return alert('email changed')
-  }
 
-const submitPasswordChange = async (e) => {
-  e.preventDefault();
-  setErrorPassword("");
-  setCorrectPassword("");
+    try {
+      await userServices.changeUserEmail(store.user?.id, email.email);
+      setEmailChanged("Email updated successfully");
 
-  if (password.password !== password.confirmedPassword) {
-    setErrorPassword("Passwords do not match");
-    return;
-  }
+      setTimeout(() => {
+        setShowEmailModal(false)
+        setEmail({ email: "", confirmedEmail: "" });
+        setEmailChanged("")
+      }, 3000);
+    } catch (error) {
+      setErrorEmailChange("Falied to change de email. Please try again")
+    }
 
-  try {
-    await userServices.changeUserPassword(store.user?.id, password.password);
-    setCorrectPassword("Password changed successfully");
+  };
 
-    // Esperar 3 segundos para que el usuario vea el mensaje
-    setTimeout(() => {
-      setShowPasswordModal(false);
-      setPassword({ password: "", confirmedPassword: "" });
-      setCorrectPassword("");
-    }, 3000);
-  } catch (error) {
-    setErrorPassword("Failed to change password. Please try again.");
-  }
-};
 
-const closeModal = () => {
-  setShowPasswordModal(false);
-  setShowPassword(false); // ojo cerrado
-  setPassword({ password: "", confirmedPassword: "" }); // limpia inputs
-  setErrorPassword(""); // limpia error
-  setCorrectPassword(""); // limpia mensaje éxito
-};
+  const closeChangeEmailModal = () => {
+    setShowEmailModal(false);
+    setEmail({ email: "", confirmedEmail: "" });
+    setSameEmail("");
+    setEmailChanged("");
+  };
+
+  const submitPasswordChange = async (e) => {
+    e.preventDefault();
+    setErrorPassword("");
+    setCorrectPassword("");
+
+    console.log(password);
+    if (password.password !== password.confirmedPassword) {
+      setErrorPassword("Passwords do not match");
+      return;
+    }
+
+    try {
+      await userServices.changeUserPassword(store.user?.id, password.password);
+      setCorrectPassword("Password changed successfully");
+
+      // Esperar 3 segundos para que el usuario vea el mensaje
+      setTimeout(() => {
+        closeChangePasswordModal();
+      }, 3000);
+    } catch (error) {
+      setErrorPassword("Failed to change password. Please try again.");
+    }
+  };
+
+  const closeChangePasswordModal = () => {
+    setShowPasswordModal(false);
+    setShowPassword(false); // ojo cerrado
+    setPassword({ password: "", confirmedPassword: "" }); // limpia inputs
+    setErrorPassword(""); // limpia error
+    setCorrectPassword(""); // limpia mensaje éxito
+  };
+
 
   const handleChange = e => {
     setEmail({
@@ -113,13 +138,19 @@ const closeModal = () => {
       {showEmailModal && (
         <div className="modal-overlay">
           <div className="modal-box">
+
             <h3>Change Email</h3>
-            <input type="email" placeholder="New Email" name="email" value={email.email} onChange={handleChange} />
-            <input type="email" placeholder="Confirm New Email" name="confirmedEmail" value={email.confirmedEmail} onChange={handleChange} />
-            <div className="modal-actions">
-              <button onClick={() => setShowEmailModal(false)}>Cancel</button>
-              <button className="confirm-btn" onClick={closeModal}>Update</button>
-            </div>
+            <form onSubmit={submitEmailChange}>
+              <input type="email" placeholder="New Email" name="email" value={email.email} onChange={handleChange} />
+              <input type="email" placeholder="Confirm New Email" name="confirmedEmail" value={email.confirmedEmail} onChange={handleChange} />
+              {sameEmail && <h6 className="text-danger mt-1">{sameEmail}</h6>}
+              {emailChanged && <h6 className="text-success mt-1">{emailChanged}</h6>}
+              {errorEmailChange && <h6 className="text-danger mt-1">{errorEmailChange}</h6>}
+              <div className="modal-actions">
+                <button type="button" onClick={closeChangeEmailModal}>Cancel</button>
+                <button className="confirm-btn">Update</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -130,28 +161,28 @@ const closeModal = () => {
             <h3>Change Password</h3>
             <form onSubmit={submitPasswordChange}>
 
-            <div className='d-flex'>
+              <div className='d-flex'>
 
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="New Password"
-                name="password"
-                value={password.password}
-                className=""
-                onChange={handleChange} />
-              <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
-                <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
-              </span>
-            </div>
-            <input type="password" placeholder="Confirm New Password" name="confirmedPassword" value={password.confirmedPassword} onChange={handleChange} />
-            {errorPassword && <h6 className="text-danger mt-1">{errorPassword}</h6>}
-            {correctPassword && <h6 className="text-success mt-1">{correctPassword}</h6>}
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="New Password"
+                  name="password"
+                  value={password.password}
+                  className=""
+                  onChange={handleChange} />
+                <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
+                  <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                </span>
+              </div>
+              <input type="password" placeholder="Confirm New Password" name="confirmedPassword" value={password.confirmedPassword} onChange={handleChange} />
+              {errorPassword && <h6 className="text-danger mt-1">{errorPassword}</h6>}
+              {correctPassword && <h6 className="text-success mt-1">{correctPassword}</h6>}
 
-            <div className="modal-actions">
-              <button type="button" onClick={() => setShowPasswordModal(false)}>Cancel</button>
-              <button className="confirm-btn">Update</button>
-            </div>
-                </form>
+              <div className="modal-actions">
+                <button type="button" onClick={closeChangePasswordModal}>Cancel</button>
+                <button className="confirm-btn">Update</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
