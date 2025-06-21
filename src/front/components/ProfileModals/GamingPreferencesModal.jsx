@@ -13,7 +13,7 @@ export const GamingPreferencesModal = ({ selected, setSelected, onSave, onCancel
     setSelected((prev) => {
       if (prev.includes(option)) {
         return prev.filter((item) => item !== option);
-      } else if (prev.length < 6) {
+      } else if (prev.length < 5) {
         return [...prev, option];
       }
       return prev;
