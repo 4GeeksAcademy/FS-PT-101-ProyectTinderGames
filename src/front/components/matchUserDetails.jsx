@@ -29,7 +29,7 @@ export const MatchUserDetails = () => {
   const [rating, setRating] = useState(0);
   const [newComment, setNewComment] = useState({ stars: 0, comment: "" });
   const [hoverRating, setHoverRating] = useState(0);
-    const allGames = store.itsMatchInfo?.profile?.games ?? [];
+  const allGames = store.itsMatchInfo?.profile?.games ?? [];
   const topThreeGames = allGames
     .slice()                                      // 1. Copia el array para no mutar el original
     .sort((a, b) => (b.gameHoursPlayed ?? 0) - (a.gameHoursPlayed ?? 0))  // 2. Orden descendente por horas
@@ -51,17 +51,17 @@ export const MatchUserDetails = () => {
   }, []);
 
   useEffect(() => {
-      // Limpiar popovers anteriores (evita duplicados o errores)
-      document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
-        const popover = bootstrap.Popover.getInstance(el);
-        if (popover) popover.dispose();
-      });
-  
-      // Inicializar popovers actuales
-      document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
-        new bootstrap.Popover(el);
-      });
-    }, [topThreeGames]); // 🔥 Se reinicia solo cuando topThreeGames cambia
+    // Limpiar popovers anteriores (evita duplicados o errores)
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+      const popover = bootstrap.Popover.getInstance(el);
+      if (popover) popover.dispose();
+    });
+
+    // Inicializar popovers actuales
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+      new bootstrap.Popover(el);
+    });
+  }, [topThreeGames]); // 🔥 Se reinicia solo cuando topThreeGames cambia
 
   // El hook useMemo de React sirve para “memorizar” (cachear) el resultado de una función de cálculo y sólo volver a 
   // ejecutarla cuando cambien unas dependencias que tú le indiques. Se utiliza para optimizar el rendimiento, evitando 
@@ -227,11 +227,47 @@ export const MatchUserDetails = () => {
 
             <div className="row">
               <div className="col-md-6">
+                <div className="d-flex align-items-center">
+
                 <label>Discord</label>
-                <p>{profile.discord}</p>
+                <span className="tooltip-wrapper">
+                  <i className="ms-2 mt-4 fa-solid fa-circle-info fa-xl discord-info-icon"></i>
+                  <span className="tooltip-text discord-info-tooltip-text">
+                    <strong>Connect with your match</strong>
+                    <div >
+                      Want to talk to your match?
+                      <br />
+                      Use their Discord or Steam
+                      <br />
+                      info to reach out
+                      <br />
+                      and start chatting!
+                    </div>
+                  </span>
+                  </span>
+                </div>
+
+                  <p>{profile.discord}</p>
               </div>
               <div className="col-md-6">
+                 <div className="d-flex align-items-center">
                 <label>Steam friend id</label>
+                <span className="tooltip-wrapper">
+                  <i className="ms-2 mt-4 fa-solid fa-circle-info fa-xl discord-info-icon"></i>
+                  <span className="tooltip-text discord-info-tooltip-text">
+                    <strong>Connect with your match</strong>
+                    <div >
+                      Want to talk to your match?
+                      <br />
+                      Use their Discord or Steam
+                      <br />
+                      info to reach out
+                      <br />
+                      and start chatting!
+                    </div>
+                  </span>
+                  </span>
+                  </div>
                 <p>{profile.steam}</p>
               </div>
               <div className="gaming-prefs-box col-md-6">
@@ -251,6 +287,24 @@ export const MatchUserDetails = () => {
           <div className="container coming-soon-box">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
+              <div>
+                <span className="tooltip-wrapper">
+                  <i className="fa-solid fa-circle-info fa-xl medals-info-icon"></i>
+                  <span className="tooltip-text medal-info-tooltip-text">
+                    <strong>Medal Info:</strong>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
+                    </div>
+                  </span>
+                </span>
+              </div>
+
             </div>
 
             <div className="row mt-5 gap-3 justify-content-center">
