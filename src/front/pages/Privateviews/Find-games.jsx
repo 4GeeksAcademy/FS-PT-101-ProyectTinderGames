@@ -10,7 +10,10 @@ export const FindGames = () => {
   const { store } = useGlobalReducer();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "Hi! I'm PlayerLink AI. I'm here to recommend new games and answer any other game-related questions. How can I help you today?" },
+    {
+      sender: "bot",
+      text: "Hi! I'm PlayerLink AI. I'm here to recommend new games and answer any other game-related questions. How can I help you today?",
+    },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,22 +35,26 @@ export const FindGames = () => {
 
     const userInfo = store.user?.profile
       ? (() => {
-          const { name, age, games } = store.user.profile;
-          const juegosStr = Array.isArray(games)
-            ? games.map((item) => item.game.title).join(", ")
-            : "sin juegos";
-          return `Nombre: ${name}, Edad: ${age}, Juegos: ${juegosStr}`;
-        })()
+        const { name, age, games } = store.user.profile;
+        const juegosStr = Array.isArray(games)
+          ? games.map((item) => item.gameTitle).join(", ")
+          : "sin juegos";
+        return `Nombre: ${name}, Edad: ${age}, Juegos: ${juegosStr}`;
+      })()
       : "the user has no data";
 
-    setMessages((prev) => [...prev, { sender: "user", text }]);
+    // Nuevo mensaje del usuario (todavía no está en el estado)
+    const updatedMessages = [...messages, { sender: "user", text }];
+
+    // Mostramos inmediatamente en la UI
+    setMessages(updatedMessages);
     setInputValue("");
     setIsLoading(true);
 
     try {
       const respuesta = await axios.post(
         `${BACKEND_URL}/api/chat`,
-        { message: text, userInfo },
+        { messages: updatedMessages, userInfo },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -80,9 +87,8 @@ export const FindGames = () => {
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`d-flex mb-3 ${
-                  msg.sender === "user" ? "justify-content-end" : "justify-content-start"
-                }`}
+                className={`d-flex mb-3 ${msg.sender === "user" ? "justify-content-end" : "justify-content-start"
+                  }`}
               >
                 {msg.sender === "bot" && (
                   <img
@@ -93,11 +99,10 @@ export const FindGames = () => {
                   />
                 )}
                 <div
-                  className={`px-3 py-2 rounded-3 text-wrap message-bubble ${
-                    msg.sender === "user"
-                      ? "bg-gradient-user text-white shadow-user"
-                      : "bg-gradient-bot text-white shadow-bot"
-                  }`}
+                  className={`px-3 py-2 rounded-3 text-wrap message-bubble ${msg.sender === "user"
+                    ? "bg-gradient-user text-white shadow-user"
+                    : "bg-gradient-bot text-white shadow-bot"
+                    }`}
                   style={{ maxWidth: "75%" }}
                 >
                   {msg.text}
