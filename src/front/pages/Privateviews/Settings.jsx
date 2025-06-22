@@ -3,6 +3,7 @@ import './Settings.css';
 import userServices from "../../services/userServices"
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx"
 import { useNavigate } from 'react-router-dom';
+import { ProfileConditions } from '../../components/ProfileConditions/ProfileConditions.jsx';
 
 
 
@@ -296,7 +297,7 @@ const SettingsView = () => {
           </div>
         </div>
       )}
-
+<ProfileConditions/>
     </div>
 
 

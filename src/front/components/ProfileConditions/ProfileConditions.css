@@ -20,3 +20,11 @@
 .profile-conditions-decline-btn:hover{
     background-color: #ff000065;
 }
+.profile-conditions-input{
+ 
+  border-color: #8f00ff;
+}
+.profile-conditions-input:focus{
+   border: 2px solid #00f0ff;
+  outline: none;
+}
