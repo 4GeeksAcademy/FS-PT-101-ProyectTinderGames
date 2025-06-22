@@ -64,13 +64,13 @@
 
 .sidebar-button.logout .sidebar-text {
   color: white; 
-  margin-left: 30px; /* Espacio entre el ícono y el texto */
+  margin-left: 10px; /* Espacio entre el ícono y el texto */
 }
 
 .sidebar-button.logout .sidebar-icon {
   font-size: 18px; /* Tamaño del ícono */
-  margin-right: 10px; /* Espacio entre el ícono y el texto */
-  margin-left: 40px;
+  margin-right: 5px; /* Espacio entre el ícono y el texto */
+  margin-left: 20px;
 }
 
 .sidebar-button.logout i {
