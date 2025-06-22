@@ -150,7 +150,7 @@ export const Register = ({ onSwitch }) => {
                                 </span>
                             </div>
 
-                            {/* Mensaje con las condiciones que faltan */}
+                            {/* Mensaje con las condiciones contraseña que faltan */}
                             {passwordErrors.length > 0 && (
                                 <h5 className="text-danger mt-2 register-message-errors">
                                     Password must contain {passwordErrors.join(", ")}.
