@@ -347,23 +347,23 @@ export const MatchUserDetails = () => {
                 aria-hidden="true"
               >
                 <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="commentModalLabel">
+                  <div className="modal-content modal-sci-fi">
+                    <div className="modal-header modal-sci-fi-header">
+                      <h5 className="modal-title modal-sci-fi-title" id="commentModalLabel">
                         Leave a new comment
                       </h5>
                       <button
                         type="button"
-                        className="btn-close"
+                        className="btn-close "
                         data-bs-dismiss="modal"
                         aria-label="Close"
                       />
                     </div>
-                    <div className="modal-body">
-                      <div className="modal-body">
+                    <div className="modal-body ">
+                      <div className="modal-body modal-sci-fi-body">
                         {/* Rating */}
                         <div className="mb-3 text-warning">
-                          <label className="form-label text-dark">Stars</label>
+                          <label className="form-label ">Stars</label>
                           <div>
                             {[1, 2, 3, 4, 5].map((star) => (
                               <i
@@ -383,7 +383,7 @@ export const MatchUserDetails = () => {
 
                         {/* Comment textarea */}
                         <div className="mb-3">
-                          <label htmlFor="newComment" className="form-label text-dark">
+                          <label htmlFor="newComment" className="form-label">
                             Comment
                           </label>
                           <textarea
@@ -398,17 +398,17 @@ export const MatchUserDetails = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="modal-footer">
+                    <div className="modal-footer modal-sci-fi-footer">
                       <button
                         type="button"
-                        className="btn btn-secondary"
+                        className="btn btn-sci-fi-primary"
                         data-bs-dismiss="modal"
                       >
                         Cancel
                       </button>
                       <button
                         type="button"
-                        className="btn btn-primary"
+                        className="btn-sci-fi-primary"
                         onClick={handleSaveComment}
                         disabled={!newComment.comment.trim() || newComment.stars === 0}
                       >
