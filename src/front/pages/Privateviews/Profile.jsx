@@ -662,7 +662,7 @@ const Profile = () => {
           <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12 mt-3">
-                <div></div>
+               
                 Games{" "}
                 <span className="tooltip-wrapper">
                   <i className="fa-solid fa-circle-info fa-2xs medals-info-icon"></i>
