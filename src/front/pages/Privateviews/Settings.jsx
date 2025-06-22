@@ -218,29 +218,36 @@ const SettingsView = () => {
             <h3>Change Password</h3>
             <form onSubmit={submitPasswordChange}>
               <div className='d-flex'>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Acutal Password"
-                  name="actualPassword"
-                  value={password.actualPassword}
-                  className=""
-                  onChange={handleChange} />
-                <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
-                  <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
-                </span>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Actual Password"
+                    name="actualPassword"
+                    value={password.actualPassword}
+                    onChange={handleChange}
+                   
+                  />
+
+                </div>
+
               </div>
               <div className='d-flex'>
+                <div style={{ position: 'relative', width: '100%' }}>
+
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="New Password"
                   name="password"
                   value={password.password}
-                  className=""
+                  className="settings-change-password-input"
                   onChange={handleChange} />
-                <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
-                  <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
-                </span>
+                  <i
+                    onClick={() => setShowPassword(prev => !prev)}
+                    className={`fa-solid setting-change-password-eye-icon ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+  
+                  ></i>
               </div>
+                  </div>
               <input type="password" placeholder="Confirm New Password" name="confirmedPassword" value={password.confirmedPassword} onChange={handleChange} />
               {errorPassword && <h6 className="text-danger mt-1">{errorPassword}</h6>}
               {correctPassword && <h6 className="text-success mt-1">{correctPassword}</h6>}
