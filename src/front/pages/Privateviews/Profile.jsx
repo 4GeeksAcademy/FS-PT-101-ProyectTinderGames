@@ -463,6 +463,7 @@ const Profile = () => {
                       type="text"
                       value={profile[f]}
                       onChange={e => handleInputChange(f, e.target.value)}
+                      maxLength={20}
                     />
                   ) : (
                     <p>{profile[f]}</p>
@@ -479,6 +480,8 @@ const Profile = () => {
                     type="number"
                     value={profile.age}
                     onChange={e => handleInputChange('age', +e.target.value)}
+                    max={120}
+                    min={1}
                   />
                 ) : (
                   <p>{profile.age}</p>
@@ -521,6 +524,7 @@ const Profile = () => {
                       type="text"
                       value={profile[f]}
                       onChange={e => handleInputChange(f, e.target.value)}
+                      maxLength={30}
                     />
                   ) : (
                     <p>{profile[f]}</p>
@@ -574,6 +578,8 @@ const Profile = () => {
                     type="text"
                     value={profile.location}
                     onChange={e => handleInputChange('location', e.target.value)}
+                    maxLength={20}
+                    minLength={4}
                   />
                 ) : (
                   <p>{profile.location}</p>
@@ -701,7 +707,8 @@ const Profile = () => {
                           value={game.hours_played}
                           onChange={handleChange}
                           placeholder="Eg.: 42"
-                          min="0"
+                          min="1"
+                          max="10000"
                         />
                         {errorHoursPlayed && <h6 className="text-danger ms-2 mt-2 ">{errorHoursPlayed}</h6>}
                         {errorRepeatedGame && <h6 className="text-danger ms-2 mt-2 ">{errorRepeatedGame}</h6>}
