@@ -5,6 +5,7 @@ import useGlobalReducer from "../../hooks/useGlobalReducer.jsx"
 import { useNavigate } from 'react-router-dom';
 
 
+
 const SettingsView = () => {
   const navigate = useNavigate()
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -295,7 +296,11 @@ const SettingsView = () => {
           </div>
         </div>
       )}
+
     </div>
+
+
+
   );
 };
 
