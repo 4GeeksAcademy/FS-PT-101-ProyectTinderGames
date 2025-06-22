@@ -13,10 +13,12 @@ const SettingsView = () => {
   const [showBreakModal, setShowBreakModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [email, setEmail] = useState({
+    actualEmail: '',
     email: '',
     confirmedEmail: ''
   })
   const [password, setPassword] = useState({
+    actualPassword: '',
     password: '',
     confirmedPassword: ''
   })
@@ -42,54 +44,106 @@ const SettingsView = () => {
     setEmailChanged("");
     setErrorEmailChange("");
 
-    console.log(email);
     if (email.email !== email.confirmedEmail) {
-      setSameEmail("Emails must be the same")
+      setSameEmail("Emails must be the same");
+      return;
+    }
+
+    if (email.actualEmail !== store.user.email) {
+      setSameEmail("Your current email is incorrect");
       return;
     }
 
     try {
-      await userServices.changeUserEmail(store.user?.id, email.email);
+      const resp = await userServices.changeUserEmail(store.user?.id, email.email);
+
+      if (!resp.ok) {
+        setErrorEmailChange("Something happened, looks like this email already exists");
+        return;
+      }
+
+      setSameEmail("");
+      setErrorEmailChange("");
       setEmailChanged("Email updated successfully");
 
       setTimeout(() => {
-        setShowEmailModal(false)
-        setEmail({ email: "", confirmedEmail: "" });
-        setEmailChanged("")
+        setShowEmailModal(false);
+        setEmail({ actualEmail: '', email: "", confirmedEmail: "" });
+        setEmailChanged("");
+        dispatch({ type: 'logout' });
+        navigate('/');
       }, 3000);
-    } catch (error) {
-      setErrorEmailChange("Falied to change de email. Please try again")
-    }
 
+    } catch (error) {
+      setErrorEmailChange("Failed to change the email. Please try again");
+    }
   };
+
 
 
   const closeChangeEmailModal = () => {
     setShowEmailModal(false);
-    setEmail({ email: "", confirmedEmail: "" });
+    setEmail({ actualEmail: '', email: "", confirmedEmail: "" });
     setSameEmail("");
     setEmailChanged("");
   };
+
+  const deleteAccount = async (userId) => {
+    const resp = await userServices.deleteAccount(userId);
+
+    if (!resp.ok) {
+      alert(resp.error || "Failed to delete account");
+      return;
+    }
+
+    alert("Account deleted successfully");
+
+    setTimeout(() => {
+      setShowDeleteModal(false);
+      dispatch({ type: 'logout' });
+      navigate('/');
+    }, 3000);
+  };
+
 
   const submitPasswordChange = async (e) => {
     e.preventDefault();
     setErrorPassword("");
     setCorrectPassword("");
-
-    console.log(password);
+    if (password.actualPassword === password.password) {
+      setErrorPassword("Passwords are the same");
+      return;
+    }
+    if (password.password.length <= 0) {
+      setErrorPassword("Passwords must contain data");
+      return;
+    }
     if (password.password !== password.confirmedPassword) {
       setErrorPassword("Passwords do not match");
       return;
     }
 
     try {
-      await userServices.changeUserPassword(store.user?.id, password.password);
+      const resp = await userServices.changeUserPassword(
+        store.user?.id,
+        password.password,
+        password.actualPassword
+      );
+
+      if (!resp.ok) {
+        setErrorPassword(data?.msg || "Error changing password");
+        return;
+      }
+
       setCorrectPassword("Password changed successfully");
 
       // Esperar 3 segundos para que el usuario vea el mensaje
       setTimeout(() => {
         closeChangePasswordModal();
+        dispatch({ type: 'logout' });
+        navigate('/');
       }, 3000);
+
     } catch (error) {
       setErrorPassword("Failed to change password. Please try again.");
     }
@@ -129,7 +183,6 @@ const SettingsView = () => {
         <h3>Delete Account</h3>
         <p>If you delete your account, all your data will be permanently erased after 30 days.</p>
         <div className="warning-buttons">
-          <button className="pause-btn" onClick={() => setShowBreakModal(true)}>Take a Break</button>
           <button className="delete-btn" onClick={() => setShowDeleteModal(true)}>Delete Account</button>
         </div>
       </div>
@@ -141,6 +194,7 @@ const SettingsView = () => {
 
             <h3>Change Email</h3>
             <form onSubmit={submitEmailChange}>
+              <input type="actualEmail" placeholder="Email" name="actualEmail" value={email.actualEmail} onChange={handleChange} />
               <input type="email" placeholder="New Email" name="email" value={email.email} onChange={handleChange} />
               <input type="email" placeholder="Confirm New Email" name="confirmedEmail" value={email.confirmedEmail} onChange={handleChange} />
               {sameEmail && <h6 className="text-danger mt-1">{sameEmail}</h6>}
@@ -160,9 +214,19 @@ const SettingsView = () => {
           <div className="modal-box">
             <h3>Change Password</h3>
             <form onSubmit={submitPasswordChange}>
-
               <div className='d-flex'>
-
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Acutal Password"
+                  name="actualPassword"
+                  value={password.actualPassword}
+                  className=""
+                  onChange={handleChange} />
+                <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
+                  <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                </span>
+              </div>
+              <div className='d-flex'>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="New Password"
@@ -202,7 +266,7 @@ const SettingsView = () => {
       )} */}
 
 
-      {/* Take a Break modal */}
+      {/* Take a Break modal 
       {showBreakModal && (
         <div className="modal-overlay">
           <div className="modal-box">
@@ -217,6 +281,7 @@ const SettingsView = () => {
           </div>
         </div>
       )}
+      */}
 
       {/* Delete Account modal */}
       {showDeleteModal && (
@@ -225,7 +290,7 @@ const SettingsView = () => {
             <h3>Are you sure?</h3>
             <div className="modal-actions">
               <button onClick={() => setShowDeleteModal(false)}>No</button>
-              <button className="confirm-btn">Yes</button>
+              <button className="confirm-btn" onClick={() => deleteAccount(store.user?.id)}>Yes</button>
             </div>
           </div>
         </div>

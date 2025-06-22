@@ -99,33 +99,79 @@ userServices.changeUserEmail = async (user_id, newEmail) => {
       body: JSON.stringify({ email: newEmail }),
     });
 
-    if (!resp.ok) throw Error("Something went wrong");
-
     const data = await resp.json();
-    return data;
+
+    return {
+      ok: resp.ok,
+      data,
+      error: resp.ok ? null : data?.error || "Unknown error",
+    };
   } catch (error) {
-    console.log(error);
-    return error;
+    console.error("Error en changeUserEmail:", error);
+    return {
+      ok: false,
+      data: null,
+      error: error.message || "Network error",
+    };
   }
 };
 
-userServices.changeUserPassword = async (user_id, newPassword) => {
+userServices.deleteAccount = async (userId) => {
+  try {
+    const resp = await fetch(url + `/api/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await resp.json();
+
+    return {
+      ok: resp.ok,
+      data,
+      error: resp.ok ? null : data?.error || "Unknown error",
+    };
+  } catch (error) {
+    console.error("Error en deleteAccount:", error);
+    return {
+      ok: false,
+      data: null,
+      error: error.message || "Network error",
+    };
+  }
+};
+
+userServices.changeUserPassword = async (
+  user_id,
+  newPassword,
+  actualPassword
+) => {
   try {
     const resp = await fetch(url + `/api/users_password/${user_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password: newPassword }),
+      body: JSON.stringify({ password: newPassword, actualPassword }),
     });
 
-    if (!resp.ok) throw Error("Something went wrong");
-
     const data = await resp.json();
-    return data;
+
+    // Devuelve estructura controlada: { ok: boolean, data, error }
+    return {
+      ok: resp.ok,
+      data,
+      error: resp.ok ? null : data?.error || "Unknown error",
+    };
   } catch (error) {
-    console.log(error);
-    return error;
+    console.error("Error en changeUserPassword:", error);
+    return {
+      ok: false,
+      data: null,
+      error: error.message || "Error de red",
+    };
   }
 };
+
 export default userServices;

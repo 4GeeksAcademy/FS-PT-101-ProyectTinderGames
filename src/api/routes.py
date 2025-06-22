@@ -299,13 +299,18 @@ def put_user(user_id):
     return jsonify(user.serialize()), 200
 
 # PUT USER EMAIL
-
-
 @api.route('/users_email/<int:user_id>', methods=['PUT'])
 def put_user_email(user_id):
     data = request.get_json()
     if not data or 'email' not in data:
         return jsonify({'error': 'Missing data'}), 400
+    
+    emailstmt = select(User).where(User.email == data['email'])
+    existingEmail = db.session.execute(emailstmt).scalar_one_or_none()
+
+    if existingEmail is not None:
+        return jsonify({'error':'that email already exists'}), 400
+
     stmt = select(User).where(User.id == user_id)
     user = db.session.execute(stmt).scalar_one_or_none()
     if user is None:
@@ -319,27 +324,27 @@ def put_user_email(user_id):
 @api.route('/users_password/<int:user_id>', methods=['PUT'])
 def users_password(user_id):
     data = request.get_json()
+    required_fields = ['password', 'actualPassword']
 
-    if not data or not data.get('password'):
-        return jsonify({'error': 'Password is required'}), 400
-
-    hashed_password = generate_password_hash(data['password'])
+    if not data or not all(field in data and data[field] for field in required_fields):
+        return jsonify({'error': 'Faltan campos requeridos'}), 400
 
     stmt = select(User).where(User.id == user_id)
     user = db.session.execute(stmt).scalar_one_or_none()
 
     if user is None:
-        return jsonify({'error': f'Cannot find user with id: {user_id}'}), 404
+        return jsonify({'error': f'Usuario con id {user_id} no encontrado'}), 404
 
-    user.password = hashed_password
+    if not check_password_hash(user.password, data['actualPassword']):
+        return jsonify({'error': 'Contraseña actual incorrecta'}), 401
+
+    user.password = generate_password_hash(data['password'])
     db.session.commit()
 
-    return jsonify(user.serialize()), 200
+    return jsonify({'msg': 'Contraseña actualizada correctamente'}), 200
 
 
 # GET ALL PROFILES
-
-
 @api.route('/profiles', methods=['GET'])
 def get_profiles():
     stmt = select(Profile)
