@@ -285,27 +285,28 @@ export const MatchUserDetails = () => {
         {/* Other Tabs */}
         {activeTab === 'Games' && (
           <div className="container coming-soon-box">
-            <div className="row d-flex justify-content-around align-items-center">
-              <h2 className="col-lg-6 col-md-12 col-sm-12">Games</h2>
-              <div>
-                <span className="tooltip-wrapper">
-                  <i className="fa-solid fa-circle-info fa-xl medals-info-icon"></i>
-                  <span className="tooltip-text medal-info-tooltip-text">
-                    <strong>Medal Info:</strong>
-                    <div>
-                      <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
-                    </div>
-                    <div>
-                      <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
-                    </div>
-                    <div>
-                      <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
-                    </div>
-                  </span>
-                </span>
-              </div>
+            
+<div className="row justify-content-start">
+    <div className="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center">
+      <h2 className="mb-0">Games</h2>
+      <span className="tooltip-wrapper ms-2">
+        <i className="fa-solid fa-circle-info fa-xl medals-info-icon"></i>
+        <span className="tooltip-text medal-info-tooltip-text">
+          <strong>Medal Info:</strong>
+          <div>
+            <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
+          </div>
+          <div>
+            <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
+          </div>
+          <div>
+            <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
+          </div>
+        </span>
+      </span>
+    </div>
+  </div>
 
-            </div>
 
             <div className="row mt-5 gap-3 justify-content-center">
               {store.itsMatchInfo?.profile?.games?.length > 0 ? (
