@@ -103,7 +103,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
 
               {/* Nombre de user = nickname */}
               <h1 className="card-title d-flex justify-content-center mt-3 search-match-name">
-                {profile?.nick_name || 'undefined'}
+                {profile?.nick_name || 'No nick_name yet'}
               </h1>
 
               {/* stars-rating de los users */}
@@ -145,7 +145,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                   <div className='d-flex ms-4'>
                     <h5 className='search-match-text-sm me-4 preferences-full'>Preferences</h5>
                      <i className="fa-solid fa-thumbs-up preferences-small ms-4"></i>
-                    <h5 className='search-match-text-sm me-4 text-end '>{formattedPreferences || '-'}</h5>
+                    <h5 className='search-match-text-sm me-4 text-end '>{formattedPreferences || 'No preferences yet'}</h5>
                   </div>
                 </div>
       
@@ -187,7 +187,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                 <div className='d-flex justify-content-center '>
                   <div className='d-flex ms-4'>
                     <i className="fa-solid fa-language me-2 ms-4"></i>
-                    <h5 className='search-match-text-sm me-4'>{formattedLanguages || '-'}</h5>
+                    <h5 className='search-match-text-sm me-4'>{formattedLanguages || 'No languages yet'}</h5>
                   </div>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
                 <div className='d-flex justify-content-center '>
                   <div className='d-flex ms-4'>
                     <i className="fa-solid fa-location-dot me-2"></i>
-                    <h5 className='search-match-text-sm'>{profile?.location || '-'}</h5>
+                    <h5 className='search-match-text-sm'>{profile?.location || 'No location yet'}</h5>
                   </div>
                 </div>
               </div>
