@@ -369,17 +369,26 @@ const Profile = () => {
     setErrorCeroHours("")
 
   }
+  //Para que el user tenga que completar el perfil 
 
+  const isProfileComplete = (profile) => {
+
+    return !profile?.nick_name || !profile?.age || !profile?.preferences;
+  };
 
   return (
     <div className="profile-container">
+
       {/* PANEL IZQUIERDO: Avatar y Medallas */}
       <div className="left-panel">
         <div className="avatar-section">
+
           <button className="gear-btn" onClick={() => setShowModal(true)}>
             <i className="fa-solid fa-gear"></i>
           </button>
           <img src={selectPhoto()} alt="Avatar" className="profile-avatar" />
+
+
         </div>
         <h2>{profile.nick_name}</h2>
         <p className="location">{profile.location}</p>
@@ -409,7 +418,17 @@ const Profile = () => {
 
       {/* PANEL DERECHO: Bio, Tabs e Info */}
       <div className="right-panel">
+
+        {/* Mensaje perfil vacío */}
+        <div>
+          {isProfileComplete(profile) && (
+
+            <h3 className="text-danger"><i className="fa-solid fa-triangle-exclamation"></i> Complete your profile to continue <i className="fa-solid fa-triangle-exclamation"></i></h3>
+          )}
+        </div>
         <div className="bio-box">
+
+
           <h3>Bio</h3>
 
           {isEditing ? (
