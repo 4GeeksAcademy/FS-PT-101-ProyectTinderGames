@@ -143,7 +143,7 @@ export const Register = ({ onSwitch }) => {
                                     placeholder="Password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className="w-100 border-0 "
+                                    className="w-100 border-0"
                                 />
                                 <span className="input-group-text border-0 bg-white" onClick={() => setShowPassword(prev => !prev)}>
                                     <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
@@ -153,7 +153,7 @@ export const Register = ({ onSwitch }) => {
                             {/* Mensaje con las condiciones contraseña que faltan */}
                             {passwordErrors.length > 0 && (
                                 <h5 className="text-warning mt-2 register-message-errors">
-                                    Password must contain {passwordErrors.join(", ")}.
+                                    Password must contain {passwordErrors.join(", ")}. 
                                 </h5>
                             )}
 
