@@ -4,6 +4,7 @@ import userServices from "../../services/userServices"
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx"
 import { useNavigate } from 'react-router-dom';
 import { ProfileConditions } from '../../components/ProfileConditions/ProfileConditions.jsx';
+import { ResetPassword } from '../../components/ResetPassword/ResetPassword.jsx';
 
 
 
@@ -297,7 +298,7 @@ const SettingsView = () => {
           </div>
         </div>
       )}
-<ProfileConditions/>
+
     </div>
 
 

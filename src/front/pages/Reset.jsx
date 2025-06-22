@@ -18,6 +18,7 @@ export const Reset = () => {
 	const [success, setSuccess] = useState('')
 	const [showPassword, setShowPassword] = useState(false); // estado pra enseñar/esconder contraseña
 	const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
+	const [passwordErrors, setPasswordErrors] = useState([]); //estado para condiciones de la contraseña
 
 	useEffect(() => {
 		if (token) {
@@ -34,6 +35,54 @@ export const Reset = () => {
 			alert('The reset link has expired. Please request a new password reset')
 		}
 	}, [token]);
+
+	const validatePassword = (password) => {
+		const errors = [];
+		if (password.length < 8) errors.push("at least 8 characters");
+		if (!/[A-Z]/.test(password)) errors.push("an uppercase letter");
+		if (!/[0-9]/.test(password)) errors.push("a number");
+		if (!/[@$!%*?&.]/.test(password)) errors.push("a special character (@$!%*?&.)");
+		return errors;
+	};
+
+	const handleChange = e => {
+		const { name, value } = e.target;
+
+		setFormData(prev => ({
+			...prev,
+			[name]: value
+		}));
+
+		if (name === 'password') {
+			const errors = validatePassword(value);
+			setPasswordErrors(errors);
+		}
+	};
+	const handlePasswordChange = (e) => {
+		const value = e.target.value;
+		setPassword(value);
+
+		const errors = validatePassword(value);
+		setPasswordErrors(errors);
+
+		if (repeatPassword && value !== repeatPassword) {
+			setErrorPassword("Passwords do not match");
+		} else {
+			setErrorPassword("");
+		}
+	};
+
+	const handleRepeatPasswordChange = (e) => {
+		const value = e.target.value;
+		setRepeatPassword(value);
+
+		if (password && value !== password) {
+			setErrorPassword("Passwords do not match");
+		} else {
+			setErrorPassword("");
+		}
+	};
+
 
 
 	const handleSubmit = async (e) => {
@@ -70,7 +119,7 @@ export const Reset = () => {
 	return (
 
 		<>
-		
+
 			<div>
 				<div className='d-flex justify-content-center'>
 					<div className='card reset-card mt-5'>
@@ -90,7 +139,7 @@ export const Reset = () => {
 
 										<input
 											type={showPassword ? "text" : "password"}
-											onChange={(e) => setPassword(e.target.value)}
+											onChange={handlePasswordChange}
 											value={password}
 											placeholder="Enter new password"
 											className="w-100 border-0"
@@ -112,7 +161,7 @@ export const Reset = () => {
 
 										<input
 											type="password"
-											onChange={(e) => setRepeatPassword(e.target.value)}
+											onChange={handleRepeatPasswordChange}
 											value={repeatPassword}
 											placeholder="Repeat new password"
 											className="w-100 border-0"
@@ -120,8 +169,18 @@ export const Reset = () => {
 
 									</div>
 
-									{/* Passwrod error message */}
-									{errorPassword && <h5 className="text-danger mt-2 reset-message-errors">{errorPassword}</h5>}
+									{/* Mensaje con las condiciones contraseña que faltan */}
+									{passwordErrors.length > 0 && (
+										<h5 className="text-warning mt-2 register-message-errors">
+											Password must contain {passwordErrors.join(", ")}.
+										</h5>
+									)}
+									{/* Error contraseñas no coinciden */}
+									{errorPassword && (
+										<h6 className="text-danger mt-2 reset-message-errors">
+											{errorPassword}
+										</h6>
+									)}
 
 									{
 										success !== '' ?
