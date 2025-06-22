@@ -17,6 +17,9 @@ export const SearchMate = () => {
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [matchProfile, setMatchProfile] = useState(null);
 
+  //Para quitar el retarto 
+  const [isAnimating, setIsAnimating] = useState(false);
+
   useEffect(() => {
     if (!store.user) {
       navigate('/')
@@ -25,44 +28,44 @@ export const SearchMate = () => {
   useEffect(() => {
     if (!store.user || !store.user.profile?.id) return;
 
-    const timeout = setTimeout(() => {
-      setShowLoadingMessage(true);
-    }, 3000);
-
-    if (store.searchMatchProfiles && store.searchMatchProfiles.length > 0) {
-      setLoading(false);
-      clearTimeout(timeout);
-      return;
-    }
-
     const getProfiles = async () => {
       setLoading(true);
       try {
         const data = await searchMatchServices.getFilteredProfiles(store.user.profile.id);
 
-        console.log("Perfiles filtrados por likes/dislikes-->", data);
+        // IDs de perfiles ya match o liked
+        const matchedIds = store.matches?.map(m => m.user_id) || [];
+        const likedIds = store.likes?.map(l => l.id) || [];
 
         let allProfiles = [];
-
         if (Array.isArray(data)) {
           allProfiles = data;
         } else if (data.profiles && Array.isArray(data.profiles)) {
           allProfiles = data.profiles;
         }
+        console.log("Matches IDs------------:", store.matches?.map(m => m.user_id));
+        console.log("Likes IDs----------:", store.likes?.map(l => l.id));
+        console.log("Profiles fetched--------:", allProfiles.map(p => p.id));
 
-        dispatch({ type: "getSearchMatchProfiles", payload: allProfiles });
+        // Filtra perfiles que NO estén en matchedIds ni likedIds
+        const filteredProfiles = allProfiles.filter(profile => {
+          const profileId = profile.id || profile.user_id; // intenta ambos
+          return (
+            !matchedIds.includes(profileId) &&
+            !likedIds.includes(profileId)
+          );
+        });
+        dispatch({ type: "getSearchMatchProfiles", payload: filteredProfiles });
       } catch (error) {
         console.error("Error fetching profiles:", error);
       } finally {
         setLoading(false);
-        clearTimeout(timeout);
       }
     };
 
     getProfiles();
+  }, [store.user, store.matches, store.likes, dispatch]);
 
-    return () => clearTimeout(timeout);
-  }, [store.user, dispatch]);
 
 
   // Resetear currentUser si cambia la lista de perfiles
@@ -80,100 +83,96 @@ export const SearchMate = () => {
     dispatch({ type: "getSearchMatchProfilesFiltered", payload: remainingProfiles });
     setCurrentUser(0);
   };
-
-  //Maneja los likes
   const handleLike = async () => {
-    const likedProfile = store.searchMatchProfiles[currentUser];
-    if (!store.user?.profile?.id || !likedProfile?.id) return;
+    if (isAnimating) return;
+    setIsAnimating(true); // Oculta la tarjeta
 
-    try {
-      const response = await searchMatchServices.addLikeSent(
-        store.user.profile.id,
-        likedProfile.id
-      );
+    setTimeout(async () => {
+      const likedProfile = store.searchMatchProfiles[currentUser];
+      if (!store.user?.profile?.id || !likedProfile?.id) return;
 
-      console.log("Respuesta addLikeSent:", response);
-
-      const matchesData = await searchMatchServices.getUserMatchesInfo(store.user.profile.id);
-      console.log("matchesData:", matchesData);
-
-      // Extraemos el array de matches
-      const matchesArray = matchesData.matches || [];
-
-      // Buscamos si hay match por user_id (igual al likedProfile.id)
-      const matchedProfile = matchesArray.find((m) => m.user_id === likedProfile.id);
-
-      if (matchedProfile) {
-        // Buscamos el perfil completo en store.searchMatchProfiles usando user_id
-        const fullProfile = store.searchMatchProfiles.find(
-          (p) => p.user_id === matchedProfile.user_id
+      try {
+        const response = await searchMatchServices.addLikeSent(
+          store.user.profile.id,
+          likedProfile.id
         );
 
-        if (fullProfile) {
-          setMatchProfile(fullProfile);
-          dispatch({ type: "getItsMatchInfo", payload: fullProfile });
-        } else {
-          // Si no está en el store, usamos el matchedProfile tal cual
-          setMatchProfile(matchedProfile);
-          dispatch({ type: "getItsMatchInfo", payload: matchedProfile });
-        }
+        const matchesData = await searchMatchServices.getUserMatchesInfo(store.user.profile.id);
+        const matchesArray = matchesData.matches || [];
+        const matchedProfile = matchesArray.find((m) => m.user_id === likedProfile.id);
 
-        setShowMatchModal(true);
-
-        setTimeout(() => {
-          dispatch({ type: "saveLike", payload: likedProfile });
-
-          const remainingProfiles = store.searchMatchProfiles.filter(
-            (_, index) => index !== currentUser
+        if (matchedProfile) {
+          const fullProfile = store.searchMatchProfiles.find(
+            (p) => p.user_id === matchedProfile.user_id
           );
 
-          dispatch({
-            type: "getSearchMatchProfilesFiltered",
-            payload: remainingProfiles,
-          });
+          const finalProfile = fullProfile || matchedProfile;
 
-          setCurrentUser(0);
-        }, 500);
-      } else {
-        dispatch({ type: "saveLike", payload: likedProfile });
-        advanceToNextProfile();
+          setMatchProfile(finalProfile);
+          dispatch({ type: "getItsMatchInfo", payload: finalProfile });
+          setShowMatchModal(true);
+        } else {
+          dispatch({ type: "saveLike", payload: likedProfile });
+          advanceToNextProfile();
+        }
+      } catch (error) {
+        console.error("Error en handleLike:", error);
+      } finally {
+        setIsAnimating(false);
       }
-    } catch (error) {
-      console.error("Error en handleLike:", error);
-    }
+    }, 500);
   };
 
-
-  //Maneja los dislikes
   const handleDislike = async () => {
-    const dislikedProfile = store.searchMatchProfiles[currentUser];
-    if (!store.user?.profile?.id || !dislikedProfile?.id) return;
+    if (isAnimating) return;
+    setIsAnimating(true);
 
-    try {
-      await searchMatchServices.addDislikeSent(
-        store.user.profile.id,
-        dislikedProfile.id
-      );
-      dispatch({ type: "saveDislike", payload: dislikedProfile });
-    } catch (error) {
-      console.error("Error sending dislike:", error);
-    } finally {
-      setCurrentUser((prev) => prev + 1);
-      const remainingProfiles = store.searchMatchProfiles.filter(
-        (_, index) => index !== currentUser
-      );
-      dispatch({ type: "getSearchMatchProfiles", payload: remainingProfiles });
-      setCurrentUser(0);
-    }
+    setTimeout(async () => {
+      const dislikedProfile = store.searchMatchProfiles[currentUser];
+      if (!store.user?.profile?.id || !dislikedProfile?.id) return;
 
+      try {
+        await searchMatchServices.addDislikeSent(
+          store.user.profile.id,
+          dislikedProfile.id
+        );
+        dispatch({ type: "saveDislike", payload: dislikedProfile });
+      } catch (error) {
+        console.error("Error sending dislike:", error);
+      } finally {
+        const remainingProfiles = store.searchMatchProfiles.filter(
+          (_, index) => index !== currentUser
+        );
+        dispatch({ type: "getSearchMatchProfiles", payload: remainingProfiles });
+        setCurrentUser(0);
+        setIsAnimating(false);
+      }
+    }, 500);
   };
 
-  //Maneja el modal
+
+  //Maneja el cierre del modal
   const closeMatchModal = () => {
     setShowMatchModal(false);
     setMatchProfile(null);
     dispatch({ type: "getItsMatchInfo", payload: null });
+
+    if (matchProfile) {
+      console.log("Cerrando modal, removiendo perfil match:", matchProfile);
+
+      const remainingProfiles = store.searchMatchProfiles.filter((profile) => {
+        // Log para comparar ids
+        console.log("Comparando perfiles:", profile.id, matchProfile.id, profile.user_id, matchProfile.user_id);
+        return profile.id !== matchProfile.id && profile.user_id !== matchProfile.user_id;
+      });
+
+      console.log("Perfiles restantes tras filtro:", remainingProfiles);
+
+      dispatch({ type: "getSearchMatchProfiles", payload: remainingProfiles });
+      setCurrentUser(0);
+    }
   };
+
 
   //Mensaje si tarda al cargar nuevos users
   if (loading && showLoadingMessage) {
@@ -231,7 +230,8 @@ export const SearchMate = () => {
 
           {store.searchMatchProfiles &&
             store.searchMatchProfiles.length > 0 &&
-            store.searchMatchProfiles[currentUser] && (
+            store.searchMatchProfiles[currentUser] &&
+            !isAnimating && (
               <SearchMatchCard
                 profile={store.searchMatchProfiles[currentUser]}
                 onLike={handleLike}

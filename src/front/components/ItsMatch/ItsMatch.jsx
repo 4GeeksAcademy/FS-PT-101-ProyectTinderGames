@@ -16,6 +16,9 @@ import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 export const ItsMatch = ({ profile, photo }) => {
 
     const navigate = useNavigate()
+
+        //Prevención de error si el perfil no existe
+    if (!profile) return null;
     const handleClick = () => {
         navigate('/private/your-matches/')
     }
