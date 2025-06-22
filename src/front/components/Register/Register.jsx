@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import userServices from '../../services/userServices';
 import { Terms } from '../Terms/Terms';
 import useGlobalReducer from '../../hooks/useGlobalReducer';
@@ -8,7 +8,7 @@ import useGlobalReducer from '../../hooks/useGlobalReducer';
 export const Register = ({ onSwitch }) => {
 
     const navigate = useNavigate()
-    const {store, dispatch} = useGlobalReducer()
+    const { store, dispatch } = useGlobalReducer()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -17,19 +17,23 @@ export const Register = ({ onSwitch }) => {
     })
 
     const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
+    const [passwordErrors, setPasswordErrors] = useState([]); //estado para condiciones de la contraseña
     const [errorEmailRegistered, setErrorEmailRegistered] = useState(""); // estado para el error de email ya registrado
     const [showTerms, setShowTerms] = useState(false); // estado que muestra el modal de T&C
     const [isTermsAccepted, setIsTermsAccepted] = useState(false); // estado para verificar si se acaptó o no los T&C
     const [showPassword, setShowPassword] = useState(false); // estado para ver/ocultar la contraseña
+
 
     const handleSubmit = e => {
         e.preventDefault()
         setErrorPassword(""); // limpia error de contraseña
         setErrorEmailRegistered(""); // limpia error del email
 
-
-        if (formData.password.length < 8) { //para que salte error si la contraseña no tiene 8 caracteres
-            setErrorPassword("Password must have al least 8 characters");
+        // Validar contraseña antes de enviar
+        const errors = validatePassword(formData.password);
+        if (errors.length > 0) {
+            setPasswordErrors(errors);
+            setErrorPassword("Password does not meet the requirements.");
             return;
         }
 
@@ -62,12 +66,37 @@ export const Register = ({ onSwitch }) => {
 
     }
 
-    const handleChange = e => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        })
-    }
+    // Función para validar la contraseña y devolver qué condiciones faltan
+    const validatePassword = (password) => {
+        const errors = [];
+        if (password.length < 8) errors.push("at least 8 characters");
+        if (!/[A-Z]/.test(password)) errors.push("an uppercase letter");
+        if (!/[0-9]/.test(password)) errors.push("a number");
+        if (!/[@$!%*?&.]/.test(password)) errors.push("a special character (@$!%*?&.)");
+        return errors;
+    };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        if (name === "password") {
+            const errors = validatePassword(value);
+            setPasswordErrors(errors);
+            if (errors.length === 0) setErrorPassword("");
+        }
+
+        if (name === "repeatPassword") {
+            if (value !== formData.password) {
+                setErrorPassword("Passwords do not match");
+            } else if (passwordErrors.length === 0) {
+                setErrorPassword("");
+            }
+        }
+    };
 
     const handleTermsAccepted = () => {
         setIsTermsAccepted(true)
@@ -120,6 +149,15 @@ export const Register = ({ onSwitch }) => {
                                     <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                                 </span>
                             </div>
+
+                            {/* Mensaje con las condiciones que faltan */}
+                            {passwordErrors.length > 0 && (
+                                <h5 className="text-danger mt-2 register-message-errors">
+                                    Password must contain {passwordErrors.join(", ")}.
+                                </h5>
+                            )}
+
+
                             <div>
                                 <label htmlFor="basic-url" className="form-label mb-0 mt-2">Repeat Password</label>
                             </div>
@@ -127,6 +165,7 @@ export const Register = ({ onSwitch }) => {
                                 <input type="password" name="repeatPassword" placeholder="password" value={formData.repeatPassword} onChange={handleChange} className="w-100 rounded-2 btn-register-card-border" />
 
                             </div>
+                            {/* Mensaje si la contraseña no es la misma */}
                             {errorPassword && <h5 className="text-danger mt-2 register-message-errors">{errorPassword}</h5>}
                             <input type="submit" value="Continue" className='w-100 rounded-2 mt-4 text-white bg-black btn-register-card-border' />
 
