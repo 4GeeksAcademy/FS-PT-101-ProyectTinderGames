@@ -28,6 +28,8 @@ const SettingsView = () => {
   const [showPassword, setShowPassword] = useState(false); // estado para ver/ocultar la contraseña actual
   const [showNewPassword, setShowNewPassword] = useState(false); // estado para ver/ocultar la contraseña nueva
   const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
+  const [passwordErrors, setPasswordErrors] = useState([]); //estado para condiciones de la contraseña
+
   const [correctPassword, setCorrectPassword] = useState("") //estado para mensaje si la conrtaseña se cambió correctamente
   const [emailVerification, setEmailVerification] = useState("") //estado para mensaje de verificación enviado
   const [sameEmail, setSameEmail] = useState("") // estado para mensaje de que el email sea el mismo
@@ -174,6 +176,19 @@ const SettingsView = () => {
     })
   }
 
+  useEffect(() => {
+    const errors = [];
+    const pwd = password.password;
+
+    if (pwd.length < 8) errors.push("at least 8 characters");
+    if (!/[A-Z]/.test(pwd)) errors.push("an uppercase letter");
+    if (!/[a-z]/.test(pwd)) errors.push("a lowercase letter");
+    if (!/[0-9]/.test(pwd)) errors.push("a number");
+    if (!/[^A-Za-z0-9]/.test(pwd)) errors.push("a special character");
+
+    setPasswordErrors(errors);
+  }, [password.password]);
+
   return (
     <div className="settings-container">
       <h2 className="settings-title">Settings</h2>
@@ -253,8 +268,18 @@ const SettingsView = () => {
                     className={`fa-solid setting-change-password-eye-icon ${showNewPassword ? "fa-eye-slash" : "fa-eye"}`}
 
                   ></i>
+
                 </div>
+
               </div>
+
+              {/* Mensaje con las condiciones contraseña que faltan */}
+              {passwordErrors.length > 0 && (
+                <h5 className="text-warning mt-2 register-message-errors">
+                  Password must contain {passwordErrors.join(", ")}.
+                </h5>
+              )}
+
               <input type="password" placeholder="Confirm New Password" name="confirmedPassword" value={password.confirmedPassword} onChange={handleChange} />
               {errorPassword && <h6 className="text-danger mt-1">{errorPassword}</h6>}
               {correctPassword && <h6 className="text-success mt-1">{correctPassword}</h6>}
