@@ -25,7 +25,8 @@ const SettingsView = () => {
     password: '',
     confirmedPassword: ''
   })
-  const [showPassword, setShowPassword] = useState(false); // estado para ver/ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false); // estado para ver/ocultar la contraseña actual
+  const [showNewPassword, setShowNewPassword] = useState(false); // estado para ver/ocultar la contraseña nueva
   const [errorPassword, setErrorPassword] = useState(""); // estado para error si la contraseña no es la misma
   const [correctPassword, setCorrectPassword] = useState("") //estado para mensaje si la conrtaseña se cambió correctamente
   const [emailVerification, setEmailVerification] = useState("") //estado para mensaje de verificación enviado
@@ -155,6 +156,7 @@ const SettingsView = () => {
   const closeChangePasswordModal = () => {
     setShowPasswordModal(false);
     setShowPassword(false); // ojo cerrado
+    setShowNewPassword(false)
     setPassword({ password: "", confirmedPassword: "" }); // limpia inputs
     setErrorPassword(""); // limpia error
     setCorrectPassword(""); // limpia mensaje éxito
@@ -224,30 +226,35 @@ const SettingsView = () => {
                     placeholder="Actual Password"
                     name="actualPassword"
                     value={password.actualPassword}
+                    className='settings-change-password-input'
                     onChange={handleChange}
-                   
-                  />
 
+                  />
+                  <i
+                    onClick={() => setShowPassword(prev => !prev)}
+                    className={`fa-solid setting-change-password-eye-icon ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+
+                  ></i>
                 </div>
 
               </div>
               <div className='d-flex'>
                 <div style={{ position: 'relative', width: '100%' }}>
 
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="New Password"
-                  name="password"
-                  value={password.password}
-                  className="settings-change-password-input"
-                  onChange={handleChange} />
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    placeholder="New Password"
+                    name="password"
+                    value={password.password}
+                    className="settings-change-password-input"
+                    onChange={handleChange} />
                   <i
-                    onClick={() => setShowPassword(prev => !prev)}
-                    className={`fa-solid setting-change-password-eye-icon ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
-  
+                    onClick={() => setShowNewPassword(prev => !prev)}
+                    className={`fa-solid setting-change-password-eye-icon ${showNewPassword ? "fa-eye-slash" : "fa-eye"}`}
+
                   ></i>
+                </div>
               </div>
-                  </div>
               <input type="password" placeholder="Confirm New Password" name="confirmedPassword" value={password.confirmedPassword} onChange={handleChange} />
               {errorPassword && <h6 className="text-danger mt-1">{errorPassword}</h6>}
               {correctPassword && <h6 className="text-success mt-1">{correctPassword}</h6>}
