@@ -518,7 +518,27 @@ const Profile = () => {
             <div className="row">
               {['discord', 'steam_id'].map((f, i) => (
                 <div key={i} className="col-md-6">
-                  <label>{f === 'steam_id' ? 'Steam Friend ID' : 'Discord'}</label>
+
+
+                  <label className="d-flex align-items-center gap-2 mt-1 mb-1">{f === 'steam_id' ? 'Steam Friend ID' : 'Discord'}
+                    <div>
+                      <span className="tooltip-wrapper">
+                        <i className="fa-solid fa-circle-info fa-xl discord-info-icon"></i>
+                        <span className="tooltip-text discord-info-tooltip-text">
+                          <strong>Connect with your matches</strong>
+                          <div>
+                            The Discord or Steam info<br />
+                            in your profile will be <br />
+                          used by your matches<br />
+                            to reach out to you.
+                          </div>
+                        </span>
+                      </span>
+
+                    </div>
+
+                  </label>
+
                   {isEditing ? (
                     <input
                       type="text"
@@ -642,10 +662,11 @@ const Profile = () => {
           <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12 mt-3">
+                <div></div>
                 Games{" "}
                 <span className="tooltip-wrapper">
                   <i className="fa-solid fa-circle-info fa-2xs medals-info-icon"></i>
-                  <span className="tooltip-text">
+                  <span className="tooltip-text medal-info-tooltip-text">
                     <strong>Medal Info:</strong>
                     <div>
                       <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours

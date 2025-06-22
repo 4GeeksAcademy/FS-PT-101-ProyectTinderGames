@@ -671,7 +671,7 @@
   display: inline-block;
 }
 
-.tooltip-text {
+.medal-info-tooltip-text {
   position: absolute;
   top: 5%;
   left: 490%;
@@ -689,7 +689,7 @@
   z-index: 999;
 }
 
-.tooltip-text strong {
+.medal-info-tooltip-text strong {
   color: #00ffff;
 }
 
@@ -729,4 +729,37 @@ background: transparent !important;
 .input-hours{
   border-color: #00f7ff !important;
   
+}
+
+
+/* tooltip discord info */
+.discord-info-icon {
+  color: #7826d6 !important;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.discord-info-icon:hover {
+  color: #00ffff !important;
+}
+.discord-info-tooltip-text {
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background:black;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 1px 2px #00ffff;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 999;
+}
+
+.discord-info-tooltip-text strong {
+  color: #00ffff;
 }
