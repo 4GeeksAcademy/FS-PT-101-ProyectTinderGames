@@ -34,28 +34,41 @@ CORS(api)
 @api.route("/chat", methods=["POST"])
 def chat():
     """
-    Recibe JSON: { "messages": [...], "userInfo": "..." }
+    Recibe JSON:
+    - { "text": "...", "userInfo": "..." } → mensaje suelto
+    - { "messages": [...], "userInfo": "..." } → historial completo
+
     Llama a OpenAI y devuelve el texto generado.
     """
     data = request.get_json()
-    if not data or "messages" not in data or "userInfo" not in data:
-        return jsonify({"error": "Faltan los campos 'messages' o 'userInfo'"}), 400
 
-    messages = data["messages"]
+    if not data or "userInfo" not in data or ("messages" not in data and "text" not in data):
+        return jsonify({"error": "Faltan campos obligatorios"}), 400
+
     user_info = data["userInfo"]
 
-    try:
-        # Convertimos el historial al formato que requiere OpenAI
-        formatted_messages = [{"role": "system", "content": (
-            f"Eres un asistente virtual experto en videojuegos."
-            f"Si te preguntan sobre algún ámbito que no está diractamente relacionado con videojuegos, de forma agradable diles que no puedes responder, que solo tocas temas relacionados con videojuegos. "
-            f"Trabajas para la gran empresa de PlayerLink, que es una aplicación para encontrar a tu compañero de juego ideal, estás integrada dentro de PlayerLink, en playerlink no se juegan juegos, solo se conecta con gente, estaría bien que la menciones de vez en cuando, pero de vez en cuando, no siempre que aburre."
-            f"La primera vez saludas con cercanía y amabilidad, y usas el nombre si lo conoces. "
-            f"Estás limitado a hablar solo de temas relacionados con videojuegos y no te extiendas demasiado para que el usuario no se aburra, se conciso pero que merezca la pena."
-            f"Información del usuario: {user_info}"
-        )}]
+    # ✅ Si viene un único mensaje como texto:
+    if "text" in data:
+        history = [{"sender": "user", "text": data["text"]}]
+    else:
+        history = data["messages"]
 
-        for msg in messages:
+    try:
+        formatted_messages = [
+            {
+                "role": "system",
+                "content": (
+                    f"Eres un asistente virtual experto en videojuegos. "
+                    f"Si te preguntan sobre otro tema, responde con educación que solo puedes hablar de videojuegos. "
+                    f"Trabajas para PlayerLink, una app para encontrar compañeros de juego. "
+                    f"La primera vez saludas con cercanía. "
+                    f"Información del usuario: {user_info}"
+                )
+            }
+        ]
+
+        # Construir conversación para OpenAI
+        for msg in history:
             role = "user" if msg.get("sender") == "user" else "assistant"
             content = msg.get("text", "")
             formatted_messages.append({"role": role, "content": content})
@@ -65,7 +78,6 @@ def chat():
             messages=formatted_messages,
             temperature=0.7,
             max_tokens=512,
-            n=1,
         )
 
         reply_text = response.choices[0].message.content.strip()
@@ -856,6 +868,8 @@ def get_games_by_profile_id(profile_id):
     return jsonify(serialized), 200
 
 # PUT A GAME HOURS
+
+
 @api.route('/games/hours/<int:game_id>', methods=['PUT'])
 def put_game_hours(game_id):
     data = request.get_json()
@@ -895,9 +909,9 @@ def post_game(profile_id):
     # 4) Crear y persistir la nueva partida
     new_game = Game(
         profile_id=profile_id,
-        game_hoursPlayed = data['hours_played'] or 'undefined',
-        game_image = data['image'] or 'undefined',
-        game_title = data['title'] or 'undefined'
+        game_hoursPlayed=data['hours_played'] or 'undefined',
+        game_image=data['image'] or 'undefined',
+        game_title=data['title'] or 'undefined'
     )
     db.session.add(new_game)
     db.session.commit()
