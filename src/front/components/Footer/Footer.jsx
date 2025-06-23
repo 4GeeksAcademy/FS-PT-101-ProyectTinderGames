@@ -1,10 +1,4 @@
 import './Footer.css';
-import TikTok from "../../assets/img/social media/social-media-tiktok.png";
-import Instagram from "../../assets/img/social media/social-media-instagram.png";
-import Discord from "../../assets/img/social media/social-media-discord.png";
-import Facebook from "../../assets/img/social media/social-media-facebook.png";
-import Twitter from "../../assets/img/social media/social-media-x.png";
-import { Link } from 'react-router-dom';
 
 export const Footer = () => (
 	<footer className="footer mt-auto py-3 text-footer">
