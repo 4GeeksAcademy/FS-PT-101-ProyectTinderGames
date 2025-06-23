@@ -6,6 +6,11 @@
   flex-direction: column;
   gap: 30px;
   border-right: 1px solid #ffffff;
+  position: static;
+  min-width: 300px;
+  max-width: 300px;
+   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .sidebar-button {
@@ -84,7 +89,7 @@
   .sidebar {
     position: fixed;
     top: 60px; /* Altura del navbar */
-    left: -250px;
+    left: -300px;
     height: calc(100% - 60px);
     width: 250px;
     background-color: #000;

@@ -444,93 +444,93 @@ const Profile = () => {
 
             <h3>Bio</h3>
 
-            {isEditing ? (
-              <textarea
-                className="form-control textareastyle"
-                rows={3}
-                value={profile.bio}
-                onChange={e => handleInputChange('bio', e.target.value)}
-              />
-            ) : (
-              <p>{profile.bio}</p>
-            )}
-          </div>
-          <div className="tabs">
-            {['info', 'Games', 'comments'].map(tab => (
-              <button
-                key={tab}
-                className={activeTab === tab ? 'active' : ''}
-                onClick={() => setActiveTab(tab)}
-              >{tab.charAt(0).toUpperCase() + tab.slice(1)}</button>
-            ))}
-          </div>
-          {activeTab === 'info' && (
-            <div className="info-section container">
-              {/* Nombre y Nickname */}
-              <div className="row">
-                {['name', 'nick_name'].map((f, i) => (
-                  <div key={i} className="col-md-6">
-                    <label>{f === 'nick_name' ? 'Nickname' : 'Name'}</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={profile[f]}
-                        onChange={e => handleInputChange(f, e.target.value)}
-                        maxLength={18}
-                      />
-                    ) : (
-                      <p>{profile[f]}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {/* Age, Gender, Zodiac */}
-              <div className="row">
-                <div className="col-md-4">
-                  <label>Age</label>
+          {isEditing ? (
+            <textarea
+              className="form-control textareastyle"
+              rows={3}
+              value={profile.bio}
+              onChange={e => handleInputChange('bio', e.target.value)}
+            />
+          ) : (
+            <p>{profile.bio}</p>
+          )}
+        </div>
+        <div className="tabs">
+          {['info', 'Games', 'comments'].map(tab => (
+            <button
+              key={tab}
+              className={activeTab === tab ? 'active' : ''}
+              onClick={() => setActiveTab(tab)}
+            >{tab.charAt(0).toUpperCase() + tab.slice(1)}</button>
+          ))}
+        </div>
+        {activeTab === 'info' && (
+          <div className="info-section container">
+            {/* Nombre y Nickname */}
+            <div className="row">
+              {['name', 'nick_name'].map((f, i) => (
+                <div key={i} className="col-md-6">
+                  <label>{f === 'nick_name' ? 'Nickname' : 'Name'}</label>
                   {isEditing ? (
                     <input
-                      type="number"
-                      value={profile.age}
-                      onChange={e => handleInputChange('age', +e.target.value)}
-                      max={120}
-                      min={1}
+                      type="text"
+                      value={profile[f]}
+                      onChange={e => handleInputChange(f, e.target.value)}
+                      maxLength={11}
                     />
                   ) : (
-                    <p>{profile.age}</p>
+                    <p>{profile[f]}</p>
                   )}
                 </div>
-                <div className="col-md-4">
-                  <label>Gender</label>
-                  {isEditing ? (
-                    <select
-                      value={profile.gender}
-                      onChange={e => handleInputChange('gender', e.target.value)}
-                    >
-                      {genders.map((g, idx) => <option key={idx}>{g}</option>)}
-                    </select>
-                  ) : (
-                    <p>{profile.gender}</p>
-                  )}
-                </div>
-                <div className="col-md-4">
-                  <label>Zodiac</label>
-                  {isEditing ? (
-                    <select
-                      value={profile.zodiac}
-                      onChange={e => handleInputChange('zodiac', e.target.value)}
-                    >
-                      {zodiacSigns.map((z, idx) => <option key={idx}>{z}</option>)}
-                    </select>
-                  ) : (
-                    <p>{profile.zodiac}</p>
-                  )}
-                </div>
+              ))}
+            </div>
+            {/* Age, Gender, Zodiac */}
+            <div className="row">
+              <div className="col-md-4">
+                <label>Age</label>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={profile.age}
+                    onChange={e => handleInputChange('age', +e.target.value)}
+                    max={120}
+                    min={1}
+                  />
+                ) : (
+                  <p>{profile.age}</p>
+                )}
               </div>
-              {/* Contacto y preferencias */}
-              <div className="row">
-                {['discord', 'steam_id'].map((f, i) => (
-                  <div key={i} className="col-md-6">
+              <div className="col-md-4">
+                <label>Gender</label>
+                {isEditing ? (
+                  <select
+                    value={profile.gender}
+                    onChange={e => handleInputChange('gender', e.target.value)}
+                  >
+                    {genders.map((g, idx) => <option key={idx}>{g}</option>)}
+                  </select>
+                ) : (
+                  <p>{profile.gender}</p>
+                )}
+              </div>
+              <div className="col-md-4">
+                <label>Zodiac</label>
+                {isEditing ? (
+                  <select
+                    value={profile.zodiac}
+                    onChange={e => handleInputChange('zodiac', e.target.value)}
+                  >
+                    {zodiacSigns.map((z, idx) => <option key={idx}>{z}</option>)}
+                  </select>
+                ) : (
+                  <p>{profile.zodiac}</p>
+                )}
+              </div>
+            </div>
+            {/* Contacto y preferencias */}
+            <div className="row">
+              {['discord', 'steam_id'].map((f, i) => (
+                <div key={i} className="col-md-6">
 
 
                     <label className="d-flex align-items-center gap-2 mt-1 mb-1">{f === 'steam_id' ? 'Steam Friend ID' : 'Discord'}
