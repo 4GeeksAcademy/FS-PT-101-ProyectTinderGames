@@ -248,12 +248,19 @@
 	animation: slide-out-blurred-right 0.60s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
 } */
 
-.preferences-full{
+.preferences-full {
   display: inline;
 }
 
-.preferences-small{
+.preferences-small {
   display: none;
+}
+
+.preferences-container-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* en desktop */
+  flex-wrap: wrap;
 }
 
 /* Pantalas móviles */
@@ -270,14 +277,16 @@
   .search-match-text-sm {
     justify-self: center !important;
     font-size: smaller;
-
   }
-  .preferences-full{
-  display: none;
-}
-
-.preferences-small{
-  display: inline;
-  place-items: center !important;
-}
+  .preferences-container-mobile {
+    justify-content: flex-start; /* o center si prefieres */
+  }
+  .preferences-small {
+    display: inline !important;
+    margin-left: 0.2rem;
+    margin-right: 0.4rem;
+  }
+  .preferences-full {
+    display: none !important;
+  }
 }

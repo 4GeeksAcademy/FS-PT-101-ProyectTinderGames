@@ -16,11 +16,12 @@ import photo9 from "../../assets/img/profile-pics/profile-pic-9.png";
 export const ItsMatch = ({ profile, photo }) => {
 
     const navigate = useNavigate()
+
+        //Prevención de error si el perfil no existe
+    if (!profile) return null;
     const handleClick = () => {
         navigate('/private/your-matches/')
     }
-
-    console.log('ItsMatch profile:', profile);
 
     const selectPhoto = () => {
         const key = profile?.photo?.trim?.(); 
@@ -38,7 +39,7 @@ export const ItsMatch = ({ profile, photo }) => {
         }
     };
 
-    console.log('Profile photo string:', profile?.photo);
+
 
     return (
         <>

@@ -18,6 +18,10 @@ export const LanguageModal = ({ selected, setSelected, onSave, onCancel }) => {
       return prev;
     });
   };
+  const handleSaveAndClose = () => {
+    onSave();
+    onCancel();
+  };
 
   return (
     <div className="abmodal">
@@ -36,7 +40,7 @@ export const LanguageModal = ({ selected, setSelected, onSave, onCancel }) => {
           ))}
         </div>
         <div className="abmodal-buttons">
-          <button onClick={onSave}>Save</button>
+          <button onClick={handleSaveAndClose}>Add</button>
           <button onClick={onCancel}>Cancel</button>
         </div>
       </div>

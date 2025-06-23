@@ -24,6 +24,18 @@ export const initialStore = () => {
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
+    case "addMatch": {
+      const updatedMatches = store.userMatchesInfo
+        ? [...store.userMatchesInfo, action.payload]
+        : [action.payload];
+      // Guarda en localStorage si quieres persistir
+      localStorage.setItem("userMatchesInfo", JSON.stringify(updatedMatches));
+      return {
+        ...store,
+        userMatchesInfo: updatedMatches,
+      };
+    }
+
     case "getSearchMatchProfilesFiltered":
       localStorage.setItem(
         "searchMatchProfiles",
@@ -84,7 +96,7 @@ export default function storeReducer(store, action = {}) {
       localStorage.removeItem("likesSent");
       localStorage.removeItem("dislikesSent");
       localStorage.removeItem("searchMatchProfiles");
-      localStorage.removeItem("profile")
+      localStorage.removeItem("profile");
 
       return {
         ...store,
