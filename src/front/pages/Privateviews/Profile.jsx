@@ -231,7 +231,13 @@ const Profile = () => {
 
 
       if (isIncomplete) {
-        setNotice("⚠️ Profile incomplete. Remember to complete it for a better use of the web.");
+        setNotice(
+          <h4 className="text-center text-danger">
+
+            <i className="fa-solid fa-triangle-exclamation text-warning fa-xl"></i> Profile incomplete. Remember to complete it to unlock the full potential of PlayerLink.
+          </h4>
+            );
+
         clearNoticeTimerRef.current = setTimeout(() => setNotice(""), 10000);
       }
 
