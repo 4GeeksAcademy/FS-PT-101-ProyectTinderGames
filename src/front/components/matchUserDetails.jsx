@@ -284,7 +284,7 @@ export const MatchUserDetails = () => {
 
         {/* Other Tabs */}
         {activeTab === 'Games' && (
-          <div className="container coming-soon-box">
+          <div className="container info-section">
 
             <div className="row justify-content-start">
               <div className="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center">
