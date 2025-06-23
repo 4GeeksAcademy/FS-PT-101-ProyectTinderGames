@@ -8,3 +8,7 @@ body.modal-open {
   
 }
 
+body{
+  padding: 0 !important;
+}
+
