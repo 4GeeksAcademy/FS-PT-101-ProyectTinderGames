@@ -128,7 +128,7 @@ const Profile = () => {
 
   // Carga inicial de perfil y reviews recibidos
   useEffect(() => {
-    if (!store.user) {
+    if (!store.user || store.user === "undefined") {
       navigate('/')
     } else {
       loadProfile();
@@ -529,7 +529,7 @@ const Profile = () => {
                           <div>
                             The Discord or Steam info<br />
                             in your profile will be <br />
-                          used by your matches<br />
+                            used by your matches<br />
                             to reach out to you.
                           </div>
                         </span>
@@ -659,10 +659,10 @@ const Profile = () => {
           </div>
         )}
         {activeTab === 'Games' && (
-          <div className="container">
+          <div className="container info-section">
             <div className="row d-flex justify-content-around align-items-center">
               <h2 className="col-lg-6 col-md-12 col-sm-12 mt-3">
-               
+
                 Games{" "}
                 <span className="tooltip-wrapper">
                   <i className="fa-solid fa-circle-info fa-2xs medals-info-icon"></i>
@@ -756,11 +756,11 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <div className="row mt-5 gap-3 d-flez justify-content-center">
+            <div className="row mt-5 gap-3 d-flez justify-content-center gamesbigbox p-2">
               {store.user.profile?.games ? store.user.profile.games.map((el, i) => (
                 <div key={i} className="row gamesbox d-flex align-content-center py-3">
                   <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
-                    <p className="m-0">{el.gameTitle}</p>
+                    <h6 className="m-0">{el.gameTitle}</h6>
 
 
                   </div>
@@ -768,24 +768,21 @@ const Profile = () => {
 
                     <form className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center" onSubmit={(e) => handleSubmit(e, el.id)}>
 
-                      <div className="d-flex justify-content-evenly">
+                      <div className="row d-flex flex-row justify-content-around align-items-center">
 
                         {errorCeroHours && <h6 className="me-4 text-danger mt-2 error-hours-font">{errorCeroHours}</h6>}
 
-                        <input className="col-3 me-2 input-hours border-2 rounded-2 ms-2" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours" />
-                        <div className="d-flex justify-content-end">
-                          <button type="submit" className="me-1 fa-solid fa-solid fa-floppy-disk btn bg-transparent botonesAccionesJuegos btn-save-game" />
+                        <input className="col-auto input-hours border-2 rounded-2 ms-2" type="number" name="hours_played" value={game.hours_played} onChange={(e) => setGame({ ...game, hours_played: e.target.value })} placeholder="Hours" />
+                        <button type="submit" className="me-1 fa-solid fa-solid fa-floppy-disk btn bg-transparent botonesAccionesJuegos btn-save-game col-auto" />
+                        <span className="ms-1 text-danger botonesAccionesJuegos btn-close-edit-game col-auto col-auto" onClick={() => setIdOfGameBeingEdited(0)}>X</span>
 
-                          <span className="ms-1 text-danger botonesAccionesJuegos btn-close-edit-game col-auto" onClick={() => setIdOfGameBeingEdited(0)}>X</span>
-
-                        </div>
                       </div>
 
 
                     </form>
                     :
                     <div className="d-flex justify-content-around col-lg-6 col-md-12 col-sm-12 align-items-center">
-                      <p className="m-0 col-4">{el.gameHoursPlayed} hours</p>
+                      <h6 className="m-0 col-4">{el.gameHoursPlayed} hours</h6>
                       <span className="text-light botonesAccionesJuegos col-auto fa-solid fa-pencil" onClick={() => setIdOfGameBeingEdited(el.id)}></span>
                       <span className="text-danger botonesAccionesJuegos col-auto fa-solid fa-trash" onClick={() => handleDeleteGame(el.id)}></span>
                     </div>

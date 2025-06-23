@@ -37,7 +37,7 @@ export const MatchUserDetails = () => {
 
 
   useEffect(() => {
-    if (!store.user) {
+    if (!store.user || store.user === "undefined") {
       navigate('/')
     } else {
       userServices
@@ -229,45 +229,45 @@ export const MatchUserDetails = () => {
               <div className="col-md-6">
                 <div className="d-flex align-items-center">
 
-                <label>Discord</label>
-                <span className="tooltip-wrapper">
-                  <i className="ms-2 mt-4 fa-solid fa-circle-info fa-xl discord-info-icon"></i>
-                  <span className="tooltip-text discord-info-tooltip-text">
-                    <strong>Connect with your match</strong>
-                    <div >
-                      Want to talk to your match?
-                      <br />
-                      Use their Discord or Steam
-                      <br />
-                      info to reach out
-                      <br />
-                      and start chatting!
-                    </div>
-                  </span>
+                  <label>Discord</label>
+                  <span className="tooltip-wrapper">
+                    <i className="ms-2 mt-4 fa-solid fa-circle-info fa-xl discord-info-icon"></i>
+                    <span className="tooltip-text discord-info-tooltip-text">
+                      <strong>Connect with your match</strong>
+                      <div >
+                        Want to talk to your match?
+                        <br />
+                        Use their Discord or Steam
+                        <br />
+                        info to reach out
+                        <br />
+                        and start chatting!
+                      </div>
+                    </span>
                   </span>
                 </div>
 
-                  <p>{profile.discord}</p>
+                <p>{profile.discord}</p>
               </div>
               <div className="col-md-6">
-                 <div className="d-flex align-items-center">
-                <label>Steam friend id</label>
-                <span className="tooltip-wrapper">
-                  <i className="ms-2 mt-4 fa-solid fa-circle-info fa-xl discord-info-icon"></i>
-                  <span className="tooltip-text discord-info-tooltip-text">
-                    <strong>Connect with your match</strong>
-                    <div >
-                      Want to talk to your match?
-                      <br />
-                      Use their Discord or Steam
-                      <br />
-                      info to reach out
-                      <br />
-                      and start chatting!
-                    </div>
+                <div className="d-flex align-items-center">
+                  <label>Steam friend id</label>
+                  <span className="tooltip-wrapper">
+                    <i className="ms-2 mt-4 fa-solid fa-circle-info fa-xl discord-info-icon"></i>
+                    <span className="tooltip-text discord-info-tooltip-text">
+                      <strong>Connect with your match</strong>
+                      <div >
+                        Want to talk to your match?
+                        <br />
+                        Use their Discord or Steam
+                        <br />
+                        info to reach out
+                        <br />
+                        and start chatting!
+                      </div>
+                    </span>
                   </span>
-                  </span>
-                  </div>
+                </div>
                 <p>{profile.steam}</p>
               </div>
               <div className="gaming-prefs-box col-md-6">
@@ -285,37 +285,37 @@ export const MatchUserDetails = () => {
         {/* Other Tabs */}
         {activeTab === 'Games' && (
           <div className="container coming-soon-box">
-            
-<div className="row justify-content-start">
-    <div className="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center">
-      <h2 className="mb-0">Games</h2>
-      <span className="tooltip-wrapper ms-2">
-        <i className="fa-solid fa-circle-info fa-xl medals-info-icon"></i>
-        <span className="tooltip-text medal-info-tooltip-text">
-          <strong>Medal Info:</strong>
-          <div>
-            <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
-          </div>
-          <div>
-            <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
-          </div>
-          <div>
-            <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
-          </div>
-        </span>
-      </span>
-    </div>
-  </div>
+
+            <div className="row justify-content-start">
+              <div className="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center">
+                <h2 className="mb-0">Games</h2>
+                <span className="tooltip-wrapper ms-2">
+                  <i className="fa-solid fa-circle-info fa-xl medals-info-icon"></i>
+                  <span className="tooltip-text medal-info-tooltip-text">
+                    <strong>Medal Info:</strong>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-gold"></i> +2500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-silver"></i> +500 hours
+                    </div>
+                    <div>
+                      <i className="fa-solid fa-medal mt-1 medal-info-bronze"></i> 0-500 hours
+                    </div>
+                  </span>
+                </span>
+              </div>
+            </div>
 
 
-            <div className="row mt-5 gap-3 justify-content-center">
+            <div className="row mt-5 gap-3 justify-content-center gamesbigbox">
               {store.itsMatchInfo?.profile?.games?.length > 0 ? (
                 store.itsMatchInfo.profile.games.map((el, i) => (
                   <div key={i} className="col-12 gamesbox d-flex align-items-center py-3">
                     <div className="row w-100 m-0">
                       <div className="col-lg-10 col-md-12 d-flex justify-content-around align-items-center">
-                        <p className="m-0">{el.gameTitle}</p>
-                        <p className="m-0">{el.gameHoursPlayed} hours</p>
+                        <h6 className="m-0">{el.gameTitle}</h6>
+                        <h6 className="m-0">{el.gameHoursPlayed} hours</h6>
                       </div>
                     </div>
                   </div>

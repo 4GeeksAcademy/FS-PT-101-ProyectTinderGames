@@ -362,7 +362,6 @@
   padding: 5px 0;
   padding-left: clamp(10px, 5vw, 10px);
   margin-left: 20px;
-  
 }
 .medal-game-card img.medal {
   width: clamp(40px, 5vw, 60px);
@@ -520,7 +519,9 @@
 .gamesbox {
   border: 2px solid rgb(203, 137, 239);
   border-radius: 20px;
+  background: rgba(0, 0, 0, 0.8); /* 50% opacity black */
 }
+
 .gameImg {
   box-shadow: 0px 0px 19px 1px rgb(86, 247, 255);
   -webkit-box-shadow: 2px 0px 19px 1px rgba(86, 247, 255);
@@ -721,16 +722,13 @@
 .btn-save-game:hover {
   color: #00f7ff;
 }
-.btn-close-edit-game{
-background: transparent !important;
-
+.btn-close-edit-game {
+  background: transparent !important;
 }
 
-.input-hours{
+.input-hours {
   border-color: #00f7ff !important;
-  
 }
-
 
 /* tooltip discord info */
 .discord-info-icon {
@@ -747,7 +745,7 @@ background: transparent !important;
   top: 120%;
   left: 50%;
   transform: translateX(-50%);
-  background:black;
+  background: black;
   color: #ffffff;
   padding: 10px 14px;
   border-radius: 8px;

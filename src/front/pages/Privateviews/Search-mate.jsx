@@ -21,10 +21,10 @@ export const SearchMate = () => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    if (!store.user) {
+    if (!store.user || store.user === "undefined") {
       navigate('/')
     }
-  })
+  },[])
 
 
   //Carga los perfiles 

@@ -20,8 +20,10 @@ export const FindGames = () => {
   const chatScrollRef = useRef(null);
 
   useEffect(() => {
-    if (!store.user) navigate("/");
-  }, [store.user]);
+    if (!store.user || store.user === "undefined") {
+      navigate('/')
+    }
+  }, []);
 
   useEffect(() => {
     const ref = chatScrollRef.current;

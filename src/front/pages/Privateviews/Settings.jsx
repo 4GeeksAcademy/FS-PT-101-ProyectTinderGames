@@ -40,10 +40,10 @@ const SettingsView = () => {
   const { store, dispatch } = useGlobalReducer();
 
   useEffect(() => {
-    if (!store.user) {
+    if (!store.user || store.user === "undefined") {
       navigate('/')
     }
-  });
+  },[]);
 
   const submitEmailChange = async (e) => {
     e.preventDefault();

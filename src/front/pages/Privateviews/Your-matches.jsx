@@ -11,8 +11,9 @@ export const YourMatches = () => {
   const { store, dispatch } = useGlobalReducer();
 
   useEffect(() => {
-    if (!store.user) {
+    if (!store.user || store.user === "undefined") {
       navigate('/')
+
     } else {
       matchServices.getAllMatchesInfo(store.user?.id).then(data => dispatch({ type: "getAllMatchesInfo", payload: data.matches }))
     }
