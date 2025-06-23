@@ -18,6 +18,11 @@ export const GamingPreferencesModal = ({ selected, setSelected, onSave, onCancel
       }
       return prev;
     });
+
+  };
+  const handleSaveAndClose = () => {
+    onSave();
+    onCancel();
   };
 
   return (
@@ -37,7 +42,7 @@ export const GamingPreferencesModal = ({ selected, setSelected, onSave, onCancel
           ))}
         </div>
         <div className="abmodal-buttons">
-          <button onClick={onSave}>Save</button>
+          <button onClick={handleSaveAndClose}>Add</button>
           <button onClick={onCancel}>Cancel</button>
         </div>
       </div>
