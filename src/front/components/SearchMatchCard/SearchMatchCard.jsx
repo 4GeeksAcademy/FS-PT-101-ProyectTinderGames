@@ -33,7 +33,6 @@ export const SearchMatchCard = ({ profile, onLike, onDislike }) => {
     }
 
   };
-  console.log('Profile photo string___> del searchcard:', profile.photo);
 
   useEffect(() => {
     if (!profile?.id) return;

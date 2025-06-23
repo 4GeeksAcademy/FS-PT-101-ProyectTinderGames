@@ -23,8 +23,6 @@ export const ItsMatch = ({ profile, photo }) => {
         navigate('/private/your-matches/')
     }
 
-    console.log('ItsMatch profile:', profile);
-
     const selectPhoto = () => {
         const key = profile?.photo?.trim?.(); 
         switch (key) {
@@ -41,7 +39,7 @@ export const ItsMatch = ({ profile, photo }) => {
         }
     };
 
-    console.log('Profile photo string:', profile?.photo);
+
 
     return (
         <>
