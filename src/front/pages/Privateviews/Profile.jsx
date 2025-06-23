@@ -463,7 +463,7 @@ const Profile = () => {
                       type="text"
                       value={profile[f]}
                       onChange={e => handleInputChange(f, e.target.value)}
-                      maxLength={18}
+                      maxLength={11}
                     />
                   ) : (
                     <p>{profile[f]}</p>
