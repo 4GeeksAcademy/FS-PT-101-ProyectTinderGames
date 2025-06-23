@@ -17,7 +17,7 @@ export const NavbarHome = () => {
 
   const [showSignIn, setShowSignIn] = useState(true);
   const navigate = useNavigate()
-  const {store, dispatch} = useGlobalReducer()
+  const { store, dispatch } = useGlobalReducer()
 
   // Para que siempre se muestre Sing-In el primero
   useEffect(() => {
@@ -75,7 +75,7 @@ export const NavbarHome = () => {
 
                     {/* Modal button */}
                     <button
-                      type="button" className="btn navbar-home-font navbar-home-btn pulsate-bck" data-bs-toggle="modal" data-bs-target="#startModal" onClick={()=>store.user && navigate('/private/profile')}>
+                      type="button" className="btn navbar-home-font navbar-home-btn pulsate-bck" data-bs-toggle="modal" data-bs-target="#startModal" onClick={() => store.user && store.user !== "undefined" && navigate('/private/profile')}>
                       START
                     </button>
                   </div>
@@ -89,24 +89,24 @@ export const NavbarHome = () => {
 
       {/* modal START body */}
       <div className="modal fade" id="startModal" tabIndex="-1" aria-labelledby="startModalLabel" aria-hidden="true" data-bs-backdrop="false">
-          <div className="modal-dialog ">
-            <div className="modal-content modal-home ">
-              <div className="modal-header border-0 mt-5">
-                <div className="modal-body d-flex">
-                  <div>
-                    {showSignIn ? (
-                      <SignIn onSwitch={() => setShowSignIn(false)} />
-                    ) : (
-                      <Register onSwitch={() => setShowSignIn(true)} />
-                    )}
-                  </div>
-                  {/* <div>
+        <div className="modal-dialog ">
+          <div className="modal-content modal-home ">
+            <div className="modal-header border-0 mt-5">
+              <div className="modal-body d-flex">
+                <div>
+                  {showSignIn ? (
+                    <SignIn onSwitch={() => setShowSignIn(false)} />
+                  ) : (
+                    <Register onSwitch={() => setShowSignIn(true)} />
+                  )}
+                </div>
+                {/* <div>
                   <button type="button" className="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> */}
-                </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
 
       {/* modal RESET password body */}
